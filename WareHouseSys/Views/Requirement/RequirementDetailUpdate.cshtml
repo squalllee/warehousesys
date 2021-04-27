@@ -1,0 +1,151 @@
+﻿@using Models;
+@using WareHouseSys.ViewModels;
+@model RequirementDetailUpdateModel
+@{
+    ViewBag.Title = "需求明細修改";
+    Layout = "";
+}
+
+<style>
+    .ui-autocomplete-loading {
+        /*background: white url("../images/cycle.gif") right center no-repeat;*/
+    }
+
+    .ui-autocomplete {
+        max-height: 300px;
+        overflow-y: auto;
+        /* prevent horizontal scrollbar */
+        overflow-x: hidden;
+    }
+
+    * html .ui-autocomplete {
+        height: 100px;
+    }
+</style>
+
+<form id="updateReqDetailForm">
+    <input type="hidden" id="SerialNo" value="@Model.SerialNo" />
+    <table class="table" style="border-style:solid;border-width:2px">
+        <tbody>
+            <tr>
+                <td colspan="7" style="font-weight:800;font-size:x-large" align="center">物料需求單</td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    <font style="color:red">料號</font>
+                </td>
+                <td colspan="2">
+                    <input name="UpdateMaterialNo" style="width:85%;border-color: #d2d6de;border: 1px solid #ccc;" id="UpdateMaterialNo" value="@Model.MaterialNo" >
+                </td>
+                <td class="tdstyle">
+                    品名
+                </td>
+                <td>
+                    <input name="UpdateMaterialName" style="width:95%;border-color: #d2d6de;border: 1px solid #ccc;" id="UpdateMaterialName" value="@Model.MaterialName" readonly>
+                </td>
+                <td class="tdstyle">
+                    計量單位
+                </td>
+                <td>
+                    <input name="UpdateUnit" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" id="UpdateUnit"  value="@Model.Unit"  readonly>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle">在途量</td>
+                <td colspan="2"><input name="UpdateOnOrderInventory" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" id="UpdateOnOrderInventory" value="@Model.OnOrderInventory"  readonly></td>
+
+                <td class="tdstyle">安全量</td>
+                <td><input name="UpdateSafetyStock" id="UpdateSafetyStock" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" value="@Model.SafetyStock" readonly></td>
+                <td class="tdstyle">庫存量</td>
+                <td><input name="UpdateInventory" id="UpdateInventory" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" value="@Model.Inventory" readonly></td>
+            </tr>
+            <tr>
+                <td class="tdstyle">替代件庫存</td>
+                <td colspan="2"><input name="UpdateReplaceQuantity" id="UpdateReplaceQuantity" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" value="@Model.ReplaceQuantity" readonly></td>
+                <td class="tdstyle">替代件料號</td>
+                <td colspan="3"><input name="UpdateReplaceNo" id="UpdateReplaceNo" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" value="@Model.ReplaceNo"  readonly></td>
+              
+            </tr>
+            <tr>
+                <td class="tdstyle"><font style="color:red">需求單位</font></td>
+                <td colspan="2">
+                    <select name="UpdateRequireUnit" id="UpdateRequireUnit" class="combobox" required>
+                        @foreach (WareHouseSys.DBModels.UNIT unit in Model.uNIT)
+                        {
+                            int UnitLength = unit.UNITNO.TrimEnd('0').Count();
+
+                            if (unit.UNITNO.Trim().Substring(0,UnitLength) == Model.RequireUnit.Substring(0, UnitLength))
+                            {
+                                <option value="@unit.UNITNO.Trim()" selected>@unit.UNITNAME.Trim() [@unit.UNITNO.Trim()]</option>
+                            }
+                            else
+                            {
+                                <option value="@unit.UNITNO.Trim()">@unit.UNITNAME.Trim() [@unit.UNITNO.Trim()]</option>
+                            }
+
+                        }
+                    </select>
+                </td>
+                <td class="tdstyle"><font style="color:red">需求日期</font></td>
+                <td><input name="UpdateRequireDate" id="UpdateRequireDate" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;"  value="@Model.RequireDate.ToString("yyyy/MM/dd")" class="datetime" required></td>
+
+                <td class="tdstyle"><font style="color:red">需求數量</font></td>
+                <td><input name="UpdateRequirementQty" id="UpdateRequirementQty" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" value="@Model.RequirementQty" type="number" required></td>
+            </tr>
+            <tr>
+                <td class="tdstyle">可修件</td>
+                <td colspan="2"><input name="UpdateIsFix"  id="UpdateIsFix" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" value="@Model.IsFix"  readonly></td>
+                <td class="tdstyle">故障率</td>
+                <td><input name="UpdateFailureRate" id="UpdateFailureRate" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" value="@Model.FailureRate"  readonly></td>
+                <td class="tdstyle">維修週期</td>
+                <td><input name="UpdateRepairPeriod" id="UpdateRepairPeriod" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" value="@Model.RepairPeriod"  readonly></td>
+            </tr>
+            <tr>
+                <td class="tdstyle">設備零件數量</td>
+                <td colspan="2"><input name="UpdateEqQuantity" id="UpdateEqQuantity" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" value="@Model.EqQuantity" readonly></td>
+                <td class="tdstyle">危害物(含危害物質)</td>
+                <td><input name="UpdateIsDangerous" id="UpdateIsDangerous"  style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" value="@Model.IsDangerous" readonly></td>
+                <td class="tdstyle">保存期限</td>
+                <td><input name="UpdateExpiration" id="UpdateExpiration" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" value="@Model.Expiration"  readonly></td>
+
+            </tr>
+            <tr>
+                <td class="tdstyle">預估單價(未稅)</td>
+                <td colspan="2"><input name="UpdateEstPrice" id="UpdateEstPrice" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" value="@Model.EstPrice"></td>
+                @*<td class="tdstyle">開發樣品</td>
+                <td><input name="UpdateSimple" id="UpdateSimple" style="width:30%;border-color: #d2d6de;border: 1px solid #ccc;" value="@Model.Simple" readonly></td>*@
+                <td class="tdstyle"><font style="color:red">檢修分類</font></td>
+                <td colspan="2"><input name="RepairClass" id="RepairClass" style="width:30%;border-color: #d2d6de;border: 1px solid #ccc;"  value="@Model.RepairClass" required></td>
+            </tr>
+            <tr>
+                <td class="tdstyle"><font style="color:red">用料期程及數量1</font></td>
+                <td class="tdstyle"><font style="color:red">起</font></td>
+                <td><input name="UpdatePeriodStart1" id="UpdatePeriodStart1" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;"  class="datetime" value="@Model.PeriodStart1.ToString("yyyy/MM/dd")" required></td>
+                <td class="tdstyle"><font style="color:red">迄</font></td>
+                <td><input name="UpdatePeriodEnd1" id="UpdatePeriodEnd1" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;"  class="datetime" value="@Model.PeriodEnd1.ToString("yyyy/MM/dd")" required></td>
+                <td class="tdstyle"><font style="color:red">數量</font></td>
+                <td><input name="UpdatePeriodQty1" id="UpdatePeriodQty1" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;"  type="number" value="@Model.PeriodQty1" required></td>
+            </tr>
+            <tr>
+                <td class="tdstyle">用料期程及數量2</td>
+                <td class="tdstyle">起</td>
+                <td><input name="UpdatePeriodStart2" id="UpdatePeriodStart2" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" class="datetime" value="@Model.PeriodStart2"></td>
+                <td class="tdstyle">迄</td>
+                <td><input name="UpdatePeriodEnd2" id="UpdatePeriodEnd2" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" class="datetime" value="@Model.PeriodEnd2"></td>
+                <td class="tdstyle">數量</td>
+                <td><input name="UpdatePeriodQty2" id="UpdatePeriodQty2" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;"  type="number" value="@Model.PeriodQty2"></td>
+            </tr>
+            <tr>
+                <td class="tdstyle">詳細規格</td>
+                <td colspan="6">
+                    <textarea cols="50" rows="4"  name="UpdateSpec" id="UpdateSpec" readonly>@Model.Spec</textarea>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle"><font style="color:red">需求原因</font></td>
+                <td colspan="6"><textarea cols="50" rows="4"  name="UpdateRequireReason" id="UpdateRequireReason" required>@Model.RequireReason</textarea></td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+

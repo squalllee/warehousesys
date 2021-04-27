@@ -1,0 +1,71 @@
+﻿@using WareHouseSys.ViewModels
+@using WareHouseSys.Models;
+@model ScrapHeaderViewModel
+@{
+    Layout = null;
+}
+<style>
+    .k-grid-content {
+        overflow: auto;
+    }
+</style>
+
+<input type="hidden" name="OrderNo" value="@ViewBag.OrderNo" />
+<form id="ScrapForm">
+    <table class="table" style="border-style:solid;border-width:2px">
+        <tbody>
+            <tr>
+                <td colspan="4" style="font-weight:800;font-size:x-large" align="center">報廢單明細</td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    申請人員
+                </td>
+                <td>
+                    <h4><span class="label label-default">@Model.ApplyMan</span></h4>
+                </td>
+                <td class="tdstyle">
+                    申請日期
+                </td>
+                <td>
+                    <h4><span class="label label-default">@(DateTime.Parse(Model.ApplyDate.ToString()).ToString("yyyy/MM/dd"))</span></h4>
+
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    工單號碼
+                </td>
+                <td colspan="3">
+                    <h4><span class="label label-default">@(String.Join(",",Model.WorkNo))</span></h4>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    報廢原因
+                </td>
+                <td colspan="3">
+                    <h4><span class="label label-default">@Model.Reason</span></h4>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <div style="width:1150px">
+                        <div id="ScrapDetailGrid"></div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    附件
+                </td>
+                <td colspan="3">
+                    @foreach (Attachment f in Model.attachments)
+                    {
+                        <span class="badge badge-pill badge-default" style="cursor:pointer"><a href="@Url.Action("getAttatchment","Scrap",new {OrderNo= Model.OrderNo,FileName=f.FileName})" style="color:white" target="aa">@f.FileName</a></span>
+                    }
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>

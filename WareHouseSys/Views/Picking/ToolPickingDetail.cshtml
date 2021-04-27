@@ -1,0 +1,73 @@
+﻿@using WareHouseSys.ViewModels;
+@using WareHouseSys.Models;
+@model ToolPickHeaderSaveModel
+@{
+    ViewBag.Title = "手工具發料明細";
+    Layout = "";
+}
+<style>
+    .table > tbody > tr > td {
+        border-top: 1px solid #2b2b2b;
+    }
+</style>
+<form>
+    <table class="table" style="border-style:solid;border-width:2px">
+        <tbody>
+            <tr>
+                <td colspan="6" style="font-weight:800;font-size:x-large" align="center">領料單資訊</td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    領料單號
+                </td>
+                <td> 
+                    <h4><span class="label label-default">@Model.OrderNo</span></h4>
+                <td class="tdstyle">
+                    <font style="color:red">領料日期</font>
+                </td>
+                <td>
+                    <h4><span class="label label-default">@(Model.OutBoundDate == null ? "" : DateTime.Parse(Model.OutBoundDate.ToString()).ToString("yyyy/MM/dd"))</span></h4>
+                </td>
+
+                <td class="tdstyle">
+                    發料人員
+                </td>
+                <td>
+                    <h4><span class="label label-default">@Model.OutBoundMan</span></h4>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    緊急領料
+                </td>
+                <td colspan="5">
+                    <h4><span class="label label-default">@(Model.EmergencyPicking ? "是" : "否")</span></h4>
+                    
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6">
+                    <div style="width:1165px">
+                        <div id="PickingToolDetailGrid" data-url="@Url.Content("../Picking/ToolPickingBodyDetailByOrderNo")?OrderNO=@Model.OrderNo"></div>
+                    </div>
+
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    附件
+                </td>
+                <td colspan="5">
+                    @foreach (Attachment f in Model.attachments)
+                    {
+                        <span class="badge badge-pill badge-default" style="cursor:pointer"><a href="@Url.Action("getToolAttatchment","Picking",new {OrderNo= Model.OrderNo,FileName=f.FileName})" style="color:white" target="aa">@f.FileName</a></span>
+                    }
+                </td>
+            </tr>
+          
+        </tbody>
+    </table>
+</form>
+
+
+

@@ -1,0 +1,190 @@
+﻿@using WareHouseSys.ViewModels
+@model StockInventoryHeaderViewModel
+@{
+    ViewBag.Title = "新增盤點單";
+    Layout = "";
+}
+
+<style>
+    .table > tbody > tr > td {
+        border-top: 1px solid #2b2b2b;
+    }
+    .box-1 {
+        width: 100%;
+        height: 100%;
+        line-height: 100px;
+        max-width: 100%;
+        text-align: center;
+
+    }
+</style>
+@{
+    string UserName = ViewBag.UserName;
+    string UserId = ViewBag.UserId;
+}
+<form id="InventoryAddForm" data-saveurl="@Url.Content("../api/InventoryStock/SaveInventory")">
+    <input type="hidden" name="WareHouseMgr" value="@(Model == null?"":Model.WareHouseMgr)" />
+    <input type="hidden" name="InventoryWarHouse" value="@(Model == null?"":Model.InventoryWarHouse)" />
+    <input type="hidden" name="WGroupId" value="@(Model == null?"":Model.WGroupId)" />
+    
+    <table class="table" style="border-style:solid;border-width:2px">
+        <tbody>
+            <tr>
+                <td colspan="6" style="font-weight:800;font-size:x-large" align="center">盤點單資訊</td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    製表人員
+                </td>
+                <td>
+                    @(Html.Kendo().MultiColumnComboBox()
+                                                        .Name("InventoryMan")
+                                                        .DataTextField("TMNAME")
+                                                        .DataValueField("KEYNO")
+                                                        .Filter("contains")
+                                                        .FilterFields(new string[] { "TMNAME", "KEYNO" })
+                                                        .Text(Model == null ? UserName : Model.InventoryMan)
+                                                        .Value(Model == null ? UserId : Model.InventoryManId)
+                                                        .Columns(columns =>
+                                                        {
+                                                            columns.Add().Field("TMNAME").Title("姓名").Width("100");
+                                                            columns.Add().Field("KEYNO").Title("員工編號").Width("100");
+                                                        })
+                                                        .HtmlAttributes(new { style = "width:70%;", required = true, validationMessage = "申請人必需選擇" })
+                                                        .Height(400)
+                                                        .DataSource(source => source
+                                                            .Custom()
+                                                            .Transport(transport => transport
+                                                            .Read(read =>
+                                                            {
+                                                                read.Url("../api/Employee/getEmployeeUnit");
+                                                            }))
+                                                        ).Events(e =>
+                                                        {
+                                                            e.Select("onWareHouseChange");
+                                                        })
+                    )
+                </td>
+                <td class="tdstyle">
+                    製表日期
+                </td>
+                <td>
+                    <input name="InventoryDate" value="@(Model == null? @DateTime.Now.ToString("yyyy/MM/dd"):DateTime.Parse(Model.InventoryDate.ToString()).ToString("yyyy/MM/dd"))" class="dateTime" required />
+                </td>
+                <td class="tdstyle">
+                    盤點週期
+                </td>
+                <td>
+                    @(Html.Kendo().ComboBox()
+                                                         .Name("Period")
+                                                         .Placeholder("盤點週期...")
+                                                         .BindTo(new List<string>() {
+                                                                            "月",
+                                                                            "季",
+                                                                            "半年",
+                                                                            "年"
+                                                         })
+                                                         .SelectedIndex(0)
+                                                         .Suggest(true)
+                                                         .HtmlAttributes(new { style = "width:50%;" })
+                    )
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    倉庫
+                </td>
+                <td>
+                    @(Html.Kendo().MultiColumnComboBox()
+                                        .Name("WareHouseName")
+                                        .DataTextField("WareHouseName")
+                                        .DataValueField("WareHouseId")
+                                        .Filter("contains")
+                                        .FilterFields(new string[] { "WGroupId", "WGroupName", "WareHouseName", "TMNAME" })
+                                        .Text(Model == null ? "" : Model.WGroupName)
+                                        .Value(Model == null ? "" : Model.WGroupId)
+                                        .Columns(columns =>
+                                        {
+                                            columns.Add().Field("WGroupId").Title("群組代碼").Width("100");
+                                            columns.Add().Field("WGroupName").Title("群組名稱").Width("100");
+                                            columns.Add().Field("WareHouseName").Title("倉庫名稱").Width("200");
+                                            columns.Add().Field("TMNAME").Title("倉庫負責人").Width("100");
+                                        })
+                                        .HtmlAttributes(new { style = "width:100%;", required = true, validationMessage = "盤點庫別不得為空白" })
+                                        .Height(400)
+                                        .DataSource(source => source
+                                            .Custom()
+                                            .Transport(transport => transport
+                                            .Read(read =>
+                                            {
+                                                read.Url("../api/WareHouse/getWGroupInfo");
+                                            }))
+                                        ).Events(e =>
+                                        {
+                                            e.Select("onWareHouseChange");
+                                        })
+                    )
+                </td>
+                <td class="tdstyle">
+                    盤點屬性
+                </td>
+                <td>
+                    @(Html.Kendo().ComboBox()
+                                                 .Name("InventoryAttr")
+                                                 .Placeholder("盤點屬性...")
+                                                 .BindTo(new List<string>() {
+                                                                          "自主盤點",
+                                                                          "定期盤點",
+                                                                          "不定期盤點"
+                                                 })
+                                                 .SelectedIndex(0)
+                                                 .Suggest(true)
+                                                 .HtmlAttributes(new { style = "width:100%;" })
+                    )
+
+                </td>
+                <td class="tdstyle">
+                    盤點單位
+                </td>
+                <td>
+                    @(Html.Kendo().ComboBox()
+                                                        .Name("InventoryUnit")
+                                                        .Placeholder("盤點單位...")
+                                                        .BindTo(new List<string>() {
+                                                                                      "倉儲單位",
+                                                                                      "現場料架管理人",
+                                                                                      "監盤單位"
+                                                        })
+                                                        .SelectedIndex(0)
+                                                        .Suggest(true)
+                                                        .HtmlAttributes(new { style = "width:100%;" })
+                    )
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class=" col-lg-5">
+                                <div id="InventorySrcGrid" data-url="@Url.Content("../Material/getMaterialInfoByWareHouseId/")"></div>
+                            </div>
+                            <div class="col-lg-1" style="height:100%;margin-top:70px"><div class="box-1"><i class="fas fa-arrow-alt-circle-right fa-3x" style="cursor:pointer;display:block" onclick="addInventory();"></i><i class="fas fa-arrow-alt-circle-left fa-3x" style="cursor:pointer" onclick="removeInventory();"></i></div></div>
+                            <div class="col-lg-5">
+                                <div id="InventoryDesGrid"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6">
+                    <div class="pull-right">
+                        <button id="BtnSaveInventory" class="btn btn-default" type="button" style="margin-left:10px"><i class="far fa-save"></i> 儲存</button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+

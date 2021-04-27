@@ -1,0 +1,141 @@
+﻿
+@{
+    ViewBag.Title = "轉入庫單作業";
+    Layout = "";
+}
+
+<style>
+    .table > tbody > tr > td {
+        border-top: 1px solid #2b2b2b;
+    }
+
+    .ui-autocomplete-input {
+        width: 70%;
+    }
+
+    .tdstyle {
+        font-family: 標楷體;
+        font-size: large;
+        vertical-align: middle;
+        border-style: solid;
+        border-width: 0.5px;
+        font-weight: 800;
+        text-align: center;
+        width: 12%;
+        background-color: #D0CECF;
+    }
+
+    .ui-dialog {
+        z-index: 900 !important;
+    }
+
+    body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    #InboundAddGrid .k-grid-content {
+        min-height: 100px;
+    }
+</style>
+
+<form id="InboundAddForm">
+    <table class="table" style="border-style:solid;border-width:2px">
+        <tbody>
+            <tr>
+                <td colspan="4" style="font-weight:800;font-size:x-large" align="center">入庫單資訊</td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    入庫人員
+                </td>
+                <td>
+                    @{
+                        string UserId = ViewBag.UserId;
+                    }
+                    @(Html.Kendo().MultiColumnComboBox()
+                        .Name("InboundMan")
+                        .DataTextField("TMNAME")
+                        .DataValueField("KEYNO")
+                        .Value(UserId)
+                        .Filter("contains")
+                        .FilterFields(new string[] { "TMNAME", "KEYNO" })
+                        .Columns(columns =>
+                        {
+                            columns.Add().Field("TMNAME").Title("姓名").Width("100");
+                            columns.Add().Field("KEYNO").Title("員工編號").Width("100");
+                        })
+                        .HtmlAttributes(new { style = "width:50%;", required = true, validationMessage = "入庫人員必需選擇" })
+                        .Height(400)
+                        .DataSource(source => source
+                            .Custom()
+                            .Transport(transport => transport
+                            .Read(read =>
+                            {
+                                read.Url("../api/Employee/getEmployeeUnit");
+                            }))
+                        )
+                    )
+                </td>
+
+                <td class="tdstyle">
+                    入庫日期
+                </td>
+                <td>
+                    @(Html.Kendo().DatePicker()
+                                                                      .Name("InboundDate")
+                                                                      .Value(DateTime.Now.ToString("yyyy/MM/dd"))
+                                                                      .HtmlAttributes(new { style = "width: 80%", title = "datepicker", required = true })
+                    )
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    入庫批次
+                </td>
+                <td>
+                    <input type="text" name="DeliveryLot" class="k-textbox" placeholder="入庫批次" required validationMessage="入庫批認為必填欄位" />
+                </td>
+                <td class="tdstyle">
+                    <font style="color:red">倉庫群組</font>
+                </td>
+                <td>
+                    <select name="WGroupId">
+                        @foreach (WareHouseSys.DBModels.WGroup wGroup in ViewBag.WGroups)
+                        {
+                            <option value="@wGroup.WGroupId">@wGroup.WGroupName</option>
+                        }
+                    </select>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<div id="InboundAddGrid" ></div>
+<table class="table" style="border-style:solid;border-width:2px">
+    <tbody>
+        <tr>
+            <td>
+                <div class="pull-right" style="margin-left:10px;display:inline-block;top:200px">
+                    <button id="btnSave" class="btn btn-danger" type="button"><i class="fa fa-save"></i>儲存</button>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+@*<table class="table" style="border-style:solid;border-width:2px">
+        <tbody>
+            <tr>
+                <td >
+                    <div id="InboundAddGrid" style="max-width:1000px"></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="pull-right" style="margin-left:10px;display:inline-block;top:200px">
+                        <button id="btnSave" class="btn btn-danger" type="button"><i class="fa fa-save"></i>儲存</button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>*@

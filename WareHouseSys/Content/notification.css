@@ -1,0 +1,63 @@
+﻿.k-notification h3 {
+    padding: 30px 10px 5px;
+    font-size: 1em;
+    line-height: normal;
+}
+
+.k-notification img {
+    margin: 20px;
+    float: left;
+}
+
+
+/* Info template */
+.new-mail {
+    width: 300px;
+    height: 100px;
+}
+
+/* Error template */
+.wrong-pass {
+    width: 300px;
+    height: 100px;
+}
+
+/* Success template */
+.upload-success {
+    width: 300px;
+    height: 100px;
+}
+
+
+/* For Bootstrap v4 theme */
+.k-bootstrap-v4 .k-notification h3 {
+    padding: 10px 10px 5px;
+}
+
+.k-bootstrap-v4 .k-notification img {
+    margin: 10px 20px 0 0;
+}
+
+.k-bootstrap-v4 .new-mail,
+.k-bootstrap-v4 .wrong-pass,
+.k-bootstrap-v4 .upload-success {
+    width: calc( 300px - 2.5rem );
+    height: calc( 100px - 1.5rem );
+}
+
+
+/* For Material v2 theme */
+.k-material-v2 .k-notification h3 {
+    padding: 10px 10px 5px;
+}
+
+.k-material-v2 .k-notification img {
+    margin: 10px 20px 0 0;
+}
+
+.k-material-v2 .new-mail,
+.k-material-v2 .wrong-pass,
+.k-material-v2 .upload-success {
+    width: 270px;
+    height: 70px;
+}

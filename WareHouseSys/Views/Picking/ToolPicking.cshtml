@@ -1,0 +1,59 @@
+﻿
+@{
+    ViewBag.Title = "手工具發料作業";
+}
+
+<style>
+    .tdstyle {
+        font-family: 標楷體;
+        font-size: large;
+        vertical-align: middle;
+        border-style: solid;
+        border-width: 0.5px;
+        font-weight: 800;
+        text-align: center;
+        width: 15%;
+        background-color: #D0CECF;
+    }
+
+    .ui-dialog {
+        z-index: 1000 !important;
+    }
+
+    body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    #MaterialPickingGrid .k-grid-content, .k-grid tr td {
+        overflow: visible;
+    }
+
+    #MaterialPickingGrid .k-grid-header {
+        padding-right: 0 !important;
+    }
+</style>
+<div class="row">
+    <section class="content-header">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i>發料作業</a></li>
+            <li class="active">手工具發料</li>
+        </ol>
+    </section>
+</div>
+<button id="ToolPickingAddBtn" class="btn btn-danger">新增手工具領料單</button>
+<div id="ToolPickingGrid" data-url="@Url.Action("ToolPickingSearch", "Picking")"></div>
+
+<div id="ModifyToolPickingDialog" data-url="@Url.Action("ModifyToolPicking", "Picking")"></div>
+
+<div id="AddPickingToolDialog" data-url="@Url.Action("AddPickingTool", "Picking")"></div>
+
+<div id="ToolPickingDetailDialog" data-url="@Url.Action("ToolPickingDetail", "Picking")"></div>
+
+@section scripts{
+    <script src="~/PageJs/ToolPicking.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+    <script src="~/PageJs/ModifyToolPicking.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+    <script src="~/PageJs/AddPickingTool.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+    <script src="~/PageJs/ToolPickingDetail.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+    <script src="~/PageJs/AddToolPicking.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+}
+

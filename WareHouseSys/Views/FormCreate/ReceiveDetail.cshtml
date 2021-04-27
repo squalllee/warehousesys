@@ -1,0 +1,54 @@
+﻿
+@{
+    Layout = "";
+    ViewBag.Title = "採購明細";
+}
+@using WareHouseSys.Models;
+@model List<PurLotClass>
+
+
+<div id="tt" class="easyui-tabs" style="width:100%;height:100%;">
+    @foreach (var p in Model)
+    {
+        <div title="批次 @p.DeliveryLot" style="padding:20px;display:none;">
+            <div class="container-fluid" style="margin-top:20px">
+                @if (ViewBag.IsClose && p.Qty > 0)
+                {
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button type="button" class="btn btn-primary pull-left" onclick="CreateReceive('@ViewBag.PurchaseNo','@p.DeliveryLot',this);">產生收貨單</button>
+                        </div>
+                    </div>
+                }
+
+                <div class="row" style="margin-top:10px">
+                    <div class="col-md-12">
+                        <table id="purBody-@p.DeliveryLot" class="easyui-datagrid" style="width:100%;min-height:300px"
+                               title=""
+                               url="../api/Purchase/getPurBodyByLot/@ViewBag.PurchaseNo/@p.DeliveryLot"
+                               sortName="PurchaseNo" sortOrder="asc"
+                               pagination="true" fitColumns="true" singleSelect="true">
+                            <thead>
+                                <tr>
+                                    <th field="PurchaseNo" width="200" sortable="true">案號</th>
+                                    <th field="MaterialNo" width="250" align="right" sortable="true">料號</th>
+                                    <th field="Price" width="250" align="right" sortable="true">單價</th>
+                                    <th field="Quantity" width="300" align="right" sortable="true">應交數量</th>
+                                    <th field="receivedQty" width="300" align="right" sortable="true">已交數量</th>
+                                    <th field="UnreceivedQty" width="300" align="right" sortable="true">未交數量</th>
+                                    <th field="DeliveryLot" width="300" align="right" sortable="true">交貨批次</th>
+                                    <th field="DeliveryPlace" width="300" align="right" sortable="true">交貨地點</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
+
+
+
+<script src="~/PageJs/ReceiveDetail.js?ver=@DateTime.Now.ToString("yyyyMmddHHmmss")"></script>

@@ -1,0 +1,51 @@
+﻿@using WareHouseSys.Models;
+@model List<PurLotClass>
+@{
+    Layout = "";
+    ViewBag.Title = "需求明細";
+}
+
+
+
+<div class="container-fluid" style="margin-top:20px" id="tt">
+    @if (ViewBag.IsClose)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <button type="button" class="btn btn-primary pull-left" onclick="CreatePur('@ViewBag.RequireNo',this);">產生採購單</button>
+            </div>
+        </div>
+    }
+
+    <div class="row" style="margin-top:10px">
+        <div class="col-md-12">
+            <table id="purBody" class="easyui-datagrid" style="width:100%;min-height:300px"
+                   title=""
+                   url="../api/Requirement/getReqBody/@ViewBag.RequireNo"
+                   sortName="OrderNo" sortOrder="asc"
+                   pagination="true" fitColumns="true" singleSelect="true">
+                <thead>
+                    <tr>
+                        <th field="OrderNo" width="200" sortable="true">案號</th>
+                        <th field="SerialNo" width="200" sortable="true">序號</th>
+                        <th field="MaterialNo" width="250" align="right" sortable="true">料號</th>
+                        <th field="EstPrice" width="250" align="right" sortable="true">單價</th>
+                        <th field="RequirementQty" width="300" align="right" sortable="true">數量</th>
+                        <th field="OnOrderInventory" width="300" align="right" sortable="true">在途量</th>
+                        <th field="RequireDate" width="300" align="right" sortable="true" formatter="formatDate1">需求日期</th>
+                        <th field="PeriodStart1" width="300" align="right" sortable="true" formatter="formatDate1">用料期程1(起)</th>
+                        <th field="PeriodEnd1" width="300" align="right" sortable="true" formatter="formatDate1">用料期程1(迄)</th>
+                        <th field="PeriodQty1" width="300" align="right" sortable="true">用料量1</th>
+                        <th field="PeriodStart2" width="300" align="right" sortable="true" formatter="formatDate1">用料期程2(起)</th>
+                        <th field="PeriodEnd2" width="300" align="right" sortable="true" formatter="formatDate1">用料期程2(迄)</th>
+                        <th field="PeriodQty2" width="300" align="right" sortable="true">用料量2</th>
+                        <th field="DeliveryPeriod" width="300" align="right" sortable="true">交貨期</th>
+                        <th field="RequireReason" width="300" align="right" sortable="true">需求原因</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+@* <script src="~/PageJs/PurCreate.js?ver=@DateTime.Now.ToString("yyyyMmddHHmmss")"></script>*@
+@*<script src="~/PageJs/ReceiveDetail.js?ver=@DateTime.Now.ToString("yyyyMmddHHmmss")"></script>*@

@@ -1,0 +1,169 @@
+﻿@using WareHouseSys.ViewModels
+@model MaterialUpdateHeaderViewModel
+
+@{
+    ViewBag.Title = "ReqMaterialAdd";
+    Layout = "";
+}
+
+<style>
+    .table > tbody > tr > td {
+        border-top: 1px solid #2b2b2b;
+    }
+
+    .fileinput-button {
+        position: relative;
+        overflow: hidden;
+    }
+
+        .fileinput-button input {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 0;
+            opacity: 0;
+            -ms-filter: 'alpha(opacity=0)';
+            font-size: 200px;
+            direction: ltr;
+            cursor: pointer;
+        }
+
+    .thumb {
+        height: 80px;
+        width: 100px;
+        border: 1px solid #000;
+    }
+
+    ul.thumb-Images li {
+        width: 120px;
+        float: left;
+        display: inline-block;
+        vertical-align: top;
+        height: 120px;
+    }
+
+    .img-wrap {
+        position: relative;
+        display: inline-block;
+        font-size: 0;
+    }
+
+        .img-wrap .close {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            z-index: 100;
+            background-color: #D0E5F5;
+            padding: 5px 2px 2px;
+            color: #000;
+            font-weight: bolder;
+            cursor: pointer;
+            opacity: .5;
+            font-size: 23px;
+            line-height: 10px;
+            border-radius: 50%;
+        }
+
+        .img-wrap:hover .close {
+            opacity: 1;
+            background-color: #ff0000;
+        }
+
+    .FileNameCaptionStyle {
+        font-size: 12px;
+    }
+</style>
+<input type="hidden" name="OrderNo" value="@(Model == null?"":Model.OrderNo)" />
+<form id="MaterialUpdateAddForm">
+    <table class="table" style="border-style:solid;border-width:2px">
+        <tbody>
+            <tr>
+                <td colspan="4" style="font-weight:800;font-size:x-large" align="center">料號變更單資訊</td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    <font style="color:red">申請日期</font>
+                </td>
+                <td>
+                    @(Html.Kendo().DatePicker()
+                         .Name("ReqDateTime")
+                         .Format("yyyy/MM/dd")
+                         .Value((Model == null ? DateTime.Now.ToString("yyyy/MM/dd") : Model.ReqDateTime.ToString("yyyy/MM/dd")))
+                         .HtmlAttributes(new { style = "width: 100%", title = "datepicker" })
+
+                    )
+
+                </td>
+                <td class="tdstyle">
+                    申請人員
+                </td>
+                <td>
+                    @{
+                        string UserId = ViewBag.UserId;
+                    }
+                    @(Html.Kendo().MultiColumnComboBox()
+                                        .Name("ReqMan")
+                                        .DataTextField("TMNAME")
+                                        .DataValueField("KEYNO")
+                                        .Filter("contains")
+                                        .FilterFields(new string[] { "TMNAME", "KEYNO" })
+                                        .Value((Model == null ? UserId : Model.ReqManId))
+                                        .Columns(columns =>
+                                        {
+                                            columns.Add().Field("TMNAME").Title("姓名").Width("200px");
+                                            columns.Add().Field("KEYNO").Title("員工編號").Width("200px");
+                                        })
+                                        .HtmlAttributes(new { style = "width:100%;" })
+                                        .Height(400)
+                                        .DataSource(source => source
+                                            .Custom()
+                                            .Transport(transport => transport
+                                            .Read(read =>
+                                            {
+                                                read.Url("../api/Employee/getEmployee");
+                                            }))
+                                        )
+                    )
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    原因
+                </td>
+                <td colspan="3">
+                    <input name="Reason" type="text" value="@(Model == null ? "" : Model.Reason)" style="width:50%" required validationMessage="原因不可為空白">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <div style="width:1165px">
+                        <div id="MaterialUpdateGrid"></div>
+                    </div>
+
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <div class="pull-right">
+                        @if (Model == null)
+                        {
+                            <button id="BtnSave" class="btn btn-danger" type="button" style="margin-left:10px"><i class="far fa-save"></i> 儲存</button>
+                        }
+                        else
+                        {
+                            <button id="BtnUpdate" class="btn btn-danger" type="button" style="margin-left:10px"><i class="far fa-edit"></i> 修改</button>
+                        }
+
+                    </div>
+                </td>
+               
+            </tr>
+
+        </tbody>
+    </table>
+
+
+</form>
+
+
+

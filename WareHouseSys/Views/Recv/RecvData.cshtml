@@ -1,0 +1,79 @@
+﻿@using WareHouseSys.Models;
+@model RecvHeaderViewModel
+@{
+    ViewBag.Title = "收貨作業";
+    Layout = "";
+}
+
+<style>
+    .table > tbody > tr > td {
+        border-top: 1px solid #2b2b2b;
+    }
+    .error{
+        color:red
+    }
+</style>
+
+<form id="RecvHeaderForm">
+    <input type="hidden" name="OrderNo" value="@Model.OrderNo" />
+    <input type="hidden" name="DeliveryLot" value="@Model.DeliveryLot" />
+
+    <table class="table" style="border-style:solid;border-width:2px">
+        <tbody>
+            <tr>
+                <td colspan="6" style="font-weight:800;font-size:x-large" align="center">收貨單資訊</td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    採購單號
+                </td>
+                <td> <input type="text" name="PurchaseNo" value="@Model.PurchaseNo" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" readonly></td>
+                <td class="tdstyle">
+                    <font style="color:red">收貨日期</font>
+                </td>
+                <td>
+                    <input type="text" name="ReceiveDate" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" value="@(Model.ReceiveDate == null?"":DateTime.Parse(Model.ReceiveDate.ToString()).ToString("yyyy/MM/dd"))" class="dateTime" required>
+                </td>
+
+                <td class="tdstyle">
+                    收貨人
+                </td>
+                <td>
+                    <input type="text" name="ReceiveMan" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" value="@Model.ReceiveMan" readonly>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle"><font style="color:red">是否提供文件</font></td>
+                <td colspan="5">
+                    <label for="IsDocument-1">是</label>
+                    @Html.RadioButton("IsDocument", true, Model.IsDocument, new { @id = "IsDocument-1" })
+                    <label for="IsDocument-2">否</label>
+                    @Html.RadioButton("IsDocument", false, !Model.IsDocument, new { @id = "IsDocument-2" })
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle"><font style="color:red">收貨狀況</font></td>
+                <td colspan="5"><textarea name="ReceiveStatus" cols="100" rows="4" required>@Model.ReceiveStatus</textarea></td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+   
+<table id="RecvDataTable" data-url="@Url.Content("../api/Recv/getRecvData")?OrderNo=@Model.OrderNo&Lot=@Model.DeliveryLot" data-saveurl="@Url.Content("../api/Recv/saveRecvData")" class="hover display">
+    <thead>
+        <tr>
+            <th>序號</th>
+            <th>料號</th>
+            <th>品名</th>
+            <th>規格</th>
+            <th>單位</th>
+            <th>庫別</th>
+            <th>儲位</th>
+            <th>應交數量</th>
+            <th>已交數量</th>
+            <th>未交數量</th>
+            <th>動作</th>
+        </tr>
+    </thead>
+</table>
+

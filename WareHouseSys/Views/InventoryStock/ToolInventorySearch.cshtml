@@ -1,0 +1,65 @@
+﻿
+@{
+    ViewBag.Title = "手工具盤點查詢";
+
+}
+<style>
+    .tdstyle {
+        font-family: 標楷體;
+        font-size: large;
+        vertical-align: middle;
+        border-style: solid;
+        border-width: 0.5px;
+        font-weight: 800;
+        text-align: center;
+        width: 15%;
+        background-color: #D0CECF;
+    }
+
+    #BackSearchGrid .k-grid-content, .k-grid tr td {
+        overflow: visible;
+    }
+
+    #BackSearchGrid .k-grid-header {
+        padding-right: 0 !important;
+    }
+</style>
+<div class="row">
+    <section class="content-header">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i>盤點作業</a></li>
+            <li class="active">手工具盤點作業</li>
+        </ol>
+    </section>
+</div>
+
+<button id="ToolInventoryAdd" class="btn btn-danger">新增手工具盤點單</button>
+
+<div id="ToolInventorySearchGrid" data-url="@Url.Action("InventoryHeader", "InventoryStock")" data-deleteurl="@Url.Content("../api/InventoryStock/deleteToolInventory")"></div>
+
+<div id="ToolInventoryAddDialog" data-url="@Url.Action("ToolInventoryAdd","InventoryStock")"></div>
+
+<div id="InventoryDetailDialog" data-url="@Url.Action("ToolInventoryDetail","InventoryStock")"></div>
+
+<div id="FirstCheckDialog" data-url="@Url.Action("ToolFirstCheck","InventoryStock")"></div>
+
+<div id="SecondCheckDialog" data-url="@Url.Action("ToolSecondCheck","InventoryStock")"></div>
+
+<div id="InventoryCloseDialog" data-url="@Url.Action("ToolInventoryClose","InventoryStock")"></div>
+
+<div id="InventoryRecordDialog" data-url="@Url.Action("ToolInventoryRecord","InventoryStock")"></div>
+
+@section scripts{
+    <script src="~/PageJs/ToolInventorySearch.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+    <script src="~/PageJs/ToolInventoryAdd.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+    <script src="~/PageJs/ToolFirstCheck.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+    <script src="~/PageJs/ToolSecondCheck.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+    <script src="~/PageJs/ToolInventoryDetail.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+    <script src="~/PageJs/ToolInventoryClose.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+    <script src="~/PageJs/ToolInventoryRecord.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+    @*
+
+        <script src="~/PageJs/FileUpload.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>*@
+}
+
+

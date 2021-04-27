@@ -1,0 +1,46 @@
+﻿@{
+    ViewBag.Title = "展延查詢";
+}
+
+<style>
+    .tdstyle {
+        font-family: 標楷體;
+        font-size: large;
+        vertical-align: middle;
+        border-style: solid;
+        border-width: 0.5px;
+        font-weight: 800;
+        text-align: center;
+        width: 15%;
+        background-color: #D0CECF;
+    }
+
+    #ExtendMaterialGrid .k-grid-content, .k-grid tr td {
+        overflow: visible;
+    }
+
+    #ExtendMaterialGrid .k-grid-header {
+        padding-right: 0 !important;
+    }
+</style>
+<div class="row">
+    <section class="content-header">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> 展延作業</a></li>
+            <li class="active">展延</li>
+        </ol>
+    </section>
+</div>
+
+<div id="ExtendMaterialGrid" data-url="@Url.Action("getExtendHaderViewModel", "Extend")" data-deleteurl="@Url.Content("../api/Extend/deleteExtend")"></div>
+
+<div id="ExtendDetailDialog" data-url="@Url.Action("ExtendDetail","Extend")"></div>
+
+<div id="doExtendDialog" data-url="@Url.Action("doExtend","Extend")"></div>
+
+@section scripts{
+    <script src="~/PageJs/ExtendMaterial.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+    <script src="~/PageJs/FileUpload.js"></script>
+    <script src="~/PageJs/ExtendDetail.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+    <script src="~/PageJs/doExtend.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+}

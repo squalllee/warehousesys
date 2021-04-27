@@ -1,0 +1,91 @@
+﻿@using WareHouseSys.ViewModels
+@using WareHouseSys.Models
+@model LendHeaderViewModel
+
+@{
+    ViewBag.Title = "借料單明細";
+    Layout = "";
+}
+
+<style>
+    .table > tbody > tr > td {
+        border-top: 1px solid #2b2b2b;
+    }
+
+  
+</style>
+
+@{
+    string UserName = ViewBag.UserName;
+    string UserId = ViewBag.UserId;
+}
+
+<form>
+    <table class="table" style="border-style:solid;border-width:2px">
+        <tbody>
+            <tr>
+                <td colspan="4" style="font-weight:800;font-size:x-large" align="center">借料單資訊</td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    申請人員
+                </td>
+                <td>
+                    <h4><span class="label label-default">@Model.LendMan</span></h4>
+                </td>
+                <td class="tdstyle">
+                    發料人員
+                </td>
+                <td>
+                    <h4><span class="label label-default">@Model.OutBoundMan</span></h4>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    發料日期
+                </td>
+                <td>
+                    <h4><span class="label label-default">@(Model.OutBoundDate == null?"": DateTime.Parse(Model.OutBoundDate.ToString()).ToString("yyyy/MM/dd"))</span></h4>
+                </td>
+                <td class="tdstyle">
+                    借料期限
+                </td>
+                <td>
+                    <h4><span class="label label-default">@(Model.Deadline==null?"":DateTime.Parse(Model.Deadline.ToString()).ToString("yyyy/MM/dd"))</span></h4>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    借料原因
+                </td>
+                <td>
+                    <h4><span class="label label-default">@(Model.Reason == "其它" ? Model.OtherReason : Model.Reason)</span></h4>
+                </td>
+                <td class="tdstyle">
+                    原因說明
+                </td>
+                <td>
+                    <h4><span class="label label-default">@Model.OtherReason</span></h4>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <div style="width:950px">
+                        <div id="LendDetailGrid" data-url="@Url.Content("../Lend/LendBodyViewModel")?OrderNo=@(Model == null?"":Model.OrderNo)" ></div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    附件
+                </td>
+                <td colspan="3">
+                    @foreach (Attachment f in Model.attachments)
+                    {
+                        <span class="badge badge-pill badge-default" style="cursor:pointer"><a href="@Url.Action("getAttatchment","Lend",new { OrderNo=Model.OrderNo,FileName=f.FileName})" style="color:white" target="aa">@f.FileName</a></span>
+                    }
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>

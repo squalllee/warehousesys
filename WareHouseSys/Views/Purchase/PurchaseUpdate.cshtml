@@ -1,0 +1,291 @@
+﻿
+@model WareHouseSys.DBModels.PurchaseHeader
+
+@{
+    ViewBag.Title = "需求明細修改";
+    Layout = "";
+}
+
+<style>
+    .table > tbody > tr > td {
+        border-top: 1px solid #2b2b2b;
+    }
+
+    .ui-autocomplete-input {
+        width: 70%;
+    }
+
+    .tdstyle {
+        font-family: 標楷體;
+        font-size: large;
+        vertical-align: middle;
+        border-style: solid;
+        border-width: 0.5px;
+        font-weight: 800;
+        text-align: center;
+        width: 12%;
+        background-color: #D0CECF;
+    }
+
+    .ui-dialog {
+        z-index: 900 !important;
+    }
+
+    body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    .fileinput-button {
+        position: relative;
+        overflow: hidden;
+    }
+
+        .fileinput-button input {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 0;
+            opacity: 0;
+            -ms-filter: 'alpha(opacity=0)';
+            font-size: 200px;
+            direction: ltr;
+            cursor: pointer;
+        }
+
+    .thumb {
+        height: 80px;
+        width: 100px;
+        border: 1px solid #000;
+    }
+
+    ul.thumb-Images li {
+        width: 120px;
+        float: left;
+        display: inline-block;
+        vertical-align: top;
+        height: 120px;
+    }
+
+    .img-wrap {
+        position: relative;
+        display: inline-block;
+        font-size: 0;
+    }
+
+        .img-wrap .close {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            z-index: 100;
+            background-color: #D0E5F5;
+            padding: 5px 2px 2px;
+            color: #000;
+            font-weight: bolder;
+            cursor: pointer;
+            opacity: .5;
+            font-size: 23px;
+            line-height: 10px;
+            border-radius: 50%;
+        }
+
+        .img-wrap:hover .close {
+            opacity: 1;
+            background-color: #ff0000;
+        }
+
+    .FileNameCaptionStyle {
+        font-size: 12px;
+    }
+
+    .fstChoiceItem
+    {
+        font-size:0.8em
+    }
+    .fstResultItem {
+        font-size: 0.8em
+    }
+</style>
+
+<form id="PurchaseHeaderForm">
+    <input type="hidden" value="@Model.ContractPriceIncludeVAT" name="ContractPriceIncludeVAT" />
+    <input type="hidden" value="@Model.ContractPriceWithoutVAT" name="ContractPriceWithoutVAT" />
+    <input type="hidden" value="@Model.PurchaseNo" name="PurchaseNo" />
+
+    <table class="table" style="border-style:solid;border-width:2px">
+        <tbody>
+            <tr>
+                <td colspan="6" style="font-weight:800;font-size:x-large" align="center">採購單</td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    採購日期
+                </td>
+                <td> <input name="PurchaseDate" value="@Model.PurchaseDate.ToString("yyyy/MM/dd")" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" id="PurchaseDate" class="dateTime" required></td>
+                <td class="tdstyle">
+                    契約編號
+                </td>
+                <td>
+                    <input name="PurchaseNo" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" id="PurchaseNo" required value="@Model.PurchaseNo">
+                </td>
+
+                <td class="tdstyle">
+                    採購方式
+                </td>
+                <td>
+                    <select name="PurchaseMethod" style="width:50%;border-color: #d2d6de;border: 1px solid #ccc;" id="PurchaseMethod" required>
+                        <option></option>
+                        <option @(Model.PurchaseMethod == "小額採購" ? "selected" : "")>小額採購</option>
+                        <option @(Model.PurchaseMethod == "公開招標" ? "selected" : "")>公開招標</option>
+                        <option @(Model.PurchaseMethod == "限制性招標" ? "selected" : "")>限制性招標</option>
+                        <option @(Model.PurchaseMethod == "選擇性招標" ? "selected" : "")>選擇性招標</option>
+                        <option @(Model.PurchaseMethod == "公開取得報價或企劃書" ? "selected" : "")>公開取得報價或企劃書</option>
+                        <option @(Model.PurchaseMethod == "零用金採購" ? "selected" : "")>零用金採購</option>
+                        <option @(Model.PurchaseMethod == "共同供應契約" ? "selected" : "")>零用金採購</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    預算來源
+                </td>
+                <td>
+                    <select name="BudgetSource" multiple class="multipleSelect" id="BudgetSource" required>
+                        @if (Model.BudgetSource != null)
+                        {
+                            <option @(Model.BudgetSource.IndexOf("材料及用品費-使用材料費-物料") >= 0 ? "selected" : "") value="材料及用品費-使用材料費-物料">材料及用品費-使用材料費-物料</option>
+                        }
+                        else
+                        {
+                            <option value="材料及用品費-使用材料費-物料">材料及用品費-使用材料費-物料</option>
+                        }
+
+                    </select>
+                </td>
+                <td class="tdstyle">
+                    採購案名
+                </td>
+                <td>
+                    <input name="PurchaseName" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" id="PurchaseName" value="@Model.PurchaseName" required>
+                </td>
+                <td class="tdstyle">
+                    採購單位
+                </td>
+                <td>
+                    <select name="PurchaseUnit" style="width:50%;border-color: #d2d6de;border: 1px solid #ccc;" id="PurchaseUnit" class="combobox" required>
+                        <option></option>
+                        @foreach (WareHouseSys.DBModels.UNIT unit in ViewBag.Units)
+                        {
+                            if (unit.UNITNO.Trim() == Model.PurchaseUnit)
+                            {
+                                <option value="@unit.UNITNO.Trim()" selected>@unit.UNITNAME.Trim() [@unit.UNITNO.Trim()]</option>
+                            }
+                            else
+                            {
+                                <option value="@unit.UNITNO.Trim()">@unit.UNITNAME.Trim() [@unit.UNITNO.Trim()]</option>
+                            }
+
+                        }
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    採購承辦人
+                </td>
+                <td>
+                    <select name="PurchaseMan" style="width:50%;border-color: #d2d6de;border: 1px solid #ccc;" id="PurchaseMan" class="combobox" required>
+                        <option></option>
+                        @foreach (WareHouseSys.DBModels.Employee emp in ViewBag.Employees)
+                        {
+                            if (emp.KEYNO.Trim() == Model.PurchaseMan)
+                            {
+                                <option data-Unit="@emp.UNITNO.Trim()" value="@emp.KEYNO.Trim()" selected>@emp.TMNAME.Trim() [@emp.KEYNO.Trim()]</option>
+                            }
+                            else
+                            {
+                                <option data-Unit="@emp.UNITNO.Trim()" value="@emp.KEYNO.Trim()">@emp.TMNAME.Trim() [@emp.KEYNO.Trim()]</option>
+                            }
+
+                        }
+                    </select>
+                </td>
+                <td class="tdstyle">
+                    廠商名稱
+                </td>
+                <td>
+                    <input name="VendorName" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" id="VendorName" value="@Model.VendorName" required>
+                </td>
+                <td class="tdstyle">
+                    廠商聯絡人
+                </td>
+                <td>
+                    <input name="VendorContact" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" id="VendorContact" value="@Model.VendorContact" required>
+                </td>
+
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    電話
+                </td>
+                <td>
+                    <input name="Tel" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" id="Tel" value="@Model.Tel" required>
+                </td>
+                <td class="tdstyle">
+                    手機
+                </td>
+                <td>
+                    <input name="Mobile" style="width:30%;border-color: #d2d6de;border: 1px solid #ccc;" value="@Model.Mobile" id="Mobile">
+                </td>
+                <td class="tdstyle">開口契約</td>
+                <td>
+                    @(Html.Kendo().Switch()
+                            .Checked(Model.OpenContract)
+                            .Name("OpenContract")
+                            .Messages(c => c.Checked("是").Unchecked("否")))
+
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+<table class="table" style="border-style:solid;border-width:2px">
+    <tbody>
+        <tr>
+            <td>
+                <div class="panel-heading">
+                    <button id="btnPurDetailAdd" class="btn btn-danger" type="button" style="margin-left:10px;display:inline;top:-12px"><i class="fa fa-plus-circle"></i>新增</button>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <table id="PurDetailUpdateTable" data-url="@Url.Content("../api/Purchase/getPurBody/")@Model.PurchaseNo" data-saveurl="@Url.Content("../api/Purchase/SavePurBody")" data-deleteurl="@Url.Content("../api/Purchase/deletePurBody/")" class="hover display">
+                    <thead>
+                        <tr>
+                            <th>料號</th>
+                            <th>品名</th>
+                            <th>規格</th>
+                            <th>單位</th>
+                            <th>契約數量</th>
+                            <th>單價未稅</th>
+                            <th>交貨批次</th>
+                            <th>交貨地點</th>
+                            <th>履約期限</th>
+                            <th>需求單位</th>
+                            <th>動作</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th colspan="3" style="text-align:right">總契約金額(未稅):</th>
+                            <th colspan="2"></th>
+                            <th colspan="3" style="text-align:right">總契約金額(含稅):</th>
+                            <th colspan="3"></th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>

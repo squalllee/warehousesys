@@ -1,0 +1,90 @@
+﻿
+@{
+    ViewBag.Title = "轉報廢單";
+    Layout = "";
+}
+
+<style>
+    .table > tbody > tr > td {
+        border-top: 1px solid #2b2b2b;
+    }
+</style>
+
+<input type="hidden" id="PickingNo" value="@ViewBag.OrderNo" />
+<form id="ScrapForm">
+    <table class="table" style="border-style:solid;border-width:2px">
+        <tbody>
+            <tr>
+                <td colspan="4" style="font-weight:800;font-size:x-large" align="center">轉報廢單</td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    申請人員
+                </td>
+                <td>
+                    @{ 
+                        string UserId = ViewBag.UserId;
+                    }
+                    @(Html.Kendo().MultiColumnComboBox()
+                        .Name("ApplyMan")
+                        .DataTextField("TMNAME")
+                        .DataValueField("KEYNO")
+                        .Value(UserId)
+                        .Filter("contains")
+                        .FilterFields(new string[] { "TMNAME", "KEYNO" })
+                        .Columns(columns =>
+                        {
+                            columns.Add().Field("TMNAME").Title("姓名").Width("100");
+                            columns.Add().Field("KEYNO").Title("員工編號").Width("100");
+                        })
+                        .HtmlAttributes(new { style = "width:50%;", required = true, validationMessage = "申請人必需選擇" })
+                        .Height(400)
+                        .DataSource(source => source
+                            .Custom()
+                            .Transport(transport => transport
+                            .Read(read =>
+                            {
+                                read.Url("../api/Employee/getEmployeeUnit");
+                            }))
+                        )
+                    )
+                </td>
+                <td class="tdstyle">
+                    申請日期
+                </td>
+                <td>
+                    @(Html.Kendo().DatePicker()
+                        .Name("ApplyDate")
+                        .Format("yyyy/MM/dd")
+                        .Value(DateTime.Now.ToString("yyyy/MM/dd"))
+                        .HtmlAttributes(new { style = "width: 100%", title = "datepicker" })
+                    )
+                    
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    報廢原因
+                </td>
+                <td colspan="3">
+                    <textarea name="Reason" cols="50" rows="4" required validationMessage="報廢原因不可為空白"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <div style="width:1150px">
+                        <div id="PickingScrapGrid" data-url="@Url.Content("../Picking/PickingToScrapBodies")?OrderNO=@ViewBag.OrderNo" data-transferurl="@Url.Content("../api/Picking/TransferToScrap")"></div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <div class="pull-right" style="margin-top:10px">
+                        <button id="TransferScrap" class="btn btn-danger">轉報廢單</button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+

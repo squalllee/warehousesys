@@ -1,0 +1,177 @@
+﻿@using WareHouseSys.ViewModels;
+@model MaterialPickHeaderViewModel
+@{
+    ViewBag.Title = "發料作業";
+    Layout = "";
+}
+<style>
+    .table > tbody > tr > td {
+        border-top: 1px solid #2b2b2b;
+    }
+
+    .fileinput-button {
+        position: relative;
+        overflow: hidden;
+    }
+
+        .fileinput-button input {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 0;
+            opacity: 0;
+            -ms-filter: 'alpha(opacity=0)';
+            font-size: 200px;
+            direction: ltr;
+            cursor: pointer;
+        }
+
+    .thumb {
+        height: 80px;
+        width: 100px;
+        border: 1px solid #000;
+    }
+
+    ul.thumb-Images li {
+        width: 120px;
+        float: left;
+        display: inline-block;
+        vertical-align: top;
+        height: 120px;
+    }
+
+    .img-wrap {
+        position: relative;
+        display: inline-block;
+        font-size: 0;
+    }
+
+        .img-wrap .close {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            z-index: 100;
+            background-color: #D0E5F5;
+            padding: 5px 2px 2px;
+            color: #000;
+            font-weight: bolder;
+            cursor: pointer;
+            opacity: .5;
+            font-size: 23px;
+            line-height: 10px;
+            border-radius: 50%;
+        }
+
+        .img-wrap:hover .close {
+            opacity: 1;
+            background-color: #ff0000;
+        }
+
+    .FileNameCaptionStyle {
+        font-size: 12px;
+    }
+</style>
+<form id="PickingForm" data-saveurl="@Url.Content("../api/Picking/SavePickingHeader")">
+    <table class="table" style="border-style:solid;border-width:2px">
+        <tbody>
+            <tr>
+                <td colspan="6" style="font-weight:800;font-size:x-large" align="center">領料單資訊</td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    領料單號
+                </td>
+                <td> <input name="OrderNo" value="@Model.OrderNo" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" readonly></td>
+                <td class="tdstyle">
+                    <font style="color:red">領料日期</font>
+                </td>
+                <td>
+                    <input name="OutBoundDate" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" value="@(Model.OutBoundDate == null?"":DateTime.Parse(Model.OutBoundDate.ToString()).ToString("yyyy/MM/dd"))" class="dateTime" required>
+                </td>
+
+                <td class="tdstyle">
+                    發料人員
+                </td>
+                <td>
+                    @(Html.Kendo().MultiColumnComboBox()
+                                                            .Name("OutBoundMan")
+                                                            .DataTextField("TMNAME")
+                                                            .DataValueField("KEYNO")
+                                                            .Filter("contains")
+                                                            .FilterFields(new string[] { "TMNAME", "KEYNO" })
+                                                            .Text(Model.OutBoundMan)
+                                                            .Value(Model.OutBoundManId)
+                                                            .Columns(columns =>
+                                                            {
+                                                                columns.Add().Field("TMNAME").Title("姓名").Width("200px");
+                                                                columns.Add().Field("KEYNO").Title("員工編號").Width("200px");
+                                                            })
+                                                            .HtmlAttributes(new { style = "width:100%;",required=true })
+                                                            .Height(400)
+                                                            .DataSource(source => source
+                                                                .Custom()
+                                                                .Transport(transport => transport
+                                                                .Read(read =>
+                                                                {
+                                                                    read.Url("../api/Employee/getEmployee");
+                                                                }))
+                                                            )
+                    )
+
+
+                    @*<input name="" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" value="@Model.OutBoundMan" readonly>*@
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    緊急領料
+                </td>
+                <td colspan="5">
+                    @(Html.Kendo().Switch()
+                                                    .Name("EmergencyPicking")
+                                                    .Messages(c => c.Checked("是").Unchecked("否"))
+                                                    .Checked(Model.EmergencyPicking)
+                    )
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    領料原因
+                </td>
+                <td colspan="5">
+                    <textarea name="PickingReason" cols="50" rows="4" required validationMessage="領料原因不可為空白">@(Model != null?Model.PickingReason:"")</textarea>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6">
+                    <div style="width:1165px">
+                        <div id="PickingDetailUpdateGrid" data-url="@Url.Content("../Picking/MaterialPickingBodyDetail")?OrderNO=@Model.OrderNo" data-updateurl="@Url.Content("../api/Picking/UpdateMaterialPickingBody")"></div>
+                    </div>
+
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    附件上傳<img id="imgFileOpen" src="../images/plus.png" style="width: 20%; cursor: pointer; vertical-align: middle;" />
+                </td>
+                <td colspan="5">
+
+                    <output id="Filelist"></output>
+                    <input type="file" name="files[]" id="files" multiple accept="application/pdf," style="display:none">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6">
+                    <div class="pull-right">
+                        <button id="BtnSavePicking" class="btn btn-default" type="button" style="margin-left:10px"><i class="far fa-save"></i> 儲存</button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    
+</form>
+
+               
+

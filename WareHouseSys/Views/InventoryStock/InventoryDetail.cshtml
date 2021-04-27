@@ -1,0 +1,104 @@
+﻿@using WareHouseSys.ViewModels
+@using WareHouseSys.Models
+@model StockInventoryHeaderViewModel
+@{
+    ViewBag.Title = "盤點明細";
+    Layout = "";
+}
+
+<style>
+    .table > tbody > tr > td {
+        border-top: 1px solid #2b2b2b;
+    }
+
+    .box-1 {
+        width: 100%;
+        height: 100%;
+        line-height: 100px;
+        max-width: 100%;
+        text-align: center;
+    }
+    .diff {
+        color: red;
+        font-weight: 800;
+    }
+</style>
+
+<form>
+
+    <table class="table" style="border-style:solid;border-width:2px">
+        <tbody>
+            <tr>
+                <td colspan="6" style="font-weight:800;font-size:x-large" align="center">盤點單資訊</td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    盤點人員
+                </td>
+                <td>
+                    <h4><span class="label label-default">@Model.InventoryMan</span></h4>
+                </td>
+                <td class="tdstyle">
+                    製表日期
+                </td>
+                <td>
+                    <h4><span class="label label-default">@Model.InventoryAttr</span></h4>
+                </td>
+                <td class="tdstyle">
+                    盤點週期
+                </td>
+                <td>
+                    <h4><span class="label label-default">@Model.Period</span></h4>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    倉庫
+                </td>
+                <td>
+                    <h4><span class="label label-default">@Model.InventoryWarHouse</span></h4>
+                </td>
+                <td class="tdstyle">
+                    盤點屬性
+                </td>
+                <td>
+                    <h4><span class="label label-default">@Model.InventoryAttr</span></h4>
+                </td>
+                <td class="tdstyle">
+                    盤點單位
+                </td>
+                <td>
+                    <h4><span class="label label-default">@Model.InventoryUnit</span></h4>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6">
+                    <div style="width:950px">
+                        <div id="InventoryGrid" data-url="@Url.Content("../InventoryStock/InventoryBodies")?OrderNo=@Model.OrderNo"></div>
+                    </div>
+
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    附件
+                </td>
+                <td colspan="5">
+                    @foreach (Attachment f in Model.attachments)
+                    {
+                        if (f.NoteText == "First")
+                        {
+                            <span class="badge badge-pill badge-default" style="cursor:pointer"><a href="@Url.Action("getFirstCheckAttatchment","InventoryStock",new { OrderNo=Model.OrderNo,FileName=f.FileName})" style="color:white" target="aa">@f.FileName</a></span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-pill badge-default" style="cursor:pointer"><a href="@Url.Action("getSecondCheckAttatchment","InventoryStock",new { OrderNo=Model.OrderNo,FileName=f.FileName})" style="color:white" target="aa">@f.FileName</a></span>
+                        }
+
+                    }
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+

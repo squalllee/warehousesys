@@ -1,0 +1,57 @@
+﻿
+@{
+    ViewBag.Title = "退料作業";
+}
+
+<style>
+    .tdstyle {
+        font-family: 標楷體;
+        font-size: large;
+        vertical-align: middle;
+        border-style: solid;
+        border-width: 0.5px;
+        font-weight: 800;
+        text-align: center;
+        width: 15%;
+        background-color: #D0CECF;
+    }
+
+    .ui-dialog {
+        z-index: 1000 !important;
+    }
+
+    body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    #InboundGrid .k-grid-content, .k-grid tr td {
+        overflow: visible;
+    }
+
+    #InboundGrid .k-grid-header {
+        padding-right: 0 !important;
+    }
+</style>
+<div class="row">
+    <section class="content-header">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> 退料作業</a></li>
+            <li class="active">退料</li>
+        </ol>
+    </section>
+</div>
+
+<div id="ReturnMaterialGrid" data-url="@Url.Action("ReturnGrid", "Return")"></div>
+
+<div id="ReturnDetailDialog" data-url="@Url.Action("ReturnDetail","Return")"></div>
+
+<div id="doReturnDialog" data-url="@Url.Action("doReturn","Return")"></div>
+
+
+@section scripts{
+    <script src="~/PageJs/ReturnMaterial.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+    <script src="~/PageJs/doReturn.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+    <script src="~/PageJs/FileUpload.js"></script>
+    <script src="~/PageJs/ReturnDetail.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+}
+

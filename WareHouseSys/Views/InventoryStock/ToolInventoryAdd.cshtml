@@ -1,0 +1,160 @@
+﻿
+@{
+    ViewBag.Title = "新增手工具盤點單";
+    Layout = "";
+}
+
+<style>
+    .table > tbody > tr > td {
+        border-top: 1px solid #2b2b2b;
+    }
+
+    .box-1 {
+        width: 100%;
+        height: 100%;
+        line-height: 100px;
+        max-width: 100%;
+        text-align: center;
+    }
+</style>
+@{
+    string UserName = ViewBag.UserName;
+    string UserId = ViewBag.UserId;
+}
+<form id="ToolInventoryAddForm" data-saveurl="@Url.Content("../api/InventoryStock/SaveToolInventory")">
+
+    <table class="table" style="border-style:solid;border-width:2px">
+        <tbody>
+            <tr>
+                <td colspan="6" style="font-weight:800;font-size:x-large" align="center">盤點單資訊</td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    盤點人員
+                </td>
+                <td>
+                    @(Html.Kendo().MultiColumnComboBox()
+                                .Name("InventoryMan")
+                                .DataTextField("TMNAME")
+                                .DataValueField("KEYNO")
+                                .Filter("contains")
+                                .FilterFields(new string[] { "TMNAME", "KEYNO" })
+                                .Text(UserName)
+                                .Value(UserId)
+                                .Columns(columns =>
+                                {
+                                    columns.Add().Field("TMNAME").Title("姓名").Width("100");
+                                    columns.Add().Field("KEYNO").Title("員工編號").Width("100");
+                                })
+                                .HtmlAttributes(new { style = "width:70%;", required = true, validationMessage = "申請人必需選擇" })
+                                .Height(400)
+                                .DataSource(source => source
+                                    .Custom()
+                                    .Transport(transport => transport
+                                    .Read(read =>
+                                    {
+                                        read.Url("../api/Employee/getEmployeeUnit");
+                                    }))
+                                )
+                    )
+                </td>
+                <td class="tdstyle">
+                    盤點日期
+                </td>
+                <td>
+                    <input name="InventoryDate" value="@(Model == null? @DateTime.Now.ToString("yyyy/MM/dd"):DateTime.Parse(Model.InventoryDate.ToString()).ToString("yyyy/MM/dd"))" class="dateTime" required />
+                </td>
+                <td class="tdstyle">
+                    盤點週期
+                </td>
+                <td>
+                    @(Html.Kendo().ComboBox()
+                                                                                 .Name("Period")
+                                                                                 .Placeholder("盤點週期...")
+                                                                                 .BindTo(new List<string>() {
+                                                                                                                "月",
+                                                                                                                "季",
+                                                                                                                "半年",
+                                                                                                                "年"
+                                                                                 })
+                                                                                 .SelectedIndex(0)
+                                                                                 .Suggest(true)
+                                                                                 .HtmlAttributes(new { style = "width:50%;" })
+                    )
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    保管單位
+                </td>
+                <td>
+                    @(Html.Kendo().MultiColumnComboBox()
+                                                                .Name("KeepUnit")
+                                                                .DataTextField("UNITNAME")
+                                                                .DataValueField("UNITNO")
+                                                                .Filter("contains")
+                                                                .FilterFields(new string[] { "UNITNO", "UNITNAME" })
+                                                                .Columns(columns =>
+                                                                {
+                                                                    columns.Add().Field("UNITNAME").Title("單位名稱").Width("100");
+                                                                    columns.Add().Field("UNITNO").Title("單位代碼").Width("100");
+                                                                    columns.Add().Field("ToolMgrId").Title("手工具管理人代碼").Width("100");
+                                                                    columns.Add().Field("ToolMgr").Title("手工具管理人").Width("100");
+                                                                })
+                                                                .HtmlAttributes(new { style = "width:100%;", required = true, validationMessage = "保管單位不得為空白" })
+                                                                .Height(400)
+                                                                .DataSource(source => source
+                                                                    .Custom()
+                                                                    .Transport(transport => transport
+                                                                    .Read(read =>
+                                                                    {
+                                                                        read.Url("../api/Unit/getToolKeepUnit");
+                                                                    }))
+                                                                ).Events(e =>
+                                                                {
+                                                                    e.Select("onKeepUnitChange");
+                                                                })
+                    )
+                </td>
+                <td class="tdstyle">
+                    盤點屬性
+                </td>
+                <td>
+                    @(Html.Kendo().ComboBox()
+                                                                         .Name("InventoryAttr")
+                                                                         .Placeholder("盤點屬性...")
+                                                                         .BindTo(new List<string>() {
+                                                                                                              "自主盤點",
+                                                                                                              "定期盤點",
+                                                                                                              "不定期盤點"
+                                                                         })
+                                                                         .SelectedIndex(0)
+                                                                         .Suggest(true)
+                                                                         .HtmlAttributes(new { style = "width:100%;" })
+                    )
+
+                </td>
+                <td class="tdstyle">
+                    手工具保管人
+                </td>
+                <td>
+                    <input name="ToolMgrDisplay" readonly />
+                    <input name="ToolMgr" style="display:none" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6">
+                    <div id="ToolAddInventoryGrid" data-url="@Url.Action("InventoryBodies","ToolInventory")"></div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6">
+                    <div class="pull-right">
+                        <button id="BtnSaveInventory" class="btn btn-default" type="button" style="margin-left:10px"><i class="far fa-save"></i> 儲存</button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+

@@ -1,0 +1,123 @@
+﻿@using WareHouseSys.ViewModels
+
+@model ScrapHeaderViewModel
+@{
+    Layout = null;
+}
+<style>
+    .k-grid-content {
+        overflow: auto;
+    }
+</style>
+
+<input type="hidden" name="OrderNo" value="@ViewBag.OrderNo" />
+<form id="ScrapForm">
+    <table class="table" style="border-style:solid;border-width:2px">
+        <tbody>
+            <tr>
+                <td colspan="4" style="font-weight:800;font-size:x-large" align="center">新增廢單</td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    申請人員
+                </td>
+                <td>
+                    @{
+                        string UserId = ViewBag.UserId;
+                    }
+                    @(Html.Kendo().MultiColumnComboBox()
+                                .Name("ApplyMan")
+                                .DataTextField("TMNAME")
+                                .DataValueField("KEYNO")
+                                .Value(Model==null?UserId:Model.ApplyManId.Trim())
+                                .Filter("contains")
+                                .FilterFields(new string[] { "TMNAME", "KEYNO" })
+                                .Columns(columns =>
+                                {
+                                    columns.Add().Field("TMNAME").Title("姓名").Width("100");
+                                    columns.Add().Field("KEYNO").Title("員工編號").Width("100");
+                                })
+                                .HtmlAttributes(new { style = "width:50%;", required = true, validationMessage = "申請人必需選擇" })
+                                .Height(400)
+                                .DataSource(source => source
+                                    .Custom()
+                                    .Transport(transport => transport
+                                    .Read(read =>
+                                    {
+                                        read.Url("../api/Employee/getEmployeeUnit");
+                                    }))
+                                )
+                    )
+                </td>
+               
+                <td class="tdstyle">
+                    申請日期
+                </td>
+                <td>
+                    @(Html.Kendo().DatePicker()
+                                .Name("ApplyDate")
+                                .Format("yyyy/MM/dd")
+                                .Value(Model == null?DateTime.Now.ToString("yyyy/MM/dd"):DateTime.Parse(Model.ApplyDate.ToString()).ToString("yyyy/MM/dd"))
+                                .HtmlAttributes(new { style = "width: 100%", title = "datepicker" })
+                    )
+
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    工單號碼
+                </td>
+                <td colspan="3">
+                    
+                    @(Html.Kendo().MultiSelect()
+                          .Name("WorkNo")
+                          .MinLength(3)
+                          .Placeholder("選擇工號碼...")
+                          .AutoBind(false)
+                          .Value((Model == null ? null : Model.WorkNo))
+                          .BindTo((Model == null ? null : Model.WorkNo))
+                        .DataSource(source =>
+                        {
+                            source.Read(read =>
+                            {
+                                read.Url("../api/Maintenance/GetUnCloseWorkNo");
+                            })
+                            .ServerFiltering(true);
+                        })
+
+                    )
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    報廢原因
+                </td>
+                <td colspan="3">
+                    <textarea name="Reason" cols="50" rows="4" required validationMessage="報廢原因不可為空白">@(Model == null?"":Model.Reason)</textarea>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <div style="width:1150px">
+                        <div id="ScrapAddGrid"></div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <div class="pull-right" style="margin-top:10px">
+                        @if (@ViewBag.OrderNo == "")
+                        {
+                            <button id="ScrapNewBtn" class="btn btn-danger">儲存</button>
+                        }
+                        else
+                        {
+                            <button id="ScrapUpdateBtn" class="btn btn-danger">修改</button>
+                        }
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>

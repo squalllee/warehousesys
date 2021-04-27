@@ -1,0 +1,123 @@
+﻿
+@{
+    ViewBag.Title = "新增採購明細";
+    Layout = "";
+}
+
+<style>
+    .table > tbody > tr > td {
+        border-top: 1px solid #2b2b2b;
+    }
+
+    .ui-autocomplete-input {
+        width: 70%;
+    }
+
+    .tdstyle {
+        font-family: 標楷體;
+        font-size: large;
+        vertical-align: middle;
+        border-style: solid;
+        border-width: 0.5px;
+        font-weight: 800;
+        text-align: center;
+        width: 12%;
+        background-color: #D0CECF;
+    }
+
+    .ui-dialog {
+        z-index: 900 !important;
+    }
+
+    body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+</style>
+
+<form id="PurDetailAddForm">
+    <input name="PurchaseNo" type="hidden" value="@ViewBag.PurchaseNo" />
+
+    <table class="table" style="border-style:solid;border-width:2px">
+        <tbody>
+            <tr>
+                <td colspan="6" style="font-weight:800;font-size:x-large" align="center">新增採購明細</td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    料號
+                </td>
+                <td> <input id="AddMaterialNo" name="MaterialNo" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;"></td>
+                <td class="tdstyle">
+                    品名
+                </td>
+                <td>
+                    <input id="AddMaterialName" name="MaterialName" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" readonly>
+                </td>
+
+                <td class="tdstyle">
+                    規格
+                </td>
+                <td>
+                    <input id="AddSpec" name="Spec" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" readonly>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    單位
+                </td>
+                <td>
+                    <input id="AddUnit" name="Unit" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" readonly>
+                </td>
+                <td class="tdstyle">
+                    契約數量
+                </td>
+                <td>
+                    <input id="AddQuantity" type="number" name="Quantity" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;">
+                </td>
+                <td class="tdstyle">
+                    單價未稅
+                </td>
+                <td>
+                    <input id="AddPrice" type="number" name="Price" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;">
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    交貨批次
+                </td>
+                <td>
+                    <input id="AddDeliveryLot" name="DeliveryLot" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;">
+                </td>
+                <td class="tdstyle">
+                    交貨地點
+                </td>
+                <td>
+                    <input id="AddDeliveryPlace" name="DeliveryPlace" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;">
+                </td>
+                <td class="tdstyle">
+                    履約期限
+                </td>
+                <td>
+                    <input id="AddPerformancePeriod" name="PerformancePeriod" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" class="dateTime">
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    需求單位
+                </td>
+                <td colspan="5">
+                    <select id="AddReqireUnit" name="ReqireUnit" style="width:50%;border-color: #d2d6de;border: 1px solid #ccc;" class="combobox" onchange="selectUnit(this);">
+                        <option></option>
+                        @foreach (WareHouseSys.DBModels.UNIT unit in Model)
+                        {
+                            <option value="@unit.UNITNO.Trim()">@unit.UNITNAME.Trim() [@unit.UNITNO.Trim()]</option>
+                        }
+                    </select>
+                    <input name="RequireUnitName" type="hidden" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</form>
+

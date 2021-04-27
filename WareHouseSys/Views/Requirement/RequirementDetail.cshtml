@@ -1,0 +1,122 @@
+﻿@using WareHouseSys.Models
+@model WareHouseSys.ViewModels.RequirementHeaderViewModel
+@{
+    ViewBag.Title = "需求明細表";
+    Layout = "";
+}
+
+<style>
+    .table > tbody > tr > td {
+        border-top: 1px solid #2b2b2b;
+    }
+
+    .error {
+        color: red
+    }
+</style>
+<table class="table" style="border-style:solid;border-width:2px">
+    <tbody>
+        <tr>
+            <td colspan="6" style="font-weight:800;font-size:x-large" align="center">物料需求單</td>
+        </tr>
+        <tr>
+            <td class="tdstyle">
+                填單日期
+            </td>
+            <td>
+                <h4><span class="label label-default">@Model.ApplicationDate</span></h4>
+            </td>
+            <td class="tdstyle">
+                申請部門
+            </td>
+            <td>
+                <h4><span class="label label-default">@Model.ApplicantUnit</span></h4>
+            </td>
+
+            <td class="tdstyle">
+                申請人
+            </td>
+            <td>
+                <h4><span class="label label-default">@Model.Applicant</span></h4>
+            </td>
+        </tr>
+        <tr>
+            <td class="tdstyle">指定廠牌</td>
+            <td>
+                <h4><span class="label label-default">@(Model.SpecifyBrand ?? false ? "是":"否")</span></h4>
+
+            </td>
+            <td class="tdstyle">理由說明</td>
+            <td colspan="3">
+                <h4><span class="label label-default">@Model.SpecifyReason</span></h4>
+            </td>
+        </tr>
+        <tr>
+            <td class="tdstyle">特殊狀況</td>
+            <td>
+                @{
+                    string specialValue = (Model.Emergency == true ? "緊急辦理" : "");
+                    string Reason;
+                    if (specialValue == "")
+                    {
+                        specialValue = (Model.Temporary == true ? "臨時需求" : "");
+                        Reason = Model.TemporaryReason;
+                    }
+                    else
+                    {
+                        Reason = Model.EmergencyReason;
+                    }
+                }
+                <h4><span class="label label-default">@specialValue</span></h4>
+            </td>
+            <td class="tdstyle">理由說明</td>
+            <td colspan="3">
+                <h4><span class="label label-default">@Reason</span></h4>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="tdstyle">驗收標準</td>
+            <td>
+                <h4><span class="label label-default">@Model.AcceptanceStd</span></h4>
+            </td>
+            <td class="tdstyle">理由說明</td>
+            <td colspan="3">
+                <h4><span class="label label-default">@Model.AcceptanceReason</span></h4>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<table id="RequireDetailTable" data-url="@Url.Content("../api/Requirement/getReqBody/")@ViewBag.OrderNo" class="hover display">
+    <thead>
+        <tr>
+            <th>序號</th>
+            <th>料號</th>
+            <th>需求日期</th>
+            <th>用料期程1(起)</th>
+            <th>用料期程1(迄)</th>
+            <th>用料量1</th>
+            <th>用料期程2(起)</th>
+            <th>用料期程2(迄)</th>
+            <th>用料量2</th>
+            <th>檢修分類</th>
+            <th>需求原因</th>
+        </tr>
+    </thead>
+</table>
+
+<table class="table" style="border-style:solid;border-width:2px">
+    <tbody>
+        <tr>
+            <td class="tdstyle">
+                附件
+            </td>
+            <td>
+                @foreach (Attachment f in ViewBag.Attachments)
+                {
+                    <span class="badge badge-pill badge-default" style="cursor:pointer"><a href="@Url.Action("getAttatchment","Requirement",new { OrderNo=@ViewBag.OrderNo,FileName=f.FileName})" style="color:white" target="aa">@f.FileName</a></span>
+                }
+            </td>
+        </tr>
+    </tbody>
+</table>

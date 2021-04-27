@@ -1,0 +1,135 @@
+﻿@using WareHouseSys.ViewModels
+@model ToolPickBodyViewModel
+@{
+    ViewBag.Title = "新增手工具領料";
+    Layout = "";
+}
+
+<form id="PickingToolAddForm" data-saveurl="@Url.Content("../api/Picking/AddPickingToolBody")">
+    <input name="OrderNo" type="hidden" value="@ViewBag.OrderNo" />
+    <div class="table-responsive">
+        <table class="table" style="border-style:solid;border-width:2px">
+            <tbody>
+                <tr>
+                    <td class="tdstyle">
+                        物料代號
+                    </td>
+                    <td>
+                        <input type="text" name="MaterialNo" style="width:80%" readonly value="@Model.MaterialNo">
+                    </td>
+                    <td class="tdstyle">
+                        物料名稱
+                    </td>
+                    <td colspan="3">
+                        <input type="text" name="MaterialName" readonly value="@Model.MaterialName">
+                    </td>
+
+                </tr>
+                <tr>
+                    <td class="tdstyle">
+                        庫別代號
+                    </td>
+                    <td>
+                        <input name="WarehouseId" type="text" readonly value="@Model.WareHouseId" />
+
+                    </td>
+
+                    <td class="tdstyle">
+                        庫別名稱
+                    </td>
+                    <td colspan="3">
+                        <input name="WareHouseName" type="text" readonly value="@Model.WareHouseName" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstyle">
+                        規格
+                    </td>
+                    <td>
+                        <input type="text" name="Spec" readonly value="@Model.Spec">
+                    </td>
+                    <td class="tdstyle">
+                        <span style="color:red">儲位</span>
+                    </td>
+                    <td colspan="3">
+                        <input type="text" name="StorageId" >
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstyle">
+                        保管人
+                    </td>
+                    <td>
+                        <input type="text" name="KeepMan">
+                        @*@(Html.Kendo().MultiColumnComboBox()
+                                    .Name("KeepMan")
+                                    .DataTextField("TMNAME")
+                                    .DataValueField("KEYNO")
+                                    .Filter("contains")
+                                    .FilterFields(new string[] { "TMNAME", "KEYNO" })
+                                    .Events(e => e.Select("onSelectKeeper"))
+                                    .Columns(columns =>
+                                    {
+                                        columns.Add().Field("TMNAME").Title("姓名").Width("200px");
+                                        columns.Add().Field("KEYNO").Title("員工編號").Width("200px");
+                                        columns.Add().Field("UNITNO").Title("單位代碼").Width("200px");
+                                        columns.Add().Field("UNITNAME").Title("單位名稱").Width("200px");
+                                    })
+                                    .HtmlAttributes(new { style = "width:100%;" })
+                                    .Height(400)
+                                    .DataSource(source => source
+                                        .Custom()
+                                        .Transport(transport => transport
+                                        .Read(read =>
+                                        {
+                                            read.Url("../api/Employee/getEmployeeUnit");
+                                        }))
+                                    )
+                        )*@
+                    </td>
+                    <td class="tdstyle">
+                        <span style="color:red">保管單位</span>
+                    </td>
+                    <td colspan="3">
+                        <input type="text" name="KeepUnit" value="@Model.KeepUnit" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstyle">
+                        批號
+                    </td>
+                    <td>
+                        <input type="text" name="Lot"  value="@Model.Lot" readonly>
+                    </td>
+                    <td class="tdstyle">
+                        <span style="color:red">領料數量</span>
+                    </td>
+                    <td>
+                        <input type="number" name="PickedQty" required>
+                    </td>
+                    <td class="tdstyle">
+                        庫存量
+                    </td>
+                    <td>
+                        <input type="text" name="Quantity"  readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstyle">
+                        備註
+                    </td>
+                    <td colspan="5">
+                        <input type="text" name="Note" id="Note" style="width:80%">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6">
+                        <div class="pull-right">
+                            <button id="BtnAddPickTool" class="btn btn-default" type="button" style="margin-left:10px"><i class="far fa-save"></i> 儲存</button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</form>

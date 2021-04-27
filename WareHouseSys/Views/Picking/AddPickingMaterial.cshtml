@@ -1,0 +1,96 @@
+﻿@using WareHouseSys.ViewModels
+@model MaterialPickBodyViewModel
+@{
+    ViewBag.Title = "新增領料";
+    Layout = "";
+}
+
+<form id="PickingMaterialAddForm" data-saveurl="@Url.Content("../api/Picking/AddPickingBody")">
+    <input name="OrderNo" type="hidden" value="@ViewBag.OrderNo" />
+    <div class="table-responsive">
+        <table class="table" style="border-style:solid;border-width:2px">
+            <tbody>
+                <tr>
+                    <td class="tdstyle">
+                        物料代號
+                    </td>
+                    <td>
+                        <input type="text" name="MaterialNo" style="width:80%" readonly value="@Model.MaterialNo">
+                    </td>
+                    <td class="tdstyle">
+                        物料名稱
+                    </td>
+                    <td colspan="3">
+                        <input type="text" name="MaterialName" readonly value="@Model.MaterialName">
+                    </td>
+
+                </tr>
+                <tr>
+                    <td class="tdstyle">
+                        庫別代號
+                    </td>
+                    <td>
+                        <input name="WarehouseId" type="text" readonly value="@Model.WareHouseId" />
+
+                    </td>
+
+                    <td class="tdstyle">
+                        庫別名稱
+                    </td>
+                    <td colspan="3">
+                        <input name="WareHouseName" type="text" readonly value="@Model.WareHouseName" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstyle">
+                        規格
+                    </td>
+                    <td>
+                        <input type="text" name="Spec" readonly value="@Model.Spec">
+                    </td>
+                    <td class="tdstyle">
+                        <span style="color:red">儲位</span>
+                    </td>
+                    <td colspan="3">
+                        <input type="text" name="StorageId">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstyle">
+                        批號
+                    </td>
+                    <td>
+                        <input type="text" name="Lot" readonly>
+                    </td>
+                    <td class="tdstyle">
+                        <span style="color:red">領料數量</span>
+                    </td>
+                    <td>
+                        <input type="number" name="PickedQty" required>
+                    </td>
+                    <td class="tdstyle">
+                        庫存量
+                    </td>
+                    <td>
+                        <input type="text" name="Quantity" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstyle">
+                        備註
+                    </td>
+                    <td colspan="5">
+                        <input type="text" name="Note" id="Note" style="width:80%">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6">
+                        <div class="pull-right">
+                            <button id="BtnAddPickMaterial" class="btn btn-default" type="button" style="margin-left:10px"><i class="far fa-save"></i> 儲存</button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</form>

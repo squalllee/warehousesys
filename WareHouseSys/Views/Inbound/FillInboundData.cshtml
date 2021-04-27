@@ -1,0 +1,78 @@
+﻿@using WareHouseSys.ViewModels
+@using WareHouseSys.Models
+@{
+    ViewBag.Title = "入庫作業";
+    Layout = "";
+}
+<style>
+    .table > tbody > tr > td {
+        border-top: 1px solid #2b2b2b;
+    }
+
+    .error {
+        color: red
+    }
+
+
+
+</style>
+
+<form id="InboundForm">
+    <table class="table" style="border-style:solid;border-width:2px">
+        <tbody>
+            <tr>
+                <td colspan="6" style="font-weight:800;font-size:x-large" align="center">入庫單資訊</td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    入庫單號
+                </td>
+                <td> <input name="OrderNo" value="@Model.OrderNo" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" readonly></td>
+                <td class="tdstyle">
+                    <font style="color:red">入庫日期</font>
+                </td>
+                <td>
+
+                    <input name="InboundDate" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" value="@(Model.InboundDate == null?"":DateTime.Parse(Model.InboundDate.ToString()).ToString("yyyy/MM/dd"))" class="dateTime">
+                </td>
+
+                <td class="tdstyle">
+                    入庫人員
+                </td>
+                <td>
+                    @{
+                        string UserId = ViewBag.UserId;
+                    }
+                    @(Html.Kendo().MultiColumnComboBox()
+                                        .Name("InboundMan")
+                                        .DataTextField("TMNAME")
+                                        .DataValueField("KEYNO")
+                                        .Value(UserId)
+                                        .Filter("contains")
+                                        .FilterFields(new string[] { "TMNAME", "KEYNO" })
+                                        .Columns(columns =>
+                                        {
+                                            columns.Add().Field("TMNAME").Title("姓名").Width("100");
+                                            columns.Add().Field("KEYNO").Title("員工編號").Width("100");
+                                        })
+                                        .HtmlAttributes(new { style = "width:80%;", required = true, validationMessage = "入庫人員必需選擇" })
+                                        .Height(400)
+                                        .DataSource(source => source
+                                            .Custom()
+                                            .Transport(transport => transport
+                                            .Read(read =>
+                                            {
+                                                read.Url("../api/Employee/getEmployeeUnit");
+                                            }))
+                                        )
+                    )
+                    @*<input name="InboundMan" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" value="@Model.InboundMan" readonly>*@
+                </td>
+            </tr>
+           
+        </tbody>
+    </table>
+</form>
+
+
+<div id="InboundDetailUpdateGrid" data-url="@Url.Content("../Inbound/InboundBodyDetail")" data-addurl="@Url.Content("../api/Inbound/addInboundBody")" data-updateurl="@Url.Content("../api/Inbound/updateInboundBody")" data-destroy="@Url.Content("../api/Inbound/destroyInboundBody")"></div>

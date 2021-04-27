@@ -1,0 +1,67 @@
+﻿@section css
+{
+    <link href="~/jquery-easyui-1.7.2/themes/bootstrap/easyui.css" rel="stylesheet" />
+    <link href="~/jquery-easyui-1.7.2/themes/icon.css" rel="stylesheet" />
+}
+
+<div class="row">
+    <section class="content-header">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> 表單產生作業</a></li>
+            <li class="active">採購單產生</li>
+        </ol>
+    </section>
+</div>
+
+<div class="container-fluid" style="margin-top:20px">
+    <div class="row" style="margin-top:10px">
+        <div class="col-md-12">
+            <table id="dg" class="easyui-datagrid" style="width:100%;height:500px"
+                   url="../api/Requirement/getRequirementHeader"
+                   title="需求單查詢"
+                   sortName="OrderNo" sortOrder="asc" emptyMsg="查無資料"
+                   pagination="true" fitColumns="true" singleSelect="true" toolbar="#tb">
+                <thead>
+                    <tr>
+                        <th data-options="field:'OrderNo',width:200,sortable:true" formatter="OrderStyler">需求單號</th>
+                        <th field="ApplicationDate" width="200" sortable="true" formatter="formatDate1">採購日期</th>
+                        <th field="Applicant" width="200" align="right" sortable="true">申請人</th>
+                        <th field="Status" width="200" align="right" sortable="true">狀態</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="tb" style="padding:2px 5px;">
+    <form id="searchForm">
+        <div class="row" style="margin-top:10px">
+            <div class="col-md-3">
+                <input class="easyui-textbox" label="需求單號" name="txtRequireNo" id="txtRequireNo" labelPosition="left" style="width:100%">
+            </div>
+
+            <div class="col-md-6">
+                <input id="ApplicationDateStart" type="text" class="easyui-datebox" label="申請日期起" style="width:40%">~<input id="ApplicationDateEnd" type="text" class="easyui-datebox" label="申請日期迄" style="width:40%">
+                <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="RequireSearch();">查詢</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div id="dlgDetail" class="easyui-dialog" title="需求明細" closed="true" data-options="iconCls:'icon-save'" style="width:1000px;height:500px;padding:10px">
+    <div class="easyui-accordion" style="width:100%;height:400px;">
+        <div title="需求明細" data-options="iconCls:'icon-ok'" style="overflow:auto;padding:10px;">
+
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+
+    <script src="~/PageJs/PurCreate.js?ver=@DateTime.Now.ToString("yyyyMmddHHmmss")"></script>
+    <script src="~/PageJs/Common.js?ver=@DateTime.Now.ToString("yyyyMmddHHmmss")"></script>
+    <script src="~/jquery-easyui-1.7.2/jquery.easyui.min.js"></script>
+    <script src="~/jquery-easyui-1.7.2/locale/easyui-lang-zh_TW.js"></script>
+}

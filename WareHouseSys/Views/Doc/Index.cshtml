@@ -1,0 +1,849 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+    <script language="javascript">
+
+    $(document).ready(function () {
+         var start = $("#start").kendoDatePicker({
+            change: startChange
+        }).data("kendoDatePicker");
+
+        var end = $("#end").kendoDatePicker({
+            change: endChange
+        }).data("kendoDatePicker");
+        start.value('@ViewBag.Startdate_old');
+        end.value('@ViewBag.Enddate_old');
+        //start.value('2020-08-24');
+        //end.value('2020-08-24');
+        function startChange() {
+            var startDate = start.value(),
+                endDate = end.value();
+
+            if (startDate) {
+                startDate = new Date(startDate);
+                startDate.setDate(startDate.getDate());
+                end.min(startDate);
+            } else if (endDate) {
+                start.max(new Date(endDate));
+            } else {
+                endDate = new Date();
+                start.max(endDate);
+                end.min(endDate);
+            }
+        }
+
+        function endChange() {
+            var endDate = end.value(),
+                startDate = start.value();
+
+            if (endDate) {
+                endDate = new Date(endDate);
+                endDate.setDate(endDate.getDate());
+                start.max(endDate);
+            } else if (startDate) {
+                end.min(new Date(startDate));
+            } else {
+                endDate = new Date();
+                start.max(endDate);
+                end.min(endDate);
+            }
+        }
+
+        start.max(end.value());
+        end.min(start.value());
+      @*
+        $("#excel").kendoUpload({
+            multiple: false,
+            localization: {
+                select: '選擇檔案'
+            }
+        });
+        $("#membernum").keypress(function (event) {
+            if (event.which == 13) {
+                event.preventDefault();
+                $("#memsearch").click();
+            }
+        });
+      *@
+    @*
+        $("#goods").kendoDropDownList({
+            optionLabel: "選擇料號",
+            dataTextField: "MaterialNo",
+            dataValueField: "MaterialNo",
+            //dataSource: data,
+            //valuePrimitive: true,
+            filter: "contains",
+            //index: 0,
+            autoWidth: true,
+            //change: onChange
+            dataSource: {
+                transport: {
+                    read: {
+                        type: "GET",
+                        url: "../api/Material/getMaterialInfo"
+                    }
+                },
+                pageSize: 80,
+                serverPaging: true,
+                serverFiltering: true
+            },
+        });
+         *@
+        $("#goods").kendoDropDownList({
+            //optionLabel: "選擇料號",
+            dataTextField: "text",
+            dataValueField: "value",
+            dataSource: data,
+            //valuePrimitive: true,
+            filter: "contains",
+            //index: 0,
+            autoWidth: true,
+            valuePrimitive: true,
+            //change: onChange
+            index: 0,
+            virtual: {
+                //mapValueTo: "dataItem"
+                itemHeight: 26,
+                valueMapper: function (options) {
+                    //options.success([options.value || 0]);
+                }
+            }
+        });
+
+        var data = [
+            { text: "請選擇...", value: "00000" }
+        ];
+            var goods = $("#goods").data("kendoDropDownList");
+            var MaterialList = @Html.Raw(Json.Encode(ViewBag.MaterialInfo));
+            //var unitname;
+            //var membername;
+            //goods.setDataSource(data);
+            //新增單位編號與名稱到dropdownlist
+            goods.setDataSource(data);
+            if ('@ViewBag.Goods'.localeCompare("00000") == 0) {
+                //unitname = "全部";
+                goods.select(0);
+            }
+            //alert(MaterialList.length);
+            for (var i = 0; i < MaterialList.length; i++) {
+            //for (var i = 0; i < 1; i++) {
+                var row = MaterialList[i];
+                var str = row.MaterialNo + '(' + row.MaterialName + ')';
+                //alert(str);
+                //goods.setDataSource([{ text: str, value: row.MaterialNo }]);
+                goods.dataSource.add({ text: str, value: row.MaterialNo });
+                if (row.MaterialNo.localeCompare('@ViewBag.Goods') == 0)
+                  goods.select(i + 1);
+                    //unitname = row1.UnitName;
+            }
+
+      @*
+      $("#goods").kendoMultiColumnComboBox({
+          placeholder: "選擇料號",
+          dataTextField: "MaterialNo",
+          dataValueField: "MaterialNo",
+          filter: "contains",
+          filterFields: ["MaterialNo", "MaterialName"],
+          height: 400,
+          autoBind: true,
+          //text: options.model.MaterialNo,
+          //text: "MaterialName",
+          //value: "MaterialNo",
+          minLength: 1,
+          dataSource: {
+              transport: {
+                  read: {
+                      type: "GET",
+                      url: "../api/Material/getMaterialInfo"
+                  }
+              },
+              pageSize: 80,
+              serverPaging: true,
+              serverFiltering: true
+          },
+          columns: [
+              { field: "MaterialName", title: "品名", width: 250 },
+              { field: "MaterialNo", title: "料號", width: 150 }
+          ],
+          virtual: {
+              itemHeight: 33,
+              valueMapper: function (options) {
+                  $.ajax({
+                      url: "../api/Material/getMaterialInfo",
+                      type: "GET",
+                      dataType: "jsonp",
+                      data: options.value,
+                      success: function (data) {
+
+                          $("#goods").index = options.success(data);
+                      }
+                  })
+              }
+          },
+      }).data("kendoMultiColumnComboBox");
+      *@
+    });
+
+
+      @*
+        if ('@ViewBag.Goods'.localeCompare("00000") != 0) {
+            //membername = "全部";
+            //$("#goods").select('@ViewBag.Goods');
+            //alert('@ViewBag.Goods');
+            var multicolumncombobox = $("#goods").data("kendoDropDownList");
+            //var multicolumncombobox = document.getElementById("goods");
+            //multicolumncombobox.search('@ViewBag.Goods');
+            //multicolumncombobox.select(function (dataItem) {
+            //    return dataItem.MaterialNo === '@ViewBag.Goods';
+            //});
+            multicolumncombobox.select(10);
+        }
+        *@
+        function convertValues(value) {
+            var data = {};
+
+            value = $.isArray(value) ? value : [value];
+
+            for (var idx = 0; idx < value.length; idx++) {
+                data["values[" + idx + "]"] = value[idx];
+            }
+
+            return data;
+        }
+
+    //$("select[required]").attr("oninvalid", "this.setCustomValidity('Required!')");
+    //$('select[required]').on('invalid', function () {
+    //    this.setCustomValidity($(this).data("required-message"));
+    //});
+    function Confirm() {
+         //var upload = $("#excel").data("kendoUpload");
+         //var files = upload.getFiles();
+         //var item = files.length;
+         //var multicolumncombobox = $("#goods").data("kendoMultiColumnComboBox");
+        // get the dataItem corresponding to the selectedIndex.
+         //var dataItem = multicolumncombobox.dataItem();
+         // get the dataItem corresponding to the passed index.
+        //var dataItem = multicolumncombobox.dataItem(0);
+        //alert($("#goods").value);
+        //return true;
+        //var mySelect = document.getElementById("goods");
+        //var mySelection = mySelect.selectedIndex;
+        var mySelect = $("#goods").data("kendoDropDownList").selectedIndex;
+        //var mySelection = mySelect;
+        //alert(mySelect);
+        //if (mySelection == -1) {
+        //if (mySelect == 0) {
+        //    alert("你尚未選取資料!");
+        //    return false;
+        //}
+        //alert(mySelection);
+        return true;
+    }
+
+    function pdfDownload() {
+        var link = document.createElement('a');
+        link.href = "@Html.Raw(@Url.Action("ReportDoc", "Doc", new {start=@ViewBag.Startdate, end =@ViewBag.Enddate, goods = @ViewBag.Goods }))";
+        link.click();
+    }
+    @*
+    function Confirm() {
+        var upload = $("#excel").data("kendoUpload");
+        var files = upload.getFiles();
+        var item = files.length;
+
+        if (item == 0) {
+            alert("你尚未選取檔案!");
+            return false;
+        }
+        return true;
+    }
+    function DownLoad() {
+        var link = document.createElement('a');
+        link.href = "/HRsys/Data/刷卡資料轉入範例檔案.xls";
+        link.download = "刷卡資料轉入範例檔案.xls";
+        link.click();
+    }
+
+    function excelDownload() {
+        var link = document.createElement('a');
+        link.href = "@Html.Raw(@Url.Action("ExportExcel", "Timeworkcom", new {start=@ViewBag.Startdate, end =@ViewBag.Enddate, unit =@ViewBag.Unit, member =@ViewBag.Member, userid = @ViewBag.UserID }))";
+        link.click();
+    }
+    function htmlDownload() {
+        var link = document.createElement('a');
+        link.href = "@Html.Raw(@Url.Action("ExportFile", "Timeworkcom", new {start=@ViewBag.Startdate, end =@ViewBag.Enddate, unit =@ViewBag.Unit, member =@ViewBag.Member }))";
+        link.download = "公司員工刷卡資料表.html";
+        link.click();
+    }
+    function pdfDownload() {
+        var link = document.createElement('a');
+        link.href = "@Html.Raw(@Url.Action("ToPdf", "Timeworkcom", new {start=@ViewBag.Startdate, end =@ViewBag.Enddate, unit =@ViewBag.Unit, member =@ViewBag.Member }))";
+        link.click();
+    }
+    function wordDownload() {
+        var link = document.createElement('a');
+        link.href = "@Html.Raw(@Url.Action("ToWord", "Timeworkcom", new {start=@ViewBag.Startdate, end =@ViewBag.Enddate, unit =@ViewBag.Unit, member =@ViewBag.Member, userid = @ViewBag.UserID }))";
+        link.click();
+    }
+ *@
+    </script>
+ <div class="demo-section k-content" style="background-color:#FFD382;padding:5px;">
+     
+         <table style="background-color:#FFD382;width:100%;">
+             <tr>
+                 <td>
+                     <form action="Index" id="memform" name="memform" enctype="application/x-www-form-urlencoded" method="get">
+                         開始日期:
+                         <input id="start" name="start" style="width:10%;">
+                         結束日期:
+                         <input id="end" name="end" style="width:10%;">
+                         商品:
+                         <select id="goods" name="goods" style="width: 30%;" required></select>
+                         @*<input id="unit" name="unit" style="width: 20%;" />*@
+                         @*<select id="unit" name="unit" style="width: 20%;"></select>*@
+                         @*人員:
+                               <input id="member" name="member" style="width: 20%;" />
+                               <select id="member" name="member" style="width: 20%;"></select>*@
+                         <button type="submit" id="PrimaryButton" class="btn btn-primary" onclick="return Confirm()">查詢</button>
+                     </form>
+                     <button id="pdfDownload" class="btn btn-primary" type="button" onclick="pdfDownload()">下載Pdf檔</button>
+                 </td>
+             </tr>
+         </table>
+
+     @*
+     <div class="demo-section k-content" style="background-color:#FFD382;width:100%;padding:5px;">
+         <table style="background-color:#FFD382;width:100%;">
+             <tr>
+                 <td style="width:472px;">
+                     <button id="excelDownload" class="btn btn-primary" type="button" onclick="excelDownload()">下載Execl檔</button>
+                          <button id="htmlDownload" class="btn btn-primary" type="button" onclick="htmlDownload()">下載HTML檔</button>
+                        <button id="wordDownload" class="btn btn-primary" type="button" onclick="wordDownload()">下載Word檔</button>
+                     <button id="pdfDownload" class="btn btn-primary" type="button" onclick="pdfDownload()">下載Pdf檔</button>
+
+                 </td>
+                 <td>
+                     編號:
+                     <input id="membernum" name="membernum" type="text" style="width:30%;" />
+                     <button id="memsearch" name="memsearch" class="btn btn-primary" type="button">編號查詢</button>
+                 </td>
+             </tr>
+         </table>
+     </div>
+     *@
+ </div>
+@*
+@(Html.Kendo().Notification()
+    .Name("popupNotification")
+)
+*@
+<div id="details" class="row">
+    <div class="col-12">
+        @(Html.Kendo().Grid<WareHouseSys.ViewModels.TransactionRecordDetailViewModel>()
+                   .Name("grid")
+                   .Columns(columns =>
+                   {
+                       columns.Bound(c => c.transactionDate).Filterable(false).HtmlAttributes(new { style = "text-align: center" }).HeaderHtmlAttributes(new { style = "text-align: center" }).Title("出入庫日期").Format("{0: yyyy-MM-dd}");
+                       columns.Bound(c => c.MaterialNo).Filterable(false).HtmlAttributes(new { style = "text-align: center" }).HeaderHtmlAttributes(new { style = "text-align: center" }).Title("商品料號");
+                       columns.Bound(c => c.MaterialName).Filterable(false).HtmlAttributes(new { style = "text-align: center" }).HeaderHtmlAttributes(new { style = "text-align: center" }).Title("商品名稱");
+                       columns.Bound(c => c.OrderNo).Filterable(false).HtmlAttributes(new { style = "text-align: center" }).HeaderHtmlAttributes(new { style = "text-align: center" }).Title("訂單編號");
+                       columns.Bound(c => c.className).Filterable(false).HtmlAttributes(new { style = "text-align: center" }).HeaderHtmlAttributes(new { style = "text-align: center" }).Title("類別");
+                       columns.Bound(c => c.WareHouseName).Filterable(false).HtmlAttributes(new { style = "text-align: center" }).HeaderHtmlAttributes(new { style = "text-align: center" }).Title("庫別");
+                       columns.Bound(c => c.InQty).Filterable(false).HtmlAttributes(new { style = "text-align: center" }).HeaderHtmlAttributes(new { style = "text-align: center" }).Title("入庫數量");
+                       columns.Bound(c => c.InPrice).Filterable(false).HtmlAttributes(new { style = "text-align: center" }).HeaderHtmlAttributes(new { style = "text-align: center" }).Title("入庫單價");
+                       columns.Bound(c => c.InTotalPrice).Filterable(false).HtmlAttributes(new { style = "text-align: center" }).HeaderHtmlAttributes(new { style = "text-align: center" }).Title("入庫金額");
+                       columns.Bound(c => c.OutQty).Filterable(false).HtmlAttributes(new { style = "text-align: center" }).HeaderHtmlAttributes(new { style = "text-align: center" }).Title("出庫數量");
+                       columns.Bound(c => c.OutPrice).Filterable(false).HtmlAttributes(new { style = "text-align: center" }).HeaderHtmlAttributes(new { style = "text-align: center" }).Title("出庫單價");
+                       columns.Bound(c => c.OutTotalPrice).Filterable(false).HtmlAttributes(new { style = "text-align: center" }).HeaderHtmlAttributes(new { style = "text-align: center" }).Title("出庫金額");
+                       columns.Bound(c => c.AdjustQty).Filterable(false).HtmlAttributes(new { style = "text-align: center" }).HeaderHtmlAttributes(new { style = "text-align: center" }).Title("調整數量");
+                       columns.Bound(c => c.AdjustPrice).Filterable(false).HtmlAttributes(new { style = "text-align: center" }).HeaderHtmlAttributes(new { style = "text-align: center" }).Title("調整單價");
+                       columns.Bound(c => c.AdjustTotalPrice).Filterable(false).HtmlAttributes(new { style = "text-align: center" }).HeaderHtmlAttributes(new { style = "text-align: center" }).Title("調整金額");
+                       columns.Bound(c => c.InventoryQty).Filterable(false).HtmlAttributes(new { style = "text-align: center" }).HeaderHtmlAttributes(new { style = "text-align: center" }).Title("庫存數數量");
+                       columns.Bound(c => c.InventoryPrice).Filterable(false).HtmlAttributes(new { style = "text-align: center" }).HeaderHtmlAttributes(new { style = "text-align: center" }).Title("庫存數單價");
+                       columns.Bound(c => c.InventoryTotalPrice).Filterable(false).HtmlAttributes(new { style = "text-align: center" }).HeaderHtmlAttributes(new { style = "text-align: center" }).Title("庫存數金額");
+                       columns.Bound(c => c.Note).Filterable(false).HtmlAttributes(new { style = "text-align: center" }).HeaderHtmlAttributes(new { style = "text-align: center" }).Title("備註");
+
+                   })
+
+
+
+                  // .ClientDetailTemplateId("template")
+                  //.ToolBar(t => t.Custom().Action("ToPdf", "Timeworkcom").Text("下載pdf檔").IconClass("k-icon k-i-file-pdf"))
+                  //.ToolBar(t => t.Custom().HtmlAttributes(new { id = "excelDownload" }).Text("下載Execl檔").IconClass("k-icon k-i-file-excel"))
+                  //.ToolBar(t => t.Custom().HtmlAttributes(new { id = "htmlDownload" }).Text("下載HTML檔").IconClass("k-icon k-i-paste-as-html"))
+                  //.ToolBar(t => t.Search().Text("搜尋"))
+
+                  .Pageable(pageable => pageable
+                          .Messages(m => m
+                                 .Last("最末頁")
+                                 .First("第一頁")
+                                 .Next("下一頁")
+                                 .Previous("上一頁")
+                                 .MorePages("更多頁")
+                                 .ItemsPerPage("每頁筆數")
+                                 .Display("第 {0} - {1} 筆 共 {2} 筆記錄")
+                                 .Refresh("重新整理")
+                                 .Empty("沒有符合記錄")
+                           )
+                          .PageSizes(true)
+                          .ButtonCount(5)
+                          .PageSizes(new List<object>{ 25, 50, "all" })
+                          .Refresh(true)
+                  )
+                //.ToolBar(toolbar => toolbar.Create().Text("新增").HtmlAttributes(new { @class = "btn btn-warning" }))
+                //.ToolBar(toolbar => toolbar.Save().Text("儲存").HtmlAttributes(new { @class = "btn btn-warning" }))
+                // 儲存必須使用GridEditMode.InCell mode
+                //.Editable(editable => editable.Mode(GridEditMode.InCell))
+                //.Editable(editable => editable.Mode(GridEditMode.InLine).Window(w => w.Title("編輯通訊錄")).ConfirmDelete("確定刪除?").DisplayDeleteConfirmation("確定刪除?"))
+            @*
+                .Sortable()
+                .Filterable(filterable => filterable
+                      .Messages(m => m
+                          .Clear("清除")
+                          .Filter("過濾")
+                          .Info("輸入要搜尋的值")
+                      )
+                      .Extra(false)
+                      .Operators(operators => operators
+                          .ForString(str => str
+                               .Clear()
+                               .IsEqualTo("相等")
+                               .IsNotEqualTo("不相等")
+                               .Contains("包含搜索字")
+                          )
+                          .ForDate(str => str
+                               .Clear()
+                               .IsEqualTo("相等")
+                               .IsNotEqualTo("不相等")
+                          )
+                          .ForNumber(str => str
+                               .Clear()
+                               .IsEqualTo("相等")
+                               .IsNotEqualTo("不相等")
+                               .IsGreaterThan("大於")
+                               .IsLessThan("小於")
+                          )
+                      )
+                )
+            *@
+                .Scrollable()
+                .Resizable(resize => resize.Columns(true))
+                .HtmlAttributes(new { style = "height:750px;" })
+                //.Events(events => events.DataBound("dataBound"))
+                //.Filterable(filterable => filterable.Messages(m => m.IsFalse("否")).Messages(m => m.IsTrue("是")))
+                .DataSource(dataSource => dataSource
+                   .Ajax()
+                   .PageSize(50)
+                 //.Events(events => events.Error("error_handler"))
+                 //.Data("getHiddenSearchTermValueInWindow")
+                 .Model(model =>
+                 {
+                   //model.Id("fiseq");
+                   // Declare a model field
+                   model.Field("transactionDate", typeof(DateTime));
+                   model.Field("MaterialNo", typeof(string));
+                   model.Field("MaterialName", typeof(string));
+                   model.Field("OrderNo", typeof(string));
+                   model.Field("className", typeof(string));
+                   model.Field("WareHouseName", typeof(string));
+                   model.Field("InQty", typeof(Decimal));
+                   model.Field("InPrice", typeof(Decimal));
+                   model.Field("InTotalPrice", typeof(Decimal));
+                   model.Field("OutQty", typeof(Decimal));
+                   model.Field("OutPrice", typeof(Decimal));
+                   model.Field("OutTotalPrice", typeof(Decimal));
+                   model.Field("AdjustQty", typeof(Decimal));
+                   model.Field("AdjustPrice", typeof(Decimal));
+                   model.Field("AdjustTotalPrice", typeof(Decimal));
+                   model.Field("InventoryQty", typeof(Decimal));
+                   model.Field("InventoryPrice", typeof(Decimal));
+                   model.Field("InventoryTotalPrice", typeof(Decimal));
+                   model.Field("Note", typeof(string));
+                 })
+                 .Read(read => read.Action("TransactionRecord_Read", "Doc", new { startdate = @ViewBag.Startdate , enddate = @ViewBag.Enddate , goods = @ViewBag.Goods }))
+                 //.Create(create => create.Action("Friends_Create", "Grid1"))
+                 //.Update(update => update.Action("Friends_Update", "Grid1"))
+                 //.Destroy(destroy => destroy.Action("BrokerDB_Destroy", "Timework"))
+                )
+        )
+    </div>
+</div>
+@*
+<script>
+    
+    $(document).ready(function () {
+
+        var start = $("#start").kendoDatePicker({
+            change: startChange
+        }).data("kendoDatePicker");
+
+        var end = $("#end").kendoDatePicker({
+            change: endChange
+        }).data("kendoDatePicker");
+        //start.value('@ViewBag.Startdate_old');
+        //end.value('@ViewBag.Enddate_old');
+        start.value('2020-08-24');
+        end.value('2020-08-24');
+        function startChange() {
+            var startDate = start.value(),
+                endDate = end.value();
+
+            if (startDate) {
+                startDate = new Date(startDate);
+                startDate.setDate(startDate.getDate());
+                end.min(startDate);
+            } else if (endDate) {
+                start.max(new Date(endDate));
+            } else {
+                endDate = new Date();
+                start.max(endDate);
+                end.min(endDate);
+            }
+        }
+
+        function endChange() {
+            var endDate = end.value(),
+                startDate = start.value();
+
+            if (endDate) {
+                endDate = new Date(endDate);
+                endDate.setDate(endDate.getDate());
+                start.max(endDate);
+            } else if (startDate) {
+                end.min(new Date(startDate));
+            } else {
+                endDate = new Date();
+                start.max(endDate);
+                end.min(endDate);
+            }
+        }
+
+        start.max(end.value());
+        end.min(start.value());
+      
+        var data = [
+            { text: "全部", value: "00000" }
+        ];
+        var data1 = [
+            { text: "全部", value: "000000" }
+        ];
+         // create DropDownList from input HTML element
+         $("#unit").kendoDropDownList({
+                dataTextField: "text",
+                dataValueField: "value",
+                dataSource: data,
+                valuePrimitive: true,
+                filter: "contains",
+                index: 0,
+                autoWidth : true,
+                change: onChange
+
+         });
+
+            // create DropDownList from select HTML element
+
+        $("#member").kendoDropDownList({
+            dataTextField: "text",
+            dataValueField: "value",
+            dataSource: data1,
+            valuePrimitive: true,
+            filter: "contains",
+            index: 0,
+            virtual: {
+                //mapValueTo: "dataItem"
+                itemHeight: 26,
+                valueMapper: function (options) {
+                    //options.success([options.value || 0]);
+                }
+            }
+        });
+
+            var unit = $("#unit").data("kendoDropDownList");
+            var member = $("#member").data("kendoDropDownList");
+            var popupNotification = $("#popupNotification").data("kendoNotification");
+            //var HRUnitList = @Html.Raw(Json.Encode(this.ViewBag.HRUnit));
+            //var HRUserList = @Html.Raw(Json.Encode(this.ViewBag.HRUser));
+            var OSUnitList = @Html.Raw(Json.Encode(ViewBag.OSUnit));
+            var OSUserList = @Html.Raw(Json.Encode(ViewBag.OSUser));
+            //var OSUnitList = @Html.Raw(Json.Encode(TempData["OSUnit"]));
+            //var OSUserList = @Html.Raw(Json.Encode(TempData["OSUser"]));
+            var unitname;
+            var membername;
+            unit.setDataSource(data);
+            //新增單位編號與名稱到dropdownlist
+            if ('@ViewBag.Unit'.localeCompare("00000") == 0) {
+                //unitname = "全部";
+                unit.select(0);
+            }
+            //alert(OSUnitList.length);
+            for (var i = 0; i < OSUnitList.length; i++) {
+                var row1 = OSUnitList[i];
+                var str = row1.UnitName + '(' + row1.ApyNo + ')';
+                //alert(str);
+                unit.dataSource.add({ text: str, value: row1.UnitNo });
+                if (row1.UnitNo.localeCompare('@ViewBag.Unit') == 0)
+                    unit.select(i + 1);
+                    //unitname = row1.UnitName;
+            }
+            //unit.select(1);
+            //unit.search(unitname);
+            //alert(unit.value().length);
+            member.setDataSource(data1);
+            //alert("test1");
+            if ('@ViewBag.Member'.localeCompare("000000") == 0) {
+                    //membername = "全部";
+                    member.select(0);
+            }
+            //alert("test2");
+            var i = 0;
+            //alert(OSUserList.length);
+            //新增成員編號與名稱到dropdownlist
+            for (var j = 0; j < OSUserList.length; j++) {
+                var row2 = OSUserList[j];
+
+                if (unit.value().localeCompare("00000") == 0) {
+                //if (unit.value() == "00000") {
+
+                        var str = row2.TMName + '(' + row2.KEYNO + ')';
+                        member.dataSource.add({ text: str, value: row2.KEYNO });
+                        i++;
+                        //alert(str);
+
+                }
+                else
+                {
+
+                    if (unit.value().localeCompare(row2.UnitNo.substring(0,5)) == 0) {
+
+                        var str = row2.TMName + '(' + row2.KEYNO + ')';
+                        member.dataSource.add({ text: str, value: row2.KEYNO });
+                        i++;
+                        //alert(str);
+
+                    }
+                }
+
+                if (row2.KEYNO.localeCompare('@ViewBag.Member') == 0) {
+                    //var str = row2.TMName + '(' + row2.KEYNO + ')';
+                    //membername = str;
+                    member.select(i);
+                    //member.index = j + 1;
+                }
+            }
+            //member.search(membername);
+            //alert("test3");
+            //更改成員編號與名稱到dropdownlist
+            function onChange() {
+
+                member.setDataSource(data1);
+                for (var j = 0; j < OSUserList.length; j++) {
+                    var row3 = OSUserList[j];
+                    if (unit.value() == "00000") {
+
+                            var str = row3.TMName + '(' + row3.KEYNO + ')';
+                            member.dataSource.add({ text: str, value: row3.KEYNO });
+
+                    }
+                    else {
+                        if (unit.value().localeCompare(row3.UnitNo.substring(0, 5)) == 0) {
+
+                                var str = row3.TMName + '(' + row3.KEYNO + ')';
+                                member.dataSource.add({ text: str, value: row3.KEYNO });
+                        }
+                    }
+                }
+                member.select(0);
+            }
+
+        $("#memsearch").click(function () {
+            var unitvalue = -1;
+            //var unitno = "";
+            var membervalue = -1;
+
+            for (var j = 0; j < OSUserList.length; j++) {
+                var row4 = OSUserList[j];
+                if (row4.KEYNO.localeCompare(document.getElementById("membernum").value) == 0) {
+
+                    for (var i = 0; i < OSUnitList.length; i++) {
+                        var row1 = OSUnitList[i];
+                        if (row1.UnitNo.localeCompare(row4.UnitNo) == 0)
+                           // unitname = row1.UnitName;
+                            unitvalue = i + 1;
+                        //unitno = row1.UnitNo;
+                    }
+
+                }
+            }
+            if (unitvalue != -1) {
+                //unit.search(unitname);
+                unit.select(unitvalue);
+                member.setDataSource(data1);
+                var i = 0;
+                for (var j = 0; j < OSUserList.length; j++) {
+                    var row2 = OSUserList[j];
+                    if (unit.value().localeCompare(row2.UnitNo) == 0) {
+                        var str = row2.TMName + '(' + row2.KEYNO + ')';
+                        member.dataSource.add({ text: str, value: row2.KEYNO });
+                        i++;
+                    }
+
+                    if (row2.KEYNO.localeCompare(document.getElementById("membernum").value) == 0) {
+                        //var str = row2.TMName + '(' + row2.KEYNO + ')';
+                        //membername = str;
+                        membervalue = i;
+                    }
+                }
+                //if (membername != "")
+                //    member.search(membername);
+                member.select(membervalue);
+                $("#memform").submit();
+
+            }
+            else {
+
+                popupNotification.show("無此資料!", "error");
+            }
+        });
+       
+    });
+</script>
+*@
+@*
+<style type="text/css">
+    .highlighted-row {
+        background-color: #eeffee;
+    }
+</style>
+<script>
+    function dataBound(e) {
+        var rows = e.sender.tbody.children();
+
+        for (var j = 0; j < rows.length; j++) {
+            var row = $(rows[j]);
+            var dataItem = e.sender.dataItem(row);
+
+            //if ((dataItem.get("fdtimein2") == "") && (dataItem.get("fdtimein1").substring(11, 12) == "六" || dataItem.get("fdtimein1").substring(11, 12) == "日")) {
+            if ((dataItem.get("fdtime").substring(11, 12) == "六" || dataItem.get("fdtime").substring(11, 12) == "日")) {
+                row.addClass("highlighted-row");
+            }
+        }
+    }
+    function getvalue(fiwok) {
+
+        if (fiwok == 0)
+            return "上班";
+        else
+            return "下班";
+    }
+    function condate(offjobdaytemp) {
+        //獲得年並改成西元
+        var year = parseInt(offjobdaytemp.substring(0, 3)) + 1911;
+        //alert(year);
+        var month = offjobdaytemp.substring(3, 5);
+        //alert(month);
+        var day = offjobdaytemp.substring(5, 7);
+        //alert(day);
+        var date1 = year + "-" + month + "-" + day;
+        var offjodday = new Date(date1);
+        //alert(offjodday);
+        return new Date(offjodday.setMonth(offjodday.getMonth() + 1));
+    }
+    function ButtonEditVisible(dataItem) {
+        return ((dataItem.fimno == 0) && (dataItem.HASeq == 0) && (dataItem.SoyalSeq == 0));
+    }
+    function ButtonDestroyVisible(dataItem) {
+        return ((dataItem.fimno == 0) && (dataItem.HASeq == 0) && (dataItem.SoyalSeq == 0));
+    }
+</script>
+*@
+@*
+<script id="template" type="text/x-kendo-template">
+
+    @(Html.Kendo().Grid<HRSYS.Models.tbtowork>()
+            .Name("grid_#=SerNum#")
+            .Columns(columns =>
+            {
+
+                columns.Bound(c => c.fiseq).Filterable(false).Width(100).HtmlAttributes(new { style = "text-align: center" }).HeaderHtmlAttributes(new { style = "text-align: center" });
+                columns.Bound(c => c.fssmno).Filterable(false).Width(100).HtmlAttributes(new { style = "text-align: center" }).HeaderHtmlAttributes(new { style = "text-align: center" }).Title("編號");
+                columns.Bound(c => c.fdtime).Filterable(false).Format("{0:yyyy年MM月dd日HH時mm分}").Width(250).HtmlAttributes(new { style = "text-align: center" }).HeaderHtmlAttributes(new { style = "text-align: center" });
+                columns.Bound(c => c.fimno).Filterable(false).Width(100).HtmlAttributes(new { style = "text-align: center" }).HeaderHtmlAttributes(new { style = "text-align: center" });
+                columns.Bound(c => c.fsstano).Filterable(false).Width(150).HtmlAttributes(new { style = "text-align: center" }).HeaderHtmlAttributes(new { style = "text-align: center" });
+                columns.Bound(c => c.fiwok).Filterable(false).ClientTemplate("\\#: getvalue(fiwok)\\#").Width(100).EditorTemplateName("DropDownList").HtmlAttributes(new { style = "text-align: center" }).HeaderHtmlAttributes(new { style = "text-align: center" });
+
+
+                columns.Bound(c => c.fsno).Filterable(false).Width(150).HtmlAttributes(new { style = "text-align: center" }).HeaderHtmlAttributes(new { style = "text-align: center" });
+                //columns.Bound(c => c.HASeq).Filterable(false).Width(150);
+
+                columns.Bound(c => c.PlaceID).Filterable(false).Width(100).HtmlAttributes(new { style = "text-align: center" }).HeaderHtmlAttributes(new { style = "text-align: center" });
+                columns.Bound(c => c.SoyalSeq).Filterable(false).Width(100).HtmlAttributes(new { style = "text-align: center" }).HeaderHtmlAttributes(new { style = "text-align: center" });
+
+                columns.Command(command =>
+                {
+                    command.Edit()
+                           .Text("修改")
+                           .HtmlAttributes(new { @class = "btn btn-warning" })
+                           .UpdateText("確定")
+                           .CancelText("取消");
+                           //.Visible("ButtonEditVisible");
+
+                    command.Destroy()
+                           .Text("刪除")
+                           .HtmlAttributes(new { @class = "btn btn-warning" })
+                           .Visible("ButtonDestroyVisible");
+                }
+                    ).Width(250);
+            })
+            .Pageable(pageable => pageable
+                                .Messages(m => m
+                                    .Last("最末頁")
+                                    .First("第一頁")
+                                    .Next("下一頁")
+                                    .Previous("上一頁")
+                                    .MorePages("更多頁")
+                                    .ItemsPerPage("每頁筆數")
+                                    .Display("第 {0} - {1} 筆 共 {2} 筆記錄")
+                                    .Refresh("重新整理")
+                                    .Empty("沒有符合記錄")
+                                )
+                                .PageSizes(true)
+                                .ButtonCount(5)
+                                .PageSizes(new List<object>{ 5 , "all" })
+                                .Refresh(true)
+              )
+            .Editable(editable => editable.Mode(GridEditMode.InLine).Window(w => w.Title("編輯通訊錄")).ConfirmDelete("確定刪除?").DisplayDeleteConfirmation("確定刪除?"))
+            .HtmlAttributes(new { style = "height:450px;" })
+            .DataSource(dataSource => dataSource
+                      .Ajax()
+                      .PageSize(5)
+
+                      .Model(model =>
+                      {
+                          model.Id("fiseq");
+                          // Declare a model field
+                          model.Field("fiseq", typeof(long)).Editable(false);
+                          model.Field("fdtime", typeof(DateTime)).Editable(false);
+                          model.Field("fimno", typeof(int)).Editable(false);
+                          model.Field("fsstano", typeof(string)).Editable(false);
+                          model.Field("fiwok", typeof(byte));
+                          model.Field("fsno", typeof(string)).Editable(false);
+                          model.Field("HASeq", typeof(long)).Editable(false);
+                          model.Field("fssmno", typeof(string)).Editable(false);
+                          model.Field("PlaceID", typeof(string));
+                          model.Field("SoyalSeq", typeof(decimal)).Editable(false);
+                      })
+
+                     .Read(read => read.Action("HierarchyBrokerDB_Read", "Timework", new { fdtimes = "#= Fdaytime#" , userid = "#= KEYNO #" }))
+                     //.Read(read => read.Action("HierarchyBrokerDB_Read", "Timework", new { fssmnos = "#=fssmno#"}))
+                     .Destroy(destroy => destroy.Action("HierarchyBrokerDB_Destroy", "Timework"))
+                     .Update(update => update.Action("HierarchyBrokerDB_Update", "Timework"))
+            )
+            .Scrollable()
+            .Sortable()
+            .Resizable(resize => resize.Columns(true))
+            .ToClientTemplate()
+    )
+</script>
+*@

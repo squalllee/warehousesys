@@ -1,0 +1,33 @@
+﻿@using WareHouseSys.ViewModels
+<style>
+    .table > tbody > tr > td {
+        border-top: 1px solid #2b2b2b;
+    }
+
+    .tdstyle {
+        font-family: 標楷體;
+        font-size: large;
+        vertical-align: middle;
+        border-style: solid;
+        border-width: 0.5px;
+        font-weight: 800;
+        text-align: center;
+        width: 15%;
+        background-color: #D0CECF;
+    }
+
+
+</style>
+<div class="row">
+    <section class="content-header">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> 物料凍結作業</a></li>
+            <li class="active">物料凍結</li>
+        </ol>
+    </section>
+</div>
+
+<div id="FreezeGrid"></div>
+@section scripts{
+    <script src="~/PageJs/FreezeConfig.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+}

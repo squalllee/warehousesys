@@ -1,0 +1,53 @@
+﻿
+@{
+    ViewBag.Title = "移入作業";
+}
+
+<style>
+    .tdstyle {
+        font-family: 標楷體;
+        font-size: large;
+        vertical-align: middle;
+        border-style: solid;
+        border-width: 0.5px;
+        font-weight: 800;
+        text-align: center;
+        width: 15%;
+        background-color: #D0CECF;
+    }
+
+    body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    #TransferEstablishGrid .k-grid-content, .k-grid tr td {
+        overflow: visible;
+    }
+
+    #TransferEstablishGrid .k-grid-header {
+        padding-right: 0 !important;
+    }
+</style>
+
+<div class="row">
+    <section class="content-header">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> 移撥作業</a></li>
+            <li class="active">移入作業</li>
+        </ol>
+    </section>
+</div>
+
+@*Grid*@
+<div id="TransferInSearchGrid" data-url="@Url.Action("TransferInSearchGrid", "Transfer")"></div>
+
+@*Dialog*@
+<div id="TransferInDialog" data-url="@Url.Action("TransferIn", "Transfer")"></div>
+<div id="TransferDetailDialog" data-url="@Url.Action("TransferDetail", "Transfer")"></div>
+
+@section scripts{
+    <script src="~/PageJs/TransferInSearch.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+    <script src="~/PageJs/TransferIn.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+    <script src="~/PageJs/FileUpload.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+    <script src="~/PageJs/TransferDetail.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+}

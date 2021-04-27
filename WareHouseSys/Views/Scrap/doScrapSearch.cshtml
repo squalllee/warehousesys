@@ -1,0 +1,90 @@
+﻿@using WareHouseSys.ViewModels
+<style>
+    .table > tbody > tr > td {
+        border-top: 1px solid #2b2b2b;
+    }
+
+    .tdstyle {
+        font-family: 標楷體;
+        font-size: large;
+        vertical-align: middle;
+        border-style: solid;
+        border-width: 0.5px;
+        font-weight: 800;
+        text-align: center;
+        width: 15%;
+        background-color: #D0CECF;
+    }
+
+    .k-grid-content, .k-grid tr td {
+        overflow: visible;
+    }
+
+    .k-grid-header {
+        padding-right: 0 !important;
+    }
+</style>
+<div class="row">
+    <section class="content-header">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> 報廢作業</a></li>
+            <li class="active">報廢</li>
+        </ol>
+    </section>
+</div>
+
+@(Html.Kendo().Grid<ScrapHeaderViewModel>()
+                .Name("grid")
+                .Columns(columns =>
+                {
+                    columns.Bound(c => c.OrderNo).Width(180).Title("單號").ClientTemplate("<span style='cursor: pointer' onclick='openDetail(this);'><font style='color:blue'>#=OrderNo#</font></span>");
+                    columns.Bound(c => c.WorkNo).Width(180).Title("工單號");
+                    columns.Bound(c => c.ApplyMan).Width(300).Title("申請人");
+                    columns.Bound(c => c.ApplyUnit).Width(150).Title("申請單位");
+                    columns.Bound(c => c.ApplyDate).Width(180).Title("申請日期").ClientTemplate("#= kendo.toString(ApplyDate, 'yyyy/MM/dd')==null?'':kendo.toString(ApplyDate, 'yyyy/MM/dd') #");
+                    columns.Bound(c => c.Status).Width(80).Title("狀態");
+                    columns.Bound(c => c.ApplyDate).Width(80).Title("動作").Filterable(false).Sortable(false).ClientTemplate("<div name='ActionList' class='btn-group dropleft'></div>");
+                })
+                .HtmlAttributes(new { style = "height: 750px;" })
+                .Scrollable()
+                .Sortable()
+                .Filterable()
+                .Pageable(pageable => pageable
+                .Refresh(true)
+                .PageSizes(true)
+                .ButtonCount(5)
+                .PageSizes(new List<int>
+                                                        { 20, 30, 40, 50 }))
+                    .Filterable(filterable => filterable
+                    .Extra(false)
+                    .Operators(operators => operators
+                    .ForString(str => str.Clear()
+                    .IsEqualTo("等於")
+                    .Contains("包含")
+                    )
+                    .ForDate(str => str.Clear()
+                    .IsEqualTo("等於")
+                    .IsGreaterThanOrEqualTo("大於等於")
+                    .IsLessThanOrEqualTo("小於等於")))
+
+                    )
+                    .Events(events => events
+                            .DataBound("onGridDataBound")
+                            )
+                    .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .Read(read => read.Action("ScrapHeaderViewGrid", "Scrap"))
+                    .PageSize(50)
+
+                    )
+)
+
+<div id="ScrapDetailDialog"></div>
+
+@section scripts{
+    <script src="~/PageJs/doScrapSearch.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+    <script src="~/PageJs/ScrapDetail.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+    <script src="~/PageJs/ScrapClose.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+    <script src="~/PageJs/FileUpload.js"></script>
+
+}

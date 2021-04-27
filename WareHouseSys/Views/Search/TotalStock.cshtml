@@ -1,0 +1,299 @@
+﻿@using WareHouseSys.ViewModels;
+
+
+<style>
+    .table > tbody > tr > td {
+        border-top: 1px solid #2b2b2b;
+    }
+
+    .tdstyle {
+        font-family: 標楷體;
+        font-size: large;
+        vertical-align: middle;
+        border-style: solid;
+        border-width: 0.5px;
+        font-weight: 800;
+        text-align: center;
+        width: 15%;
+        background-color: #D0CECF;
+    }
+
+    .k-grid tr td {
+        overflow: visible;
+    }
+</style>
+<div class="row">
+    <section class="content-header">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> 查詢作業</a></li>
+            <li class="active">庫存查詢作業</li>
+        </ol>
+    </section>
+</div>
+
+<div id="OtherDetailDialog" data-url="@Url.Action("OtherRecordDetail","RepairRecord",new { Mode="0"})"></div>
+
+@(Html.Kendo().TabStrip()
+                              .Name("stockTab")
+                               .Animation(animation =>
+                              animation.Open(effect =>
+                                  effect.Fade(FadeDirection.In)))
+
+                                   .Items(tabstrip =>
+                                   {
+                                       tabstrip.Add().Text("總庫存").Selected(true).Content(
+                                        @<text>
+                                            @(Html.Kendo().Grid<TotalStockViewModel>
+                                                                    ()
+                                                                    .Name("grid")
+                                                                    .Columns(columns =>
+                                                                    {
+                                                                                columns.Bound(c => c.MaterialNo).Width(180).Title("料號").ClientTemplate("<span style='cursor: pointer' onclick='openMaterialInfo(this);'><font style='color:blue'>#=MaterialNo#</font></span>");
+                                                                                columns.Bound(c => c.MaterialName).Width(180).Title("品名");
+                                                                                columns.Bound(c => c.Spec).Width(300).Title("規格");
+                                                                                columns.Bound(c => c.Unit).Width(150).Title("單位");
+                                                                                columns.Bound(c => c.Quantity).Width(80).Title("庫存量");
+                                                                                columns.Bound(c => c.LendQty).Width(80).Title("借出量");
+                                                                                columns.Bound(c => c.Qty).Width(80).Title("目前庫存量");
+                                                                            })
+                                                                    .ToolBar(tools =>
+                                                                    {
+                                                                                tools.Excel();
+                                                                            })
+                                                                    .Excel(excel => excel
+                                                                    .FileName("Stock.xlsx")
+                                                                    .Filterable(true)
+                                                                    .AllPages(true)
+                                                                    )
+                                                                    .HtmlAttributes(new { style = "height: 750px;" })
+                                                                    .Scrollable()
+                                                                    .Sortable()
+                                                                    .Filterable()
+                                                                    .Pageable(pageable => pageable
+                                                                    .Refresh(true)
+                                                                    .PageSizes(true)
+                                                                    .ButtonCount(5)
+                                                                    .PageSizes(new List<int>
+                                                                                                            { 20, 30, 40, 50, 500 }))
+                                                                        .Filterable(filterable => filterable
+                                                                        .Extra(false)
+                                                                        .Operators(operators => operators
+                                                                        .ForString(str => str.Clear()
+                                                                        .IsEqualTo("等於")
+                                                                        .Contains("包含")
+                                                                        )
+                                                                        .ForDate(str => str.Clear()
+                                                                        .IsEqualTo("等於")
+                                                                        .IsGreaterThanOrEqualTo("大於等於")
+                                                                        .IsLessThanOrEqualTo("小於等於")))
+
+                                                                        )
+
+                                                                        .DataSource(dataSource => dataSource
+                                                                        .Ajax()
+                                                                        .Read(read => read.Action("TotalStockGrid", "Search", new { Status = "-99" }))
+                                                                        .PageSize(50)
+
+                                                                        )
+                                            )
+
+                                        </text>
+
+                                                                        );
+                                               tabstrip.Add().Text("總庫存(批號)").Content(
+                    @<text>
+                        @(Html.Kendo().Grid<TotalStockByLotViewModel>
+                                                ()
+                                                .Name("grid1")
+                                                .Columns(columns =>
+                                                {
+                                                            columns.Bound(c => c.MaterialNo).Width(180).Title("料號").ClientTemplate("<span style='cursor: pointer' onclick='openMaterialInfo(this);'><font style='color:blue'>#=MaterialNo#</font></span>").Width(150);
+                                                            columns.Bound(c => c.MaterialName).Width(180).Title("品名");
+                                                            columns.Bound(c => c.Spec).Width(300).Title("規格");
+                                                            columns.Bound(c => c.Unit).Width(150).Title("單位");
+                                                            columns.Bound(c => c.Lot).Width(180).Title("批號");
+                                                            columns.Bound(c => c.Quantity).Width(80).Title("庫存量");
+                                                            columns.Bound(c => c.LendQty).Width(80).Title("借出量");
+                                                            columns.Bound(c => c.Qty).Width(120).Title("目前庫存量");
+                                                        })
+                                                .ToolBar(tools =>
+                                                {
+                                                            tools.Excel();
+                                                        })
+                                                .Excel(excel => excel
+                                                .FileName("Stock.xlsx")
+                                                .Filterable(true)
+                                                .AllPages(true)
+                                                )
+                                                .HtmlAttributes(new { style = "height: 750px;" })
+                                                .Scrollable()
+                                                .Sortable()
+                                                .Filterable()
+                                                .Pageable(pageable => pageable
+                                                .Refresh(true)
+                                                .PageSizes(true)
+                                                .ButtonCount(5)
+                                                .PageSizes(new List<int>
+                                                                                        { 20, 30, 40, 50, 500 }))
+                                                    .Filterable(filterable => filterable
+                                                    .Extra(false)
+                                                    .Operators(operators => operators
+                                                    .ForString(str => str.Clear()
+                                                    .IsEqualTo("等於")
+                                                    .Contains("包含")
+                                                    )
+                                                    .ForDate(str => str.Clear()
+                                                    .IsEqualTo("等於")
+                                                    .IsGreaterThanOrEqualTo("大於等於")
+                                                    .IsLessThanOrEqualTo("小於等於")))
+
+                                                    )
+
+                                                    .DataSource(dataSource => dataSource
+                                                    .Ajax()
+                                                    .Read(read => read.Action("TotalStockByLotGrid", "Search", new { Status = "-99" }))
+                                                    .PageSize(50)
+
+                                                    )
+                        )
+
+                    </text>
+
+           );
+
+                                   tabstrip.Add().Text("總庫存(倉庫)").Content(
+            @<text>
+                @(Html.Kendo().Grid<TotalStockViewByWareHouseModel>
+                                        ()
+                                        .Name("grid2")
+                                        .Columns(columns =>
+                                        {
+                                            columns.Bound(c => c.MaterialNo).Width(180).Title("料號").ClientTemplate("<span style='cursor: pointer' onclick='openMaterialInfo(this);'><font style='color:blue'>#=MaterialNo#</font></span>").Width(150);
+                                            columns.Bound(c => c.MaterialName).Width(180).Title("品名");
+                                            columns.Bound(c => c.Spec).Width(300).Title("規格");
+                                            columns.Bound(c => c.Unit).Width(150).Title("單位");
+                                            columns.Bound(c => c.WareHouseName).Width(180).Title("倉庫");
+                                            columns.Bound(c => c.StorageId).Width(180).Title("儲位");
+                                            columns.Bound(c => c.Quantity).Width(80).Title("庫存量");
+                                            columns.Bound(c => c.LendQty).Width(80).Title("借出量");
+                                            columns.Bound(c => c.Qty).Width(120).Title("目前庫存量");
+                                        })
+                                        .ToolBar(tools =>
+                                        {
+                                            tools.Excel();
+                                        })
+                                        .Excel(excel => excel
+                                        .FileName("Stock.xlsx")
+                                        .Filterable(true)
+                                        .AllPages(true)
+                                        )
+                                        .HtmlAttributes(new { style = "height: 750px;" })
+                                        .Scrollable()
+                                        .Sortable()
+                                        .Filterable()
+                                        .Pageable(pageable => pageable
+                                        .Refresh(true)
+                                        .PageSizes(true)
+                                        .ButtonCount(5)
+                                        .PageSizes(new List<int>
+                                                                                { 20, 30, 40, 50, 500 }))
+                                            .Filterable(filterable => filterable
+                                            .Extra(false)
+                                            .Operators(operators => operators
+                                            .ForString(str => str.Clear()
+                                            .IsEqualTo("等於")
+                                            .Contains("包含")
+                                            )
+                                            .ForDate(str => str.Clear()
+                                            .IsEqualTo("等於")
+                                            .IsGreaterThanOrEqualTo("大於等於")
+                                            .IsLessThanOrEqualTo("小於等於")))
+
+                                            )
+
+                                            .DataSource(dataSource => dataSource
+                                            .Ajax()
+                                            .Read(read => read.Action("TotalStockByWareHouseGrid", "Search", new { Status = "-99" }))
+                                            .PageSize(50)
+
+                                            )
+                )
+
+            </text>
+
+               );
+
+                       tabstrip.Add().Text("總庫存(倉庫&批號)").Content(
+                    @<text>
+                        @(Html.Kendo().Grid<TotalStockByWareHouseAndLotViewModel>
+                                                ()
+                                                .Name("grid3")
+                                                .Columns(columns =>
+                                                {
+                                                    columns.Bound(c => c.MaterialNo).Width(180).Title("料號").ClientTemplate("<span style='cursor: pointer' onclick='openMaterialInfo(this);'><font style='color:blue'>#=MaterialNo#</font></span>").Width(150);
+                                                    columns.Bound(c => c.MaterialName).Width(180).Title("品名");
+                                                    columns.Bound(c => c.Spec).Width(300).Title("規格");
+                                                    columns.Bound(c => c.Unit).Width(80).Title("單位");
+                                                    columns.Bound(c => c.WareHouseName).Width(180).Title("倉庫");
+                                                    columns.Bound(c => c.StorageId).Width(100).Title("儲位");
+                                                    columns.Bound(c => c.Lot).Width(100).Title("批號");
+                                                    columns.Bound(c => c.Quantity).Width(80).Title("庫存量");
+                                                    columns.Bound(c => c.LendQty).Width(80).Title("借出量");
+                                                    columns.Bound(c => c.Qty).Width(120).Title("目前庫存量");
+                                                })
+                                                .ToolBar(tools =>
+                                                {
+                                                    tools.Excel();
+                                                })
+                                                .Excel(excel => excel
+                                                .FileName("Stock.xlsx")
+                                                .Filterable(true)
+                                                .AllPages(true)
+                                                )
+                                                .HtmlAttributes(new { style = "height: 750px;" })
+                                                .Scrollable()
+                                                .Sortable()
+                                                .Filterable()
+                                                .Pageable(pageable => pageable
+                                                .Refresh(true)
+                                                .PageSizes(true)
+                                                .ButtonCount(5)
+                                                .PageSizes(new List<int>
+                                                                                        { 20, 30, 40, 50, 500 }))
+                                                    .Filterable(filterable => filterable
+                                                    .Extra(false)
+                                                    .Operators(operators => operators
+                                                    .ForString(str => str.Clear()
+                                                    .IsEqualTo("等於")
+                                                    .Contains("包含")
+                                                    )
+                                                    .ForDate(str => str.Clear()
+                                                    .IsEqualTo("等於")
+                                                    .IsGreaterThanOrEqualTo("大於等於")
+                                                    .IsLessThanOrEqualTo("小於等於")))
+
+                                                    )
+
+                                                    .DataSource(dataSource => dataSource
+                                                    .Ajax()
+                                                    .Read(read => read.Action("TotalStockByWareHouseAndLotGrid", "Search", new { Status = "-99" }))
+                                                    .PageSize(50)
+
+                                                    )
+                        )
+
+                    </text>
+
+                                                          );
+                               
+
+                               })
+
+)
+
+
+@section scripts{
+    <script src="~/PageJs/TotalStock.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+
+}
+

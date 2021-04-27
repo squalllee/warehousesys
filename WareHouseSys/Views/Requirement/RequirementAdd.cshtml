@@ -1,0 +1,202 @@
+﻿
+@using WareHouseSys.ViewModels;
+@using Models;
+
+@model RequireAddViewModel
+@{
+    ViewBag.Title = "新增需求單";
+}
+
+
+<style>
+    .table > tbody > tr > td {
+        border-top: 1px solid #2b2b2b;
+    }
+    
+    .ui-autocomplete-input {
+        width: 70%;
+    }
+    .tdstyle {
+        font-family: 標楷體;
+        font-size: large;
+        vertical-align: middle;
+        border-style: solid;
+        border-width: 0.5px;
+        font-weight: 800;
+        text-align: center;
+        width: 12%;
+        background-color: #D0CECF;
+    }
+
+    .ui-dialog {
+        z-index: 900 !important;
+    }
+
+    body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+</style>
+
+<form id="reqHeader">
+    <table class="table" style="border-style:solid;border-width:2px">
+        <tbody>
+            <tr>
+                <td colspan="6" style="font-weight:800;font-size:x-large" align="center">物料需求單</td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    填單日期
+                </td>
+                <td> <input name="FillDate" value="@DateTime.Now.ToString("yyyy/MM/dd")" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" id="FillDate" class="dateTime"></td>
+                <td class="tdstyle">
+                    申請部門
+                </td>
+                <td>
+                    <select name="RequireUnit" style="width:50%;border-color: #d2d6de;border: 1px solid #ccc;" id="RequireUnit" disabled>
+                        @foreach (WareHouseSys.DBModels.UNIT unit in Model.Units)
+                        {
+                            int UnitLength = unit.UNITNO.TrimEnd('0').Count();
+                            string UserUnitId = ViewBag.UnitId;
+                            if (unit.UNITNO.TrimEnd('0') == UserUnitId.Substring(0, UnitLength))
+                            {
+                                    <option value="@unit.UNITNO.Trim()" selected>@unit.UNITNAME.Trim() [@unit.UNITNO.Trim()]</option>
+                            }
+                            else
+                            {
+                                <option value="@unit.UNITNO.Trim()">@unit.UNITNAME.Trim() [@unit.UNITNO.Trim()]</option>
+                            }
+
+                        }
+                    </select>
+                </td>
+
+                <td class="tdstyle">
+                    申請人
+                </td>
+                <td>
+                    <select name="RequireMan" style="width:50%;border-color: #d2d6de;border: 1px solid #ccc;" id="RequireMan" class="combobox" onchange="UnitChange(this);" >
+                        @foreach (WareHouseSys.DBModels.Employee emp in Model.Users)
+                                {
+                                    if (emp.KEYNO.Trim() == ViewBag.UserId)
+                                    {
+                                <option data-Unit="@emp.UNITNO.Trim()" value="@emp.KEYNO.Trim()" selected>@emp.TMNAME.Trim() [@emp.KEYNO.Trim()]</option>
+                                    }
+                                    else
+                                    {
+                                <option data-Unit="@emp.UNITNO.Trim()" value="@emp.KEYNO.Trim()">@emp.TMNAME.Trim() [@emp.KEYNO.Trim()]</option>
+                                    }
+
+                                }
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle">指定廠牌</td>
+                <td>
+                    @(Html.Kendo().Switch()
+                                            .Name("SpecifyBrand")
+                                            .Messages(c => c.Checked("是").Unchecked("否")).Events(ev => ev.Change("BrandChange"))
+                    )
+                </td>
+                <td class="tdstyle">理由說明</td>
+                <td colspan="3">
+                    <input name="SpecifyReason" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" id="PeriodQty2" type="text" disabled validationMessage="理由說明不可為空白">
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle">特殊狀況</td>
+                <td>
+                    @(Html.Kendo().ComboBox()
+                      .Name("special")
+                      .Placeholder("選擇特殊狀況")
+                      .BindTo(new List<string>() {
+                                        "",
+                                      "緊急辦理",
+                                      "臨時需求"
+                      })
+                      .SelectedIndex(0)
+                      .Suggest(true)
+                      .HtmlAttributes(new { style = "width:100%;" })
+                       .Events(e =>
+                        {
+                            e.Select("specialSelect");
+                        })
+                  )
+                   
+                </td>
+                <td class="tdstyle">理由說明</td>
+                <td colspan="3">
+                    <input name="Reason" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" id="Reason" type="text" disabled validationMessage="理由說明不可為空白">
+                </td>
+            </tr>
+            @*<tr>
+                <td class="tdstyle">臨時需求</td>
+                <td>
+
+                    @(Html.Kendo().Switch()
+                                            .Name("Temporary")
+                                            .Messages(c => c.Checked("是").Unchecked("否")).Events(ev => ev.Change("TemporaryChange"))
+                    )
+                </td>
+                <td class="tdstyle">請敘明理由</td>
+                <td colspan="3">
+                    <input name="TemporaryReason" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" id="TemporaryReason" type="text" disabled validationMessage="理由說明不可為空白">
+                </td>
+            </tr>*@
+            <tr>
+                <td class="tdstyle">驗收標準</td>
+                <td>
+                    @(Html.Kendo().RadioButton().Name("AcceptanceStd1").Checked(true).HtmlAttributes(new { @name = "AcceptanceStd", @value = "依物料抽樣數量建議表" }).Label("依物料抽樣數量建議表"))
+                    @(Html.Kendo().RadioButton().Name("AcceptanceStd2").Checked(false).HtmlAttributes(new { @name = "AcceptanceStd", @value = "其它" }).Label("其它"))
+                </td>
+                <td class="tdstyle">理由說明</td>
+                <td colspan="3">
+                    <input name="AcceptanceReason" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" id="AcceptanceReason" type="text" disabled validationMessage="理由說明不可為空白">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+
+<table class="table" style="border-style:solid;border-width:2px">
+    <tbody>
+        <tr>
+            <td>
+                <div class="panel-heading">
+                    <button id="btnAdd" class="btn btn-danger" type="button" style="margin-left:10px;display:inline;top:-12px"><i class="fa fa-plus-circle"></i>新增</button>
+                    <button id="btnSave" class="btn btn-default" type="button" style="margin-left:10px;display:inline;top:-12px"><i class="fa fa-save"></i>儲存</button>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <table id="RequireDetailTable" class="hover display">
+                    <thead>
+                        <tr>
+                            <th>料號</th>
+                            <th>需求日期</th>
+                            <th>用料期程1(起)</th>
+                            <th>用料期程1(迄)</th>
+                            <th>用料量1</th>
+                            <th>用料期程2(起)</th>
+                            <th>用料期程2(迄)</th>
+                            <th>用料量2</th>
+                            <th>檢修分類</th>
+                            <th>需求原因</th>
+                            <th>動作</th>
+                        </tr>
+                    </thead>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
+        
+<div id="ReqAddDialog" data-url="@Url.Action("RequirementAddDetail","Requirement")"></div>
+
+
+@section scripts{
+
+    <script src="~/PageJs/RequirementAdd.js?ver=@DateTime.Now.ToString("yyyyMMddHHmmss")"></script>
+}

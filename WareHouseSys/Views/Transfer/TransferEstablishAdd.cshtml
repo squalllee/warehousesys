@@ -1,0 +1,79 @@
+﻿@using WareHouseSys.ViewModels
+@model TransferHeaderViewModel
+@{
+    ViewBag.Title = "新增移撥單";
+    Layout = "";
+}
+<style>
+    .table > tbody > tr > td {
+        border-top: 1px solid #2b2b2b;
+    }
+</style>
+
+<form id="TransferEstablishForm" data-saveurl="@Url.Content("../api/Transfer/SaveTransfer")" data-updateurl="@Url.Content("../api/Transfer/UpdateTransferHeader")">
+    <input type="hidden" name="OrderNo" value="@(Model == null?"":Model.OrderNo)" />
+    <table class="table" style="border-style:solid;border-width:2px">
+        <tbody>
+            <tr>
+                <td colspan="4" style="font-weight:800;font-size:x-large" align="center">移撥單資訊</td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    申請人員
+                </td>
+                <td>
+                    @(Html.Kendo().MultiColumnComboBox()
+                                                .Name("ApplicantMan")
+                                                .DataTextField("TMNAME")
+                                                .DataValueField("KEYNO")
+                                                .Filter("contains")
+                                                .FilterFields(new string[] { "TMNAME", "KEYNO" })
+                                                .Text(Model == null? "": Model.ApplicantMan)
+                                                .Value(Model == null ? "" : Model.ApplicantId)
+                                                .Columns(columns =>
+                                                {
+                                                    columns.Add().Field("TMNAME").Title("姓名").Width("100");
+                                                    columns.Add().Field("KEYNO").Title("員工編號").Width("100");
+                                                })
+                                                .HtmlAttributes(new { style = "width:50%;" , required =true, validationMessage = "申請人必需選擇" })
+                                                .Height(400)
+                                                .DataSource(source => source
+                                                    .Custom()
+                                                    .Transport(transport => transport
+                                                    .Read(read =>
+                                                    {
+                                                        read.Url("../api/Employee/getEmployeeUnit");
+                                                    }))
+                                                )
+                    )
+                </td>
+                <td class="tdstyle">
+                    <font style="color:red">倉庫群組</font>
+                </td>
+                <td>
+                    <select name="WGroupId">
+                        @foreach(WareHouseSys.DBModels.WGroup wGroup in ViewBag.WGroup)
+                        {
+                            <option value="@wGroup.WGroupId">@wGroup.WGroupName</option>
+                        }
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <div style="width:950px">
+                        <div id="TransferDetailUpdateGrid" data-url="@Url.Content("../Transfer/TransferBodyViewModel")?OrderNo=@(Model == null?"999":Model.OrderNo)" data-updateurl="@Url.Content("../api/Transfer/TransferEstablishUpdate")" data-deleteurl="@Url.Content("../api/Transfer/TransferEstablishDelete")" data-addurl="@Url.Content("../api/Transfer/TransferEstablishAdd")"></div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <div class="pull-right">
+                        <button id="BtnSaveTransfer" class="btn btn-default" type="button" style="margin-left:10px"><i class="far fa-save"></i> 儲存</button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+

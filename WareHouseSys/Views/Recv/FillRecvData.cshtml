@@ -1,0 +1,114 @@
+﻿@using WareHouseSys.ViewModels
+@model RecvDataViewModel
+@{
+    ViewBag.Title = "收貨";
+    Layout = "";
+}
+<style>
+    .table > tbody > tr > td {
+        border-top: 1px solid #2b2b2b;
+    }
+
+    .ui-autocomplete-input {
+        width: 70%;
+    }
+
+    .tdstyle {
+        font-family: 標楷體;
+        font-size: large;
+        vertical-align: middle;
+        border-style: solid;
+        border-width: 0.5px;
+        font-weight: 800;
+        text-align: center;
+        width: 12%;
+        background-color: #D0CECF;
+    }
+
+   
+    body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+</style>
+<form id="AddRecvDataForm">
+    <input type="hidden" name="OrderNo" value="@Model.OrderNo" />
+    <input type="hidden" name="SerialNo" value="@Model.SerialNo" />
+
+    <table class="table" style="border-style:solid;border-width:2px">
+        <tbody>
+            <tr>
+                <td colspan="6" style="font-weight:800;font-size:x-large" align="center">填寫收貨資料</td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    料號
+                </td>
+                <td> <input name="MaterialNo" value="@Model.MaterialNo" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" readonly></td>
+                <td class="tdstyle">
+                    品名
+                </td>
+                <td>
+                    <input name="MaterialName" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" value="@Model.MaterialName" readonly>
+                </td>
+
+                <td class="tdstyle">
+                    規格
+                </td>
+                <td>
+                    <input name="Spec" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" value="@Model.Spec" readonly>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    單位
+                </td>
+                <td>
+                    <input name="Unit" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" value="@Model.Unit" readonly>
+                </td>
+                <td class="tdstyle">
+                    庫別
+                </td>
+                <td>
+                    <select name="WareHouseId" class="combobox" onchange="storageSelect(this);" required>
+                        <option value=""></option>
+                        @foreach (WareHouseSys.DBModels.WarehouseInfo warehouse in ViewBag.WarehouseInfos)
+                        {
+                            <option value="@warehouse.WarehouseId" @(warehouse.WarehouseId == Model.WarehouseId ? "selected" : "")>@warehouse.WareHouseName</option>
+                        }
+                    </select>
+                </td>
+                <td class="tdstyle">
+                    儲位
+                </td>
+                <td>
+                     <select name="StorageId" class="combobox" required></select>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    應收數量
+                </td>
+                <td>
+                    <input name="Quantity" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" type="number" value="@Model.Quantity" readonly>
+                </td>
+                <td class="tdstyle">
+                    已收數量
+                </td>
+                <td>
+                    <input name="ReceivedQty" onblur="calUnreceivedQty(this);" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" type="number" value="@Model.receivedQty"  required>
+                </td>
+                <td class="tdstyle">
+                    未收數量
+                </td>
+                <td>
+                    <input name="UnreceivedQty" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" type="number" value="@Model.UnreceivedQty" readonly>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle">收貨狀況</td>
+                <td colspan="5"><textarea name="Note" cols="100" rows="4">@Model.Note</textarea></td>
+            </tr>
+        </tbody>
+    </table>
+</form>

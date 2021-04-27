@@ -1,0 +1,67 @@
+﻿@using WareHouseSys.ViewModels
+@using WareHouseSys.Models
+@model DemandHeaderViewModel
+@{
+    Layout = null;
+}
+
+<style>
+    .table > tbody > tr > td {
+        border-top: 1px solid #2b2b2b;
+    }
+</style>
+<input type="hidden" name="OrderNo" value="@Model.OrderNo" />
+<table class="table" style="border-style:solid;border-width:2px">
+    <tbody>
+        <tr>
+            <td colspan="4" style="font-weight:800;font-size:x-large" align="center">預估需求單資訊</td>
+        </tr>
+        <tr>
+            <td class="tdstyle">
+                申請日期
+            </td>
+            <td>
+                <h4><span class="label label-default">@Model.ApplyDate.ToString("yyyy/MM/dd")</span></h4>
+            </td>
+            <td class="tdstyle">
+                申請人員
+            </td>
+            <td>
+                <h4><span class="label label-default">@Model.ApplyMan</span></h4>
+            </td>
+        </tr>
+        <tr>
+            <td class="tdstyle">
+                年度
+            </td>
+            <td>
+                <h4><span class="label label-default">@Model.Annual</span></h4>
+            </td>
+            <td class="tdstyle">
+                季
+            </td>
+            <td>
+                <h4><span class="label label-default">@Model.Season</span></h4>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4">
+                <div style="width:960px">
+                    <div id="EstDemandDetailGrid"></div>
+                </div>
+
+            </td>
+        </tr>
+        <tr>
+            <td class="tdstyle">
+                附件
+            </td>
+            <td colspan="3">
+                @foreach (Attachment f in Model.attachments)
+                {
+                    <span class="badge badge-pill badge-default" style="cursor:pointer"><a href="@Url.Action("getAttatchment","EstDemand",new { OrderNo=Model.OrderNo,FileName=f.FileName})" style="color:white" target="aa">@f.FileName</a></span>
+                }
+            </td>
+        </tr>
+    </tbody>
+</table>

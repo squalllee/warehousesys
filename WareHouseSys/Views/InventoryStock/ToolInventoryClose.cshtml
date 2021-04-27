@@ -1,0 +1,131 @@
+﻿@using WareHouseSys.ViewModels
+@model ToolInventoryHeaderViewModel
+@{
+    ViewBag.Title = "結案";
+    Layout = "";
+}
+<style>
+    .table > tbody > tr > td {
+        border-top: 1px solid #2b2b2b;
+    }
+
+    .box-1 {
+        width: 100%;
+        height: 100%;
+        line-height: 100px;
+        max-width: 100%;
+        text-align: center;
+    }
+
+    .thumb {
+        height: 80px;
+        width: 100px;
+        border: 1px solid #000;
+    }
+
+    ul.thumb-Images li {
+        width: 120px;
+        float: left;
+        display: inline-block;
+        vertical-align: top;
+        height: 120px;
+    }
+
+    .img-wrap {
+        position: relative;
+        display: inline-block;
+        font-size: 0;
+    }
+
+        .img-wrap .close {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            z-index: 100;
+            background-color: #D0E5F5;
+            padding: 5px 2px 2px;
+            color: #000;
+            font-weight: bolder;
+            cursor: pointer;
+            opacity: .5;
+            font-size: 23px;
+            line-height: 10px;
+            border-radius: 50%;
+        }
+
+        .img-wrap:hover .close {
+            opacity: 1;
+            background-color: #ff0000;
+        }
+
+    .FileNameCaptionStyle {
+        font-size: 12px;
+    }
+</style>
+
+<form id="InventoryCloseForm" data-closeurl="@Url.Content("../api/InventoryStock/ToolInventoryClose")">
+    <input type="hidden" name="OrderNo" value="@Model.OrderNo" />
+    <table class="table" style="border-style:solid;border-width:2px">
+        <tbody>
+            <tr>
+                <td colspan="6" style="font-weight:800;font-size:x-large" align="center">盤點單資訊</td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    盤點人員
+                </td>
+                <td>
+                    <h4><span class="label label-default">@Model.InventoryMan</span></h4>
+                </td>
+                <td class="tdstyle">
+                    <font style="color:red">製表日期</font>
+                </td>
+                <td>
+                    <h4><span class="label label-default">@Model.InventoryAttr</span></h4>
+                </td>
+                <td class="tdstyle">
+                    <font style="color:red">盤點週期</font>
+                </td>
+                <td>
+                    <h4><span class="label label-default">@Model.Period</span></h4>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    保管單位
+                </td>
+                <td>
+                    <h4><span class="label label-default">@Model.KeepUnit</span></h4>
+                </td>
+                <td class="tdstyle">
+                    盤點屬性
+                </td>
+                <td>
+                    <h4><span class="label label-default">@Model.InventoryAttr</span></h4>
+                </td>
+                <td class="tdstyle">
+                    手工具保管人
+                </td>
+                <td>
+                    <h4><span class="label label-default">@Model.ToolMgr</span></h4>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6">
+                    <div style="width:950px">
+                        <div id="InventoryCloseGrid" data-url="@Url.Content("../InventoryStock/ToolFirstSecondCheck")?OrderNo=@Model.OrderNo"></div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6">
+                    <div class="pull-right">
+                        <button id="BtnClose" class="btn btn-default" type="button" style="margin-left:10px"><i class="far fa-save"></i> 結案</button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+

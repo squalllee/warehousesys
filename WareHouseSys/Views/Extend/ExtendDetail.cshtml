@@ -1,0 +1,87 @@
+﻿@using WareHouseSys.ViewModels
+@using WareHouseSys.Models
+@model ExtendHeaderViewModel
+@{
+    ViewBag.Title = "展延作業";
+    Layout = "";
+}
+
+@{
+    string UserName = ViewBag.UserName;
+    string UserId = ViewBag.UserId;
+}
+
+<style>
+    .table > tbody > tr > td {
+        border-top: 1px solid #2b2b2b;
+    }
+
+</style>
+<form>
+    <table class="table" style="border-style:solid;border-width:2px">
+        <tbody>
+            <tr>
+                <td colspan="6" style="font-weight:800;font-size:x-large" align="center">展延單資訊</td>
+            </tr>
+            <tr>
+                <td class="tdstyle" style="width:10%">
+                    借料單號
+                </td>
+                <td style="width:10%">
+                    <h4><span class="label label-default">@Model.LendNo</span></h4>
+                </td>
+                <td class="tdstyle" style="width:30%">展期人員</td>
+                <td>
+                    <h4><span class="label label-default">@Model.ExtendMan</span></h4>
+                </td>
+                <td class="tdstyle">
+                    核可人員
+                </td>
+                <td>
+                    <h4><span class="label label-default">@Model.ApprovedMan</span></h4>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    展延日期
+                </td>
+                <td>
+                    <h4><span class="label label-default">@Model.CloseDate.ToString("yyyy/MM/dd")</span></h4>
+                </td>
+                <td class="tdstyle">
+                    展延天數
+                </td>
+                <td colspan="3">
+                    <h4><span class="label label-default">@Model.Days</span></h4>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    展延原因
+                </td>
+                <td colspan="5">
+                    <h4><span class="label label-default">@Model.ExtendReason</span></h4>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6">
+                    <div style="width:950px">
+                        <div id="ExtendDetailGrid" data-url="@Url.Content("../Extend/LendBodyWithExtendDetailViewModel")?OrderNo=@Model.LendNo"></div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    附件
+                </td>
+                <td colspan="5">
+                    @foreach (Attachment f in Model.attachments)
+                    {
+                        <span class="badge badge-pill badge-default" style="cursor:pointer"><a href="@Url.Action("getAttatchment","Extend",new { OrderNo=Model.OrderNo,FileName=f.FileName})" style="color:white" target="aa">@f.FileName</a></span>
+                    }
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+

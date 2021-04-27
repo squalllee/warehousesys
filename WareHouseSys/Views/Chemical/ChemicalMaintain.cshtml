@@ -1,0 +1,122 @@
+﻿@{
+    ViewBag.Title = "化學品維護作業";
+}
+
+<style>
+    .tdstyle {
+        font-family: 標楷體;
+        font-size: large;
+        vertical-align: middle;
+        border-style: solid;
+        border-width: 0.5px;
+        font-weight: 800;
+        text-align: center;
+        width: 15%;
+        background-color: #D0CECF;
+    }
+
+    .ui-dialog {
+        z-index: 1000 !important;
+    }
+
+    body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    .fileinput-button {
+        position: relative;
+        overflow: hidden;
+    }
+
+        .fileinput-button input {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 0;
+            opacity: 0;
+            -ms-filter: 'alpha(opacity=0)';
+            font-size: 200px;
+            direction: ltr;
+            cursor: pointer;
+        }
+
+    .thumb {
+        height: 80px;
+        width: 100px;
+        border: 1px solid #000;
+    }
+
+    ul.thumb-Images li {
+        width: 120px;
+        float: left;
+        display: inline-block;
+        vertical-align: top;
+        height: 120px;
+    }
+
+    .img-wrap {
+        position: relative;
+        display: inline-block;
+        font-size: 0;
+    }
+
+        .img-wrap .close {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            z-index: 100;
+            background-color: #D0E5F5;
+            padding: 5px 2px 2px;
+            color: #000;
+            font-weight: bolder;
+            cursor: pointer;
+            opacity: .5;
+            font-size: 23px;
+            line-height: 10px;
+            border-radius: 50%;
+        }
+
+        .img-wrap:hover .close {
+            opacity: 1;
+            background-color: #ff0000;
+        }
+
+    .FileNameCaptionStyle {
+        font-size: 12px;
+    }
+</style>
+<div class="row">
+    <section class="content-header">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> 化學品維護作業</a></li>
+            <li class="active">化學品維護</li>
+        </ol>
+    </section>
+</div>
+
+<div id="ChemicalGrid"></div>
+
+<input type="hidden" value="@Url.Action("getSDSAttatchment","Chemical")" id="baseUrl" />
+
+<script id="noDataTemplate" type="text/x-kendo-tmpl">
+    # var value = instance.input.val(); #
+    # var id = instance.element[0].id; #
+    <div>
+        No data found. Do you want to add new item - '#: value #' ?
+    </div>
+    <br />
+    <button class="k-button" onclick="addNew('#: value #')" ontouchend="addNew( '#: value #')">Add new item</button>
+</script>
+
+<script type="text/x-kendo-template" id="template">
+    <div class="product">
+        <img src="../content/web/foods/#= name #" alt="#: name # image" />
+    </div>
+</script>
+
+@section scripts{
+
+    <script src="~/PageJs/ChemicalMaintain.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+
+    <script src="~/PageJs/FileUpload.js"></script>
+}

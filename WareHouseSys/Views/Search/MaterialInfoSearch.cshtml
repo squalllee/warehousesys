@@ -1,0 +1,192 @@
+﻿@using WareHouseSys.ViewModels;
+
+
+<style>
+    .table > tbody > tr > td {
+        border-top: 1px solid #2b2b2b;
+    }
+
+    .tdstyle {
+        font-family: 標楷體;
+        font-size: large;
+        vertical-align: middle;
+        border-style: solid;
+        border-width: 0.5px;
+        font-weight: 800;
+        text-align: center;
+        width: 15%;
+        background-color: #D0CECF;
+    }
+
+    .k-grid tr td {
+        overflow: visible;
+    }
+
+   /* .dropZoneElement {
+        position: relative;
+        display: inline-block;
+        background-color: #f8f8f8;
+        border: 1px solid #c7c7c7;
+        width: 230px;
+        height: 110px;
+        text-align: center;
+    }*/
+
+   /* .textWrapper {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 100%;
+        font-size: 24px;
+        line-height: 1.2em;
+        font-family: Arial,Helvetica,sans-serif;
+        color: #000;
+    }
+
+    .dropImageHereText {
+        color: #c7c7c7;
+        text-transform: uppercase;
+        font-size: 12px;
+    }*/
+
+    .product {
+        float: left;
+        position: relative;
+        margin: 0 10px 10px 0;
+        padding: 0;
+    }
+
+        .product img {
+            width: 110px;
+            height: 110px;
+        }
+
+
+
+    .thumb {
+        height: 80px;
+        width: 100px;
+        border: 1px solid #000;
+    }
+
+    .img-wrap {
+        position: relative;
+        display: inline-block;
+        font-size: 0;
+    }
+
+        .img-wrap .close {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            z-index: 100;
+            background-color: #D0E5F5;
+            padding: 5px 2px 2px;
+            color: #000;
+            font-weight: bolder;
+            cursor: pointer;
+            opacity: .5;
+            font-size: 23px;
+            line-height: 10px;
+            border-radius: 50%;
+        }
+
+        /*.img-wrap:hover .close {*/
+    .close:hover {
+        opacity: 1;
+        background-color: #ff0000;
+    }
+</style>
+
+<div class="row">
+    <section class="content-header">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> 查詢作業</a></li>
+            <li class="active">物料基本資料查詢作業</li>
+        </ol>
+    </section>
+</div>
+
+@(Html.Kendo().Grid<MaterialInfoViewModel>
+    ()
+    .Name("grid")
+    .Columns(columns =>
+    {
+        columns.Bound(c => c.MaterialNo).Width(80).Title("圖片").Filterable(false).Sortable(false).ClientTemplate("<div name='attatchment' class='btn-group dropleft'></div>");
+        columns.Bound(c => c.MaterialNo).Width(180).Title("料號");
+        columns.Bound(c => c.MaterialName).Width(180).Title("品名");
+        columns.Bound(c => c.Spec).Width(300).Title("規格");
+        columns.Bound(c => c.Unit).Width(150).Title("單位");
+        columns.Bound(c => c.SystemName).Width(150).Title("系統別");
+        columns.Bound(c => c.SubSystemName).Width(150).Title("子系統別");
+        columns.Bound(c => c.FixClassName).Width(150).Title("維修類別");
+        columns.Bound(c => c.AffectClassName).Width(150).Title("影響類別");
+        columns.Bound(c => c.VendorName).Width(150).Title("原廠代碼/開發");
+        columns.Bound(c => c.Length).Width(150).Title("長(cm)");
+        columns.Bound(c => c.Witdh).Width(150).Title("寬(cm)");
+        columns.Bound(c => c.Height).Width(150).Title("高(cm)");
+        columns.Bound(c => c.weight).Width(150).Title("重(kg)");
+        columns.Bound(c => c.EqQuantity).Width(150).Title("設備零件數");
+        columns.Bound(c => c.SafetyStock).Width(150).Title("安全量");
+        columns.Bound(c => c.EstAnnConsumption).Width(150).Title("預估年秏用量");
+        columns.Bound(c => c.ROP).Width(150).Title("請購點");
+        columns.Bound(c => c.EstPurPeriod).Width(150).Title("預估購備期(天)");
+        columns.Bound(c => c.IsFix).Width(150).Title("可修件").ClientTemplate("#=IsFix?'是':'否'#");
+        columns.Bound(c => c.IsDangerous).Width(150).Title("危害物").ClientTemplate("#=IsDangerous?'是':'否'#");
+        columns.Bound(c => c.SpecifyBrand).Width(150).Title("指定廠牌").ClientTemplate("#=SpecifyBrand?'是':'否'#");
+        columns.Bound(c => c.IsLimitTime).Width(150).Title("時限品").ClientTemplate("#=IsLimitTime?'是':'否'#");
+        columns.Bound(c => c.Freeze).Width(150).Title("凍結").ClientTemplate("#=Freeze?'是':'否'#");
+        columns.Bound(c => c.Expiration).Width(150).Title("保存期限(月)");
+        columns.Bound(c => c.ReplaceNo).Width(150).Title("替代件料號");
+
+    })
+    .ToolBar(tools =>
+    {
+        tools.Excel();
+    })
+     .Events(events => events
+                .DataBound("onGridDataBound")
+            )
+    .Excel(excel => excel
+    .FileName("Stock.xlsx")
+    .Filterable(true)
+    .AllPages(true)
+    )
+    .HtmlAttributes(new { style = "height: 750px;" })
+    .Scrollable()
+    .Sortable()
+    .Filterable()
+    .Pageable(pageable => pageable
+    .Refresh(true)
+    .PageSizes(true)
+    .ButtonCount(5)
+    .PageSizes(new List<int>
+        { 20, 30, 40, 50, 500 }))
+        .Filterable(filterable => filterable
+        .Extra(false)
+        .Operators(operators => operators
+        .ForString(str => str.Clear()
+        .IsEqualTo("等於")
+        .Contains("包含")
+        )
+        .ForDate(str => str.Clear()
+        .IsEqualTo("等於")
+        .IsGreaterThanOrEqualTo("大於等於")
+        .IsLessThanOrEqualTo("小於等於")))
+
+        )
+        .DataSource(dataSource => dataSource
+        .Ajax()
+        .Read(read => read.Action("MaterialInfoGrid", "Search", new { Status = "-99" }))
+        .PageSize(50)
+
+        )
+        )
+
+
+
+@section scripts{
+    <script src="~/PageJs/MaterialInfoSearch.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+
+
+}

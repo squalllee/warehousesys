@@ -1,0 +1,43 @@
+﻿@{
+    ViewBag.Title = "還料查詢";
+}
+
+<style>
+    .tdstyle {
+        font-family: 標楷體;
+        font-size: large;
+        vertical-align: middle;
+        border-style: solid;
+        border-width: 0.5px;
+        font-weight: 800;
+        text-align: center;
+        width: 15%;
+        background-color: #D0CECF;
+    }
+
+    #BackSearchGrid .k-grid-content, .k-grid tr td {
+        overflow: visible;
+    }
+
+    #BackSearchGrid .k-grid-header {
+        padding-right: 0 !important;
+    }
+</style>
+<div class="row">
+    <section class="content-header">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> 還料作業</a></li>
+            <li class="active">還料查詢</li>
+        </ol>
+    </section>
+</div>
+
+<div id="BackSearchGrid" data-url="@Url.Action("getBackHaderViewModel", "Back")" data-deleteurl="@Url.Content("../api/Back/deleteBack")"></div>
+
+<div id="BackDetailDialog" data-url="@Url.Action("BackDetail","Back")"></div>
+
+@section scripts{
+    <script src="~/PageJs/BackSearch.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+    <script src="~/PageJs/ModifyBack.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+    <script src="~/PageJs/BackDetail.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+}

@@ -1,0 +1,46 @@
+﻿
+@{
+    ViewBag.Title = "採購單明細";
+    Layout = "";
+}
+    <script language="javascript">
+
+    $(document).ready(function () {
+
+       // alert('@ViewBag.ContractPriceWithoutVAT');
+       // alert('@ViewBag.ContractPriceIncludeVAT');
+        $("[name='ContractPriceWithoutVAT']").val('@ViewBag.ContractPriceWithoutVAT');
+        $("[name='ContractPriceIncludeVAT']").val('@ViewBag.ContractPriceIncludeVAT');
+        //alert($("[name='ContractPriceWithoutVAT']").val());
+        //alert($("[name='ContractPriceIncludeVAT']").val());
+    });
+
+    </script>
+
+    <input type="hidden" name="ContractPriceWithoutVAT" />
+    <input type="hidden" name="ContractPriceIncludeVAT" />
+
+<table id="PurDetailTable" data-url="@Url.Content("../api/Purchase/getPurBody/")@ViewBag.PurchaseNo" class="hover display" style="width:100%">
+    <thead>
+        <tr>
+            <th>序號</th>
+            <th>料號</th>
+            <th>品名</th>
+            <th>規格</th>
+            <th>契約單價</th>
+            <th>數量</th>
+            <th>交貨批次</th>
+            <th>交貨地點</th>
+            <th>履約期限</th>
+            <th>需求單位</th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <th colspan="10" style="text-align:right">
+
+            </th>
+        </tr>
+    </tfoot>
+</table>
+

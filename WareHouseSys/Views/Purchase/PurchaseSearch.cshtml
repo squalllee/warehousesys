@@ -1,0 +1,100 @@
+﻿
+@{
+    ViewBag.Title = "採購單查詢";
+}
+<style>
+    .tdstyle {
+        font-family: 標楷體;
+        font-size: large;
+        vertical-align: middle;
+        border-style: solid;
+        border-width: 0.5px;
+        font-weight: 800;
+        text-align: center;
+        width: 15%;
+        background-color: #D0CECF;
+    }
+
+    .ui-dialog {
+        z-index: 1000 !important;
+    }
+
+    body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+</style>
+@section css
+{
+    <link href="~/Content/fastselect.min.css" rel="stylesheet" />
+}
+
+<div class="row">
+    <section class="content-header">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> 採購作業</a></li>
+            <li class="active">採購單查詢</li>
+        </ol>
+    </section>
+</div>
+
+<form name="PurchaseForm">
+    <div class="table-responsive">
+        <table class="table" style="border-style:solid;border-width:2px">
+            <tbody>
+                <tr>
+                    <td class="tdstyle">
+                        採購單號
+                    </td>
+                    <td> <input name="PurchaseNo" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" id="PurchaseNo"></td>
+                    <td class="tdstyle">
+                        採購日期起
+                    </td>
+                    <td>
+                        <input type="text" name="PurchaseDateStart" id="PurchaseDateStart" class="dateTime">~<input type="text" name="PurchaseDateEnd" id="PurchaseDateEnd" class="dateTime">
+                        <button id="btnSearch" class="btn btn-default" type="button" style="margin-left:10px"><i class="fa fa-search fa-fw"></i> 查詢</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</form>
+
+<table id="PurchaseTable" data-url="@Url.Content("../api/Purchase/PurchaseSearch")" class="hover display">
+    <thead>
+        <tr>
+            <th>採購案號</th>
+            <th>採購日期</th>
+            <th>採購案名</th>
+            <th>物料金額(未稅)</th>
+            <th>物料金額(含稅)</th>
+            <th>採購方式</th>
+            <th>預算來源</th>
+            <th>採購單位</th>
+            <th>採購承辦人</th>
+            <th>廠商名稱</th>
+            <th>廠商聯絡人</th>
+            <th>電話</th>
+            <th>手機</th>
+            <th>需求單號</th>
+            <th>狀態</th>
+            <th>動作</th>
+        </tr>
+    </thead>
+
+</table>
+
+<div id="PurDetailDialog" data-url="@Url.Action("PurDetail","Purchase")"></div>
+<div id="TransToRecvDialog" data-url="@Url.Action("TransToRecv","Purchase")"></div>
+<div id="TransToInboundDialog" data-url="@Url.Action("TransToInbound","Purchase")"></div>
+<div id="PurUpdateDialog" data-url="@Url.Action("PurchaseUpdate","Purchase")" data-saveurl="@Url.Content("../api/Purchase/savePurHeader")"></div>
+<div id="PurUpdateDetailDialog" data-url="@Url.Action("PurUpdateDetail","Purchase")"></div>
+<div id="PurAddDetailDialog" data-url="@Url.Action("PurchaseDetailAdd","Purchase")" data-saveurl="@Url.Content("../api/Purchase/AddPurBody")"></div>
+
+
+@section scripts{
+
+
+    <script src="~/Scripts/fastselect.standalone.min.js"></script>
+    <script src="~/PageJs/PurchaseSearch.js?ver=@DateTime.Now.ToString("yyyyMMddHHmmss")"></script>
+}
+

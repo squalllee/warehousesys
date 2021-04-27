@@ -1,0 +1,171 @@
+﻿
+@{
+    ViewBag.Title = "需求單修改";
+    Layout = "";
+}
+
+<style>
+    .table > tbody > tr > td {
+        border-top: 1px solid #2b2b2b;
+    }
+
+    .ui-autocomplete-input {
+        width: 70%;
+    }
+
+    .tdstyle {
+        font-family: 標楷體;
+        font-size: large;
+        vertical-align: middle;
+        border-style: solid;
+        border-width: 0.5px;
+        font-weight: 800;
+        text-align: center;
+        width: 12%;
+        background-color: #D0CECF;
+    }
+
+    .ui-dialog {
+        z-index: 900 !important;
+    }
+
+    body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    .fileinput-button {
+        position: relative;
+        overflow: hidden;
+    }
+
+        .fileinput-button input {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 0;
+            opacity: 0;
+            -ms-filter: 'alpha(opacity=0)';
+            font-size: 200px;
+            direction: ltr;
+            cursor: pointer;
+        }
+
+    .thumb {
+        height: 80px;
+        width: 100px;
+        border: 1px solid #000;
+    }
+
+    ul.thumb-Images li {
+        width: 120px;
+        float: left;
+        display: inline-block;
+        vertical-align: top;
+        height: 120px;
+    }
+
+    .img-wrap {
+        position: relative;
+        display: inline-block;
+        font-size: 0;
+    }
+
+        .img-wrap .close {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            z-index: 100;
+            background-color: #D0E5F5;
+            padding: 5px 2px 2px;
+            color: #000;
+            font-weight: bolder;
+            cursor: pointer;
+            opacity: .5;
+            font-size: 23px;
+            line-height: 10px;
+            border-radius: 50%;
+        }
+
+        .img-wrap:hover .close {
+            opacity: 1;
+            background-color: #ff0000;
+        }
+
+    .FileNameCaptionStyle {
+        font-size: 12px;
+    }
+</style>
+
+<input type="hidden" id="OrderNo" value="@ViewBag.OrderNo" />
+<table class="table" style="border-style:solid;border-width:2px">
+    <tbody>
+        <tr>
+            <td colspan="6" style="font-weight:800;font-size:x-large" align="center">物料需求計畫表</td>
+        </tr>
+        <tr>
+            <td class="tdstyle">
+                填單日期
+            </td>
+            <td> <input name="FillDate" value="@ViewBag.FillDate" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;"  readonly></td>
+            <td class="tdstyle">
+                申請部門
+            </td>
+            <td>
+                <input name="ApplicantUnit" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;"  value="@ViewBag.ApplicantUnit" readonly>
+            </td>
+
+            <td class="tdstyle">
+                申請人
+            </td>
+            <td>
+                <input name="Applicant" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;"  value="@ViewBag.Applicant" readonly>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<table class="table" style="border-style:solid;border-width:2px">
+    <tbody>
+        <tr>
+            <td>
+                <table id="RequireDetailCloseTable" data-url="@Url.Content("../api/Requirement/getReqBody/")@ViewBag.OrderNo" class="hover display">
+                    <thead>
+                        <tr>
+                            <th>料號</th>
+                            <th>需求數量</th>
+                            <th>需求日期</th>
+                            <th>用料期程1(起)</th>
+                            <th>用料期程1(迄)</th>
+                            <th>用料量1</th>
+                            <th>用料期程2(起)</th>
+                            <th>用料期程2(迄)</th>
+                            <th>用料量2</th>
+                            <th>交貨期</th>
+                            <th>需求原因</th>
+                        </tr>
+                    </thead>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<table class="table" style="border-style:solid;border-width:2px">
+        <tr>
+            <td class="tdstyle">
+                附件上傳<img id="imgFileOpen" src="../images/plus.png" style="width: 20%; cursor: pointer; vertical-align: middle;" />
+            </td>
+            <td colspan="5">
+
+                <output id="Filelist"></output>
+                <input type="file" name="files[]" id="files" multiple accept="image/jpeg, image/png, image/gif," style="display:none">
+            </td>
+        </tr>
+    </table>
+
+@section scripts{
+
+    <script src="~/PageJs/RequirementClose.js?ver=@DateTime.Now.ToString("yyyyMMddHHmmss")"></script>
+}
+
+

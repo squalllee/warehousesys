@@ -1,0 +1,99 @@
+﻿
+@{
+    ViewBag.Title = "初盤作業";
+    Layout = "";
+}
+
+<style>
+    .table > tbody > tr > td {
+        border-top: 1px solid #2b2b2b;
+    }
+
+    .box-1 {
+        width: 100%;
+        height: 100%;
+        line-height: 100px;
+        max-width: 100%;
+        text-align: center;
+    }
+    .diff
+    {
+        color:red;
+        font-weight:800;
+    }
+
+    .thumb {
+        height: 80px;
+        width: 100px;
+        border: 1px solid #000;
+    }
+
+    ul.thumb-Images li {
+        width: 120px;
+        float: left;
+        display: inline-block;
+        vertical-align: top;
+        height: 120px;
+    }
+
+    .img-wrap {
+        position: relative;
+        display: inline-block;
+        font-size: 0;
+    }
+
+        .img-wrap .close {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            z-index: 100;
+            background-color: #D0E5F5;
+            padding: 5px 2px 2px;
+            color: #000;
+            font-weight: bolder;
+            cursor: pointer;
+            opacity: .5;
+            font-size: 23px;
+            line-height: 10px;
+            border-radius: 50%;
+        }
+
+        .img-wrap:hover .close {
+            opacity: 1;
+            background-color: #ff0000;
+        }
+
+    .FileNameCaptionStyle {
+        font-size: 12px;
+    }
+</style>
+
+<table class="table" style="border-style:solid;border-width:2px">
+    <tbody>
+        <tr>
+            <td colspan="2">
+                <div style="width:950px" >
+                    <div id="FirstCheckGrid" data-url="@Url.Content("../InventoryStock/FirstSecondCheck")?OrderNo=@ViewBag.OrderNo" data-updateurl="@Url.Content("../api/InventoryStock/updateFirstCheckQty")"></div>
+                </div>
+
+            </td>
+        </tr>
+        <tr>
+            <td class="tdstyle">
+                附件上傳<img id="imgFileOpen" src="../images/plus.png" style="width: 20%; cursor: pointer; vertical-align: middle;" />
+            </td>
+            <td style="width:80%">
+                <output id="Filelist"></output>
+                <input type="file" name="files[]" id="files" multiple accept="application/pdf," style="display:none">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <div class="pull-right" >
+                    <button id="BtnSetFirstCheck" class="btn btn-default" type="button" style="margin-left:10px" data-complete="@Url.Content("../api/InventoryStock/setFirstCheckComplete")/@ViewBag.OrderNo"><i class="far fa-save"></i> 完成初盤</button>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+

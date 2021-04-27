@@ -1,0 +1,103 @@
+﻿@using WareHouseSys.ViewModels
+@{
+    ViewBag.Title = "物料申請單審核";
+}
+
+<style>
+    .tdstyle {
+        font-family: 標楷體;
+        font-size: large;
+        vertical-align: middle;
+        border-style: solid;
+        border-width: 0.5px;
+        font-weight: 800;
+        text-align: center;
+        width: 15%;
+        background-color: #D0CECF;
+    }
+
+    .ui-dialog {
+        z-index: 1000 !important;
+    }
+
+    body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    .k-grid tr td {
+        overflow: visible;
+    }
+</style>
+
+<div class="row">
+    <section class="content-header">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i>料號申請作業</a></li>
+            <li class="active">物料申請單審核</li>
+        </ol>
+    </section>
+</div>
+
+@(Html.Kendo().Grid<ReqMaterialHeaderViewModel>()
+                    .Name("grid")
+                    .Columns(columns =>
+                    {
+                        columns.Bound(c => c.OrderNo).Title("單號").ClientTemplate("<span style='cursor: pointer' onclick='openDetail(this);'><font style='color:blue'>#=OrderNo#</font></span>").Width(150);
+                        columns.Bound(c => c.ReqMan).Title("申請人");
+                        columns.Bound(c => c.ReqUnit).Title("申請單位");
+                        columns.Bound(c => c.ReqDateTime).Title("申請日期").ClientTemplate("#=kendo.toString(ReqDateTime, 'yyyy/MM/dd')#"); ;
+                        columns.Bound(c => c.Status).Title("狀態");
+                        columns.Bound(c => c.Status).Title("動作").Filterable(false).Sortable(false).ClientTemplate("<div name='ActionList' class='btn-group dropleft'></div>");
+                    })
+                .HtmlAttributes(new { style = "height: 750px;" })
+                .Scrollable()
+                .Sortable()
+                .Filterable()
+                .Pageable(pageable => pageable
+                                 .Messages(m => m
+                                 .Last("最末頁")
+                                 .First("第一頁")
+                                 .Next("下一頁")
+                                 .Previous("上一頁")
+                                 .MorePages("更多頁")
+                                 .ItemsPerPage("每頁筆數")
+                                 .Display("第 {0} - {1} 筆 共 {2} 筆記錄")
+                                 .Refresh("重新整理")
+                                 .Empty("沒有符合記錄")
+                                 )
+                .PageSizes(true)
+                .ButtonCount(5)
+                .PageSizes(new List<object> { 25, 50 })
+                .Refresh(true))
+                .Filterable(filterable => filterable
+                .Extra(false)
+                .Operators(operators => operators
+                    .ForString(str => str.Clear()
+                        .IsEqualTo("等於")
+                        .Contains("包含")
+                    )
+                    .ForDate(str => str.Clear()
+                    .IsEqualTo("等於")))
+                )
+                .Events(events => events
+                .DataBound("onGridDataBound")
+                )
+                .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .Model(model => model.Id(p => p.OrderNo))
+                    .Read(read => read.Action("ReqMaterialHeader", "ReqMaterialInfo"))
+
+                    .Events(events => events.Error("error_handler"))
+                    .PageSize(50)
+
+                )
+
+)
+
+@section scripts{
+    <script src="~/PageJs/ReqMaterialReview.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+    <script src="~/PageJs/ReqMaterialAdd.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+    <script src="~/PageJs/ReqMaterialDetail.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+    <script src="~/PageJs/FileUpload.js"></script>
+    <script src="~/PageJs/ReqMaterialDoReview.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+}

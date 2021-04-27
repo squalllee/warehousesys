@@ -1,0 +1,575 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>臺中捷運倉儲管理系統</title>
+
+    <link href="~/Content/AdminLTE.css" rel="stylesheet" />
+    @*<link href="~/Content/bootstrap.css" rel="stylesheet" />*@
+    @*<link href="~/Content/lib/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" />*@
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet" />
+    @* <link href="~/Content/lib/bower_components/Ionicons/css/ionicons.min.css" rel="stylesheet" />*@
+
+    <link href="~/Content/skins/skin-blue.min.css" rel="stylesheet" />
+    <link href="~/Content/jquery.mloading.css" rel="stylesheet" />
+
+    <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet" />
+
+    	<script src="https://kendo.cdn.telerik.com/2020.1.114/js/jquery.min.js"></script>
+	<script src="https://kendo.cdn.telerik.com/2020.1.114/js/jszip.min.js"></script>
+	<script src="https://kendo.cdn.telerik.com/2020.1.114/js/kendo.all.min.js"></script>
+	<script src="https://kendo.cdn.telerik.com/2020.1.114/js/kendo.aspnetmvc.min.js"></script>
+@Scripts.Render("~/bundles/modernizr")
+
+    @RenderSection("css", required: false)
+    @RenderSection("scripts", required: false)
+
+    	<link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" type="text/css" />
+	<link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+@*	<script src="@Url.Content("~/Scripts/bootstrap.min.js")"></script>
+*@
+
+    <link href="~/Content/notification.css" rel="stylesheet" />
+    <link href="https://kendo.cdn.telerik.com/2020.1.114/styles/kendo.common-bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://kendo.cdn.telerik.com/2020.1.114/styles/kendo.bootstrap.min.css" rel="stylesheet" type="text/css" />
+    	<link href="https://kendo.cdn.telerik.com/2020.1.114/styles/kendo.common.min.css" rel="stylesheet" type="text/css" />
+	<link href="https://kendo.cdn.telerik.com/2020.1.114/styles/kendo.default.min.css" rel="stylesheet" type="text/css" />
+	<script src="@Url.Content("~/Scripts/kendo.modernizr.custom.js")"></script>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+        <!-- Main Header -->
+        <header class="main-header">
+            <!-- Logo -->
+            <a href="@Url.Action("Index","Home")" class="logo">
+                <!-- mini logo for sidebar mini 50x50 pixels -->
+                <span class="logo-mini"><b>T</b>CM</span>
+                <!-- logo for regular state and mobile devices -->
+                <span class="logo-lg"><b>臺中捷運</b>倉儲管理系統</span>
+            </a>
+            <!-- Header Navbar -->
+            <nav class="navbar navbar-static-top" role="navigation">
+                <!-- Sidebar toggle button-->
+                <a href="#" class="sidebar-toggle " data-toggle="push-menu" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
+                <!-- Navbar Right Menu -->
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <img src="~/images/user1-128x128.jpg" class="user-image" alt="User Image">
+                                <span class="hidden-xs">@ViewBag.UserName</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="user-header">
+                                    <img src="~/images/user1-128x128.jpg" class="img-circle" alt="User Image">
+                                    <p>
+                                        @ViewBag.UnitName - @ViewBag.JOBName
+                                        <small>EXT:@ViewBag.Ext</small>
+                                    </p>
+                                </li>
+                                <li class="user-footer">
+                                    <div class="pull-left">
+                                        <a href="#" class="btn btn-default btn-flat" data-toggle="modal" data-target="#modal-info">個人資料</a>
+                                    </div>
+                                    <div class="pull-right">
+                                        <a href="@Url.Action("Logout","Account")" class="btn btn-default btn-flat">登出</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <!-- Left side column. contains the logo and sidebar -->
+        <aside class="main-sidebar">
+            <!-- sidebar: style can be found in sidebar.less -->
+            <section class="sidebar">
+                <!-- Sidebar user panel (optional) -->
+                <div class="user-panel">
+                    <div class="pull-left image">
+                        <img src="~/images/user1-128x128.jpg" class="img-circle" alt="User Image">
+                    </div>
+
+                    <div class="pull-left info" style="padding-top:15px">
+                        <p>@ViewBag.UserName</p>
+
+                    </div>
+                </div>
+
+                <!-- Sidebar Menu -->
+                <ul class="sidebar-menu" data-widget="tree">
+                    <li class="treeview @(ViewContext.RouteData.Values["controller"].ToString() == "ReqMaterialInfo" ? "active menu-open":"")">
+                        <a href="#">
+                            <i class="fab fa-codepen"></i><span>料號申請作業</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li @(ViewContext.RouteData.Values["action"].ToString() == "ReqMaterialSearch" ? "class=active" : "")><a href="@Url.Action("ReqMaterialSearch","ReqMaterialInfo")"><i class="fa fa-circle-o"></i>料號申請</a></li>
+                            @if (ViewBag.WareHouseList.Count > 0)
+                            {
+                                <li @(ViewContext.RouteData.Values["action"].ToString() == "ReqMaterialReview" ? "class=active" : "")><a href="@Url.Action("ReqMaterialReview","ReqMaterialInfo")"><i class="fa fa-circle-o"></i>料號申請審核</a></li>
+
+                            }
+                        </ul>
+                    </li>
+
+                    <li class="treeview @(ViewContext.RouteData.Values["controller"].ToString() == "MaterialUpdate" ? "active menu-open":"")">
+                        <a href="#">
+                            <i class="fab fa-codepen"></i><span>料號變更作業</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li @(ViewContext.RouteData.Values["action"].ToString() == "MaterialUpdateSearch" ? "class=active" : "")><a href="@Url.Action("MaterialUpdateSearch","MaterialUpdate")"><i class="fa fa-circle-o"></i>物料變更申請</a></li>
+                            @if (ViewBag.WareHouseList.Count > 0)
+                            {
+                                <li @(ViewContext.RouteData.Values["action"].ToString() == "MaterialUpdateReview" ? "class=active" : "")><a href="@Url.Action("MaterialUpdateReview","MaterialUpdate")"><i class="fa fa-circle-o"></i>物料變更審核</a></li>
+
+                            }
+                        </ul>
+                    </li>
+
+                    <li class="treeview @(ViewContext.RouteData.Values["controller"].ToString() == "EstDemand" ? "active menu-open":"")">
+                        <a href="#">
+                            <i class="fas fa-sign"></i><span>預估需求作業</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li @(ViewContext.RouteData.Values["action"].ToString() == "EstDemandSearch" ? "class=active" : "")><a href="@Url.Action("EstDemandSearch","EstDemand")"><i class="fa fa-circle-o"></i>預估需求單新增</a></li>
+                            @if (ViewBag.WareHouseList.Count > 0)
+                            {
+                                <li @(ViewContext.RouteData.Values["action"].ToString() == "EstDemandReview" ? "class=active" : "")><a href="@Url.Action("EstDemandReview","EstDemand")"><i class="fa fa-circle-o"></i>預估需求單審核</a></li>
+                            }
+
+                        </ul>
+                    </li>
+
+                    <li class="treeview @(ViewContext.RouteData.Values["controller"].ToString() == "Requirement" ? "active menu-open":"")">
+                        <a href="#">
+                            <i class="fas fa-rss"></i> <span>需求作業</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li @(ViewContext.RouteData.Values["action"].ToString() == "RequirementAdd" ? "class=active" : "")><a href="@Url.Action("RequirementAdd","Requirement")"><i class="fa fa-circle-o"></i>需求單新增作業</a></li>
+                            <li @(ViewContext.RouteData.Values["action"].ToString() == "RequirementSearch" ? "class=active" : "")><a href="@Url.Action("RequirementSearch","Requirement")"><i class="fa fa-circle-o"></i>需求單查詢作業</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="treeview @(ViewContext.RouteData.Values["controller"].ToString() == "Purchase" ? "active menu-open":"")">
+                        <a href="#">
+                            <i class="fas fa-shopping-bag"></i> <span>採購作業</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li @(ViewContext.RouteData.Values["action"].ToString() == "PurchaseSearch" ? "class=active" : "")><a href="@Url.Action("PurchaseSearch","Purchase")"><i class="fa fa-circle-o"></i>採購單查詢</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="treeview @(ViewContext.RouteData.Values["controller"].ToString() == "Recv" ? "active menu-open":"")">
+                        <a href="#">
+                            <i class="fas fa-registered"></i> <span>收貨作業</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li @(ViewContext.RouteData.Values["action"].ToString() == "RecvSearch" ? "class=active" : "")><a href="@Url.Action("RecvSearch","Recv")"><i class="fa fa-circle-o"></i>收貨單查詢</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="treeview @(ViewContext.RouteData.Values["controller"].ToString() == "Inbound" ? "active menu-open":"")">
+                        <a href="#">
+                            <i class="fas fa-warehouse"></i> <span>入庫作業</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li @(ViewContext.RouteData.Values["action"].ToString() == "InboundSearch" ? "class=active" : "")><a href="@Url.Action("InboundSearch","Inbound")"><i class="fa fa-circle-o"></i>入庫單查詢</a></li>
+
+                        </ul>
+                    </li>
+
+                    <li class="treeview @(ViewContext.RouteData.Values["controller"].ToString() == "Picking" ? "active menu-open":"")">
+                        <a href="#">
+                            <i class="fas fa-box-open"></i><span>發料作業</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li @(ViewContext.RouteData.Values["action"].ToString() == "PickingSearch" ? "class=active" : "")><a href="@Url.Action("PickingSearch","Picking")"><i class="fa fa-circle-o"></i>發料查詢</a></li>
+                            @if (ViewBag.WareHouseList.Count > 0)
+                            {
+                                <li @(ViewContext.RouteData.Values["action"].ToString() == "MaterialPicking" ? "class=active" : "")><a href="@Url.Action("MaterialPicking","Picking")"><i class="fa fa-circle-o"></i>物料發料</a></li>
+                            }
+
+                        </ul>
+                    </li>
+
+                    <li class="treeview @(ViewContext.RouteData.Values["controller"].ToString() == "Transfer" ? "active menu-open":"")">
+                        <a href="#">
+                            <i class="fas fa-exchange-alt"></i><span>移撥作業</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li @(ViewContext.RouteData.Values["action"].ToString() == "TransferEstablish" ? "class=active" : "")><a href="@Url.Action("TransferEstablish","Transfer")"><i class="fa fa-circle-o"></i>移撥申請</a></li>
+                            @*<li @(ViewContext.RouteData.Values["action"].ToString() == "TransferOutSearch" ? "class=active" : "")><a href="@Url.Action("TransferOutSearch","Transfer")"><i class="fa fa-circle-o"></i>移出作業</a></li>*@
+                            <li @(ViewContext.RouteData.Values["action"].ToString() == "TransferInSearch" ? "class=active" : "")><a href="@Url.Action("TransferInSearch","Transfer")"><i class="fa fa-circle-o"></i>移入作業</a></li>
+                        </ul>
+                    </li>
+                    <li class="treeview @(ViewContext.RouteData.Values["controller"].ToString() == "Return" ? "active menu-open":"")">
+                        <a href="#">
+                            <i class="fas fa-undo"></i><span>退料作業</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li @(ViewContext.RouteData.Values["action"].ToString() == "ReturnSearch" ? "class=active" : "")><a href="@Url.Action("ReturnSearch","Return")"><i class="fa fa-circle-o"></i>退料查詢</a></li>
+                            @if (ViewBag.WareHouseList.Count > 0)
+                            {
+                                <li @(ViewContext.RouteData.Values["action"].ToString() == "ReturnMaterial" ? "class=active" : "")><a href="@Url.Action("ReturnMaterial","Return")"><i class="fa fa-circle-o"></i>退料</a></li>
+                            }
+                        </ul>
+                    </li>
+                    <li class="treeview @(ViewContext.RouteData.Values["controller"].ToString() == "Lend" ? "active menu-open":"")">
+                        <a href="#">
+                            <i class="fas fa-share"></i><span>借料作業</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li @(ViewContext.RouteData.Values["action"].ToString() == "LendSearch" ? "class=active" : "")><a href="@Url.Action("LendSearch","Lend")"><i class="fa fa-circle-o"></i>借料查詢</a></li>
+                            @if (ViewBag.WareHouseList.Count > 0)
+                            {
+                                <li @(ViewContext.RouteData.Values["action"].ToString() == "LendMaterial" ? "class=active" : "")><a href="@Url.Action("LendMaterial","Lend")"><i class="fa fa-circle-o"></i>借料</a></li>
+                            }
+                        </ul>
+                    </li>
+                    <li class="treeview @(ViewContext.RouteData.Values["controller"].ToString() == "Back" ? "active menu-open":"")">
+                        <a href="#">
+                            <i class="fas fa-shipping-fast"></i><span>還料作業</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li @(ViewContext.RouteData.Values["action"].ToString() == "BackSearch" ? "class=active" : "")><a href="@Url.Action("BackSearch","Back")"><i class="fa fa-circle-o"></i>還料查詢</a></li>
+                            @if (ViewBag.WareHouseList.Count > 0)
+                            {
+                                <li @(ViewContext.RouteData.Values["action"].ToString() == "BackMaterial" ? "class=active" : "")><a href="@Url.Action("BackMaterial","Back")"><i class="fa fa-circle-o"></i>還料</a></li>
+                            }
+                        </ul>
+                    </li>
+                    <li class="treeview @(ViewContext.RouteData.Values["controller"].ToString() == "Extend" ? "active menu-open":"")">
+                        <a href="#">
+                            <i class="far fa-calendar-alt"></i><span>展延作業</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li @(ViewContext.RouteData.Values["action"].ToString() == "ExtendSearch" ? "class=active" : "")><a href="@Url.Action("ExtendSearch","Extend")"><i class="fa fa-circle-o"></i>展延查詢</a></li>
+                            @if (ViewBag.WareHouseList.Count > 0)
+                            {
+                                <li @(ViewContext.RouteData.Values["action"].ToString() == "ExtendMaterial" ? "class=active" : "")><a href="@Url.Action("ExtendMaterial","Extend")"><i class="fa fa-circle-o"></i>展延</a></li>
+                            }
+                        </ul>
+                    </li>
+                    <li class="treeview @(ViewContext.RouteData.Values["controller"].ToString() == "Scrap" ? "active menu-open":"")">
+                        <a href="#">
+                            <i class="fas fa-prescription-bottle"></i><span>變賣作業</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li @(ViewContext.RouteData.Values["action"].ToString() == "ScrapSearch" ? "class=active" : "")><a href="@Url.Action("ScrapSearch","Scrap")"><i class="fa fa-circle-o"></i>變賣查詢</a></li>
+                            @if (ViewBag.WareHouseList.Count > 0)
+                            {
+                                <li @(ViewContext.RouteData.Values["action"].ToString() == "doScrapSearch" ? "class=active" : "")><a href="@Url.Action("doScrapSearch","Scrap")"><i class="fa fa-circle-o"></i>變賣</a></li>
+                            }
+                        </ul>
+                    </li>
+                    <li class="treeview @(ViewContext.RouteData.Values["controller"].ToString() == "Adjust" ? "active menu-open":"")">
+                        <a href="#">
+                            <i class="fas fa-sliders-h"></i><span>庫存調整作業</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li @(ViewContext.RouteData.Values["action"].ToString() == "AdjustApplySearch" ? "class=active" : "")><a href="@Url.Action("AdjustApplySearch","Adjust")"><i class="fa fa-circle-o"></i>調整申請</a></li>
+                            @if (ViewBag.WareHouseList.Count > 0)
+                            {
+                                <li @(ViewContext.RouteData.Values["action"].ToString() == "doAdjustSearch" ? "class=active" : "")><a href="@Url.Action("doAdjustSearch","Adjust")"><i class="fa fa-circle-o"></i>審核</a></li>
+                            }
+                        </ul>
+                    </li>
+                    @if (ViewBag.WareHouseList.Count > 0)
+                    {
+                        <li class="treeview @(ViewContext.RouteData.Values["controller"].ToString() == "InventoryStock" ? "active menu-open":"")">
+                            <a href="#">
+                                <i class="fas fa-boxes"></i><span>盤點作業</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+
+                                @if (ViewBag.WareHouseList.Count > 0)
+                                {
+                                    <li @(ViewContext.RouteData.Values["action"].ToString() == "InventoryStock" ? "class=active" : "")><a href="@Url.Action("InventoryDraft","InventoryStock")"><i class="fa fa-circle-o"></i>庫存盤點</a></li>
+                                    @*<li @(ViewContext.RouteData.Values["action"].ToString() == "InventoryStock" ? "class=active" : "")><a href="@Url.Action("ToolInventorySearch","InventoryStock")"><i class="fa fa-circle-o"></i>手工具盤點</a></li>*@
+                                }
+                            </ul>
+                        </li>
+                    }
+                    @if (ViewBag.WareHouseList.Count > 0)
+                    {
+                        <li class="treeview @(ViewContext.RouteData.Values["controller"].ToString() == "Chemical" ? "active menu-open":"")">
+                            <a href="#">
+                                <i class="fas fa-boxes"></i><span>化學品作業</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li @(ViewContext.RouteData.Values["action"].ToString() == "ChemicalMaintain" ? "class=active" : "")><a href="@Url.Action("ChemicalMaintain","Chemical")"><i class="fa fa-circle-o"></i>化學品維護</a></li>
+                            </ul>
+                        </li>
+                    }
+                    <li class="treeview @(ViewContext.RouteData.Values["controller"].ToString() == "Search" ? "active menu-open":"")">
+                        <a href="#">
+                            <i class="fas fa-search-plus"></i><span>查詢作業</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+
+                            <li @(ViewContext.RouteData.Values["action"].ToString() == "TotalStock" ? "class=active" : "")><a href="@Url.Action("TotalStock","Search")"><i class="fa fa-circle-o"></i>庫存查詢</a></li>
+                            <li @(ViewContext.RouteData.Values["action"].ToString() == "MaterialInfoSearch" ? "class=active" : "")><a href="@Url.Action("MaterialInfoSearch","Search")"><i class="fa fa-circle-o"></i>物料基本資料查詢</a></li>
+                            <li @(ViewContext.RouteData.Values["action"].ToString() == "PickingRecordSearch" ? "class=active" : "")><a href="@Url.Action("PickingRecordSearch","Picking")"><i class="fa fa-circle-o"></i>發料記錄查詢</a></li>
+                            <li @(ViewContext.RouteData.Values["action"].ToString() == "InboundRecordSearch" ? "class=active" : "")><a href="@Url.Action("InboundRecordSearch","Inbound")"><i class="fa fa-circle-o"></i>入庫記錄查詢</a></li>
+                            <li @(ViewContext.RouteData.Values["action"].ToString() == "LendRecordSearch" ? "class=active" : "")><a href="@Url.Action("LendRecordSearch","Lend")"><i class="fa fa-circle-o"></i>借料記錄查詢</a></li>
+                            <li @(ViewContext.RouteData.Values["action"].ToString() == "BackRecordSearch" ? "class=active" : "")><a href="@Url.Action("BackRecordSearch","Back")"><i class="fa fa-circle-o"></i>還料記錄查詢</a></li>
+                            <li @(ViewContext.RouteData.Values["action"].ToString() == "ExtendRecordSearch" ? "class=active" : "")><a href="@Url.Action("ExtendRecordSearch","Extend")"><i class="fa fa-circle-o"></i>展延記錄查詢</a></li>
+                            <li @(ViewContext.RouteData.Values["action"].ToString() == "ReceiveRecordSearch" ? "class=active" : "")><a href="@Url.Action("ReceiveRecordSearch","Recv")"><i class="fa fa-circle-o"></i>收貨記錄查詢</a></li>
+                            <li @(ViewContext.RouteData.Values["action"].ToString() == "TransferRecordSearch" ? "class=active" : "")><a href="@Url.Action("TransferRecordSearch","Transfer")"><i class="fa fa-circle-o"></i>移撥記錄查詢</a></li>
+                            <li @(ViewContext.RouteData.Values["action"].ToString() == "ReturnRecordSearch" ? "class=active" : "")><a href="@Url.Action("ReturnRecordSearch","Return")"><i class="fa fa-circle-o"></i>退料記錄查詢</a></li>
+                            <li @(ViewContext.RouteData.Values["action"].ToString() == "MaterialHistorySearch" ? "class=active" : "")><a href="@Url.Action("MaterialHistorySearch","Search")"><i class="fa fa-circle-o"></i>物料歷程查詢</a></li>
+                            <li @(ViewContext.RouteData.Values["action"].ToString() == "LendedNoBackSearch" ? "class=active" : "")><a href="@Url.Action("LendedNoBackSearch","Search")"><i class="fa fa-circle-o"></i>已借未還物料查詢</a></li>
+                            <li @(ViewContext.RouteData.Values["action"].ToString() == "LimitTimeDueDateSearch" ? "class=active" : "")><a href="@Url.Action("LimitTimeDueDateSearch","Search")"><i class="fa fa-circle-o"></i>時限品屆期查詢</a></li>
+                            @{
+                                string UnitId = ViewBag.UnitId;
+                                if (UnitId.Substring(0, 3) == "L16")
+                                {
+                                    <li @(ViewContext.RouteData.Values["action"].ToString() == "PeriodUpDateSearch" ? "class=active" : "")><a href="@Url.Action("PeriodUpDateSearch","Search")"><i class="fa fa-circle-o"></i>用料期程查詢</a></li>
+                                }
+                            }
+                            <li @(ViewContext.RouteData.Values["action"].ToString() == "ReceiveNoInboundSearch" ? "class=active" : "")><a href="@Url.Action("ReceiveNoInboundSearch","Search")"><i class="fa fa-circle-o"></i>已收貨未入庫查詢</a></li>
+                            <li @(ViewContext.RouteData.Values["action"].ToString() == "PurchaseNoInboundSearch" ? "class=active" : "")><a href="@Url.Action("PurchaseNoInboundSearch","Search")"><i class="fa fa-circle-o"></i>已採購未入庫查詢</a></li>
+
+                            @*<li @(ViewContext.RouteData.Values["action"].ToString() == "InventoryStock" ? "class=active" : "")><a href="@Url.Action("ToolInventorySearch","InventoryStock")"><i class="fa fa-circle-o"></i>手工具盤點</a></li>*@
+                        </ul>
+                    </li>
+                    @if (ViewBag.WareHouseList.Count > 0)
+                    {
+                        <li class="treeview @(ViewContext.RouteData.Values["controller"].ToString() == "BasicInfoMaintain" ? "active menu-open":"")">
+                            <a href="#">
+                                <i class="fas fa-sliders-h"></i><span>基本資料維護作業</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li @(ViewContext.RouteData.Values["action"].ToString() == "FreezeConfig" ? "class=active" : "")><a href="@Url.Action("FreezeConfig","BasicInfoMaintain")"><i class="fa fa-circle-o"></i>凍結作業</a></li>
+                            </ul>
+                        </li>
+                    }
+                    <li class="treeview @(ViewContext.RouteData.Values["controller"].ToString() == "Doc" ? "active menu-open":"")">
+                        <a href="#">
+                            <i class="fas fa-search-plus"></i><span>報表作業</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+
+                            <li @(ViewContext.RouteData.Values["action"].ToString() == "Index" ? "class=active" : "")><a href="@Url.Action("Index","Doc")"><i class="fa fa-circle-o"></i>物料出入庫(日報表)查詢</a></li>
+                            <li @(ViewContext.RouteData.Values["action"].ToString() == "InvoiceInventory" ? "class=active" : "")><a href="@Url.Action("InvoiceInventory","Doc")"><i class="fa fa-circle-o"></i>物料出入庫(月報表)查詢</a></li>
+                            <li @(ViewContext.RouteData.Values["action"].ToString() == "InvoiceInventoryYear" ? "class=active" : "")><a href="@Url.Action("InvoiceInventoryYear","Doc")"><i class="fa fa-circle-o"></i>物料出入庫(年報表)查詢</a></li>
+                            @*<li @(ViewContext.RouteData.Values["action"].ToString() == "MaterialInfoSearch" ? "class=active" : "")><a href="@Url.Action("MaterialInfoSearch","Search")"><i class="fa fa-circle-o"></i>物料基本資料查詢</a></li>*@
+                            @*<li @(ViewContext.RouteData.Values["action"].ToString() == "InventoryStock" ? "class=active" : "")><a href="@Url.Action("ToolInventorySearch","InventoryStock")"><i class="fa fa-circle-o"></i>手工具盤點</a></li>*@
+                        </ul>
+                    </li>
+
+                </ul>
+                <!-- /.sidebar-menu -->
+            </section>
+            <!-- /.sidebar -->
+        </aside>
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Main content -->
+            <section class="content container-fluid">
+                @RenderBody()
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+        <!-- Main Footer -->
+        <footer class="main-footer">
+            <!-- To the right -->
+            <!-- Default to the left -->
+            <strong>Copyright &copy; 2019 <a href="#">臺中捷運</a>.</strong> All rights reserved.
+        </footer>
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Create the tabs -->
+            <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+                <li class="active"><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
+                <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <!-- Home tab content -->
+                <div class="tab-pane active" id="control-sidebar-home-tab">
+                    <h3 class="control-sidebar-heading">Recent Activity</h3>
+                    <ul class="control-sidebar-menu">
+                        <li>
+                            <a href="javascript:;">
+                                <i class="menu-icon fa fa-birthday-cake bg-red"></i>
+                                <div class="menu-info">
+                                    <h4 class="control-sidebar-subheading">Langdon's Birthday</h4>
+                                    <p>Will be 23 on April 24th</p>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- /.control-sidebar-menu -->
+                    <h3 class="control-sidebar-heading">Tasks Progress</h3>
+                    <ul class="control-sidebar-menu">
+                        <li>
+                            <a href="javascript:;">
+                                <h4 class="control-sidebar-subheading">
+                                    Custom Template Design
+                                    <span class="pull-right-container">
+                                        <span class="label label-danger pull-right">70%</span>
+                                    </span>
+                                </h4>
+                                <div class="progress progress-xxs">
+                                    <div class="progress-bar progress-bar-danger" style="width: 70%"></div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- /.control-sidebar-menu -->
+                </div>
+                <!-- /.tab-pane -->
+                <!-- Stats tab content -->
+                <div class="tab-pane" id="control-sidebar-stats-tab">Stats Tab Content</div>
+                <!-- /.tab-pane -->
+                <!-- Settings tab content -->
+                <div class="tab-pane" id="control-sidebar-settings-tab">
+                    <form method="post">
+                        <h3 class="control-sidebar-heading">General Settings</h3>
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">
+                                Report panel usage
+                                <input type="checkbox" class="pull-right" checked>
+                            </label>
+                            <p>
+                                Some information about this general settings option
+                            </p>
+                        </div>
+                        <!-- /.form-group -->
+                    </form>
+                </div>
+                <!-- /.tab-pane -->
+            </div>
+        </aside>
+        <!-- /.control-sidebar -->
+        <!-- Add the sidebar's background. This div must be placed
+        immediately after the control sidebar -->
+        <div class="control-sidebar-bg"></div>
+    </div>
+
+    <div class="modal fade" id="modal-info" style="display: none;">
+        <!-- Profile Image -->
+        <div class="modal-dialog modal-sm">
+            <div class="box box-primary">
+                <div class="box-body box-profile">
+                    <img src="~/images/user2-160x160.jpg" class="profile-user-img img-responsive img-circle" alt="User Image" style="height: 90px;width: 90px;border: 3px solid;">
+
+                    <h3 class="profile-username text-center">@ViewBag.UserName</h3>
+
+                    <p class="text-muted text-center">@ViewBag.JOBName</p>
+
+                    <ul class="list-group list-group-unbordered">
+                        <li class="list-group-item">
+                            <b>單位</b> <a class="pull-right">@ViewBag.UnitName</a>
+                        </li>
+
+                        <li class="list-group-item">
+                            <b>分機</b> <a class="pull-right">@ViewBag.Ext</a>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Email</b> <a class="pull-right">@ViewBag.Email</a>
+                        </li>
+                    </ul>
+
+                    <a href="#" class="btn btn-primary btn-block" data-dismiss="modal"><b>Close</b></a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    @*<script src="~/Scripts/jquery-3.3.1.min.js"></script>*@
+
+    <script src="~/Scripts/bootstrap.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="~/Scripts/jquery.ui.widget.js"></script>
+    <script src="~/Scripts/jquery.serialize-object.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/jquery.validate.min.js"></script>
+    <script src="~/PageJs/messages_zh_TW.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/additional-methods.min.js"></script>
+    <script src="~/PageJs/Common.js?ver=@DateTime.Now.ToString("yyyyMMddHHmmss")"></script>
+    <script src="~/Scripts/dateFormat.min.js?ver=@DateTime.Now.ToString("yyyyMMddHHmmss")"></script>
+    <script src="~/Scripts/jquery-dateformat.min.js?ver=@DateTime.Now.ToString("yyyyMMddHHmmss")"></script>
+    <script src="~/PageJs/FileUpload.js?ver=@DateTime.Now.ToString("yyyyMMddHHmmss")"></script>
+    <script src="~/Scripts/jquery.mloading.js"></script>
+    <script src="~/Scripts/adminlte.min.js"></script>
+    <script src="~/PageJs/notification.js?ver=@DateTime.Now.ToString("yyyyMMddHHmmss")"></script>
+    @*<script src="~/js/cultures/kendo.culture.zh.min.js"></script>*@
+    <script>
+        kendo.culture("zh-TW");
+    </script>
+
+
+</body>
+</html>

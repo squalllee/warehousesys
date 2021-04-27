@@ -1,0 +1,64 @@
+﻿@using WareHouseSys.ViewModels
+@using WareHouseSys.Models
+@model TransferHeaderViewModel
+
+@{
+    ViewBag.Title = "新增移撥單";
+    Layout = "";
+}
+<style>
+    .table > tbody > tr > td {
+        border-top: 1px solid #2b2b2b;
+    }
+</style>
+
+<form>
+    <input type="hidden" name="OrderNo" value="@(Model == null?"":Model.OrderNo)" />
+    <table class="table" style="border-style:solid;border-width:2px">
+        <tbody>
+            <tr>
+                <td colspan="4" style="font-weight:800;font-size:x-large" align="center">移撥單資訊</td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    申請人員
+                </td>
+                <td>
+                    <h4><span class="label label-default">@Model.ApplicantMan</span></h4>
+                </td>
+                <td class="tdstyle">
+                    <font style="color:red">移出人員</font>
+                </td>
+                <td>
+                    <h4><span class="label label-default">@Model.TransferOutMan</span></h4>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    移入人員
+                </td>
+                <td colspan="3">
+                    <h4><span class="label label-default">@Model.TransferInMan</span></h4>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <div style="width:1150px">
+                        <div id="TransferDetailGrid" data-url="@Url.Content("../Transfer/TransferBodyViewModel")?OrderNo=@Model.OrderNo"></div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    附件
+                </td>
+                <td colspan="5">
+                    @foreach (Attachment f in ViewBag.Attachments)
+                    {
+                        <span class="badge badge-pill badge-default" style="cursor:pointer"><a href="@Url.Action("getAttatchment","Transfer",new { OrderNo=Model.OrderNo,FileName=f.FileName})" style="color:white" target="aa">@f.FileName</a></span>
+                    }
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>

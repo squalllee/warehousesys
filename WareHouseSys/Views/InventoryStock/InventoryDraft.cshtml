@@ -1,0 +1,61 @@
+﻿
+@{
+    ViewBag.Title = "盤點單作業";
+}
+
+<style>
+    .tdstyle {
+        font-family: 標楷體;
+        font-size: large;
+        vertical-align: middle;
+        border-style: solid;
+        border-width: 0.5px;
+        font-weight: 800;
+        text-align: center;
+        width: 15%;
+        background-color: #D0CECF;
+    }
+
+    #BackSearchGrid .k-grid-content, .k-grid tr td {
+        overflow: visible;
+    }
+
+    #BackSearchGrid .k-grid-header {
+        padding-right: 0 !important;
+    }
+</style>
+<div class="row">
+    <section class="content-header">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> 盤點作業</a></li>
+            <li class="active">盤點作業</li>
+        </ol>
+    </section>
+</div>
+
+<button id="InventoryAdd" class="btn btn-danger">新增盤點單</button>
+
+<div id="InventorySearchGrid" data-url="@Url.Action("InventorySearch", "InventoryStock")" data-deleteurl="@Url.Content("../api/InventoryStock/deleteInventory")"></div>
+
+<div id="InventoryAddDialog" data-url="@Url.Action("InventoryAdd","InventoryStock")"></div>
+
+<div id="InventoryDetailDialog" data-url="@Url.Action("InventoryDetail","InventoryStock")"></div>
+
+<div id="FirstCheckDialog" data-url="@Url.Action("FirstCheck","InventoryStock")"></div>
+
+<div id="SecondCheckDialog" data-url="@Url.Action("SecondCheck","InventoryStock")"></div>
+
+<div id="InventoryCloseDialog" data-url="@Url.Action("InventoryClose","InventoryStock")"></div>
+
+<div id="InventoryRecordDialog" data-url="@Url.Action("InventoryRecord","InventoryStock")"></div>
+
+@section scripts{
+    <script src="~/PageJs/InventoryDraft.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+    <script src="~/PageJs/InventoryAdd.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+    <script src="~/PageJs/InventoryDetail.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+    <script src="~/PageJs/FirstCheck.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+    <script src="~/PageJs/SecondCheck.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+    <script src="~/PageJs/InventoryClose.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+    <script src="~/PageJs/FileUpload.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+    <script src="~/PageJs/InventoryRecord.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+}

@@ -1,0 +1,59 @@
+﻿@using WareHouseSys.ViewModels
+@using WareHouseSys.Models
+@model InboundHeaderViewModel
+@{
+    ViewBag.Title = "入庫明細";
+    Layout = "";
+}
+<style>
+    .table > tbody > tr > td {
+        border-top: 1px solid #2b2b2b;
+    }
+
+    .error {
+        color: red
+    }
+</style>
+
+<form id="InboundForm">
+    <table class="table" style="border-style:solid;border-width:2px">
+        <tbody>
+            <tr>
+                <td colspan="6" style="font-weight:800;font-size:x-large" align="center">入庫單資訊</td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    入庫單號
+                </td>
+                <td> <input name="OrderNo" value="@Model.OrderNo" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" readonly></td>
+                <td class="tdstyle">
+                    <font style="color:red">入庫日期</font>
+                </td>
+                <td>
+                    <input name="InboundDate" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" value="@(Model.InboundDate == null?"":DateTime.Parse(Model.InboundDate.ToString()).ToString("yyyy/MM/dd"))" readonly>
+                </td>
+
+                <td class="tdstyle">
+                    入庫人員
+                </td>
+                <td>
+                    <input name="InboundMan" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" value="@Model.InboundMan" readonly>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    附件
+                </td>
+                <td colspan="5">
+                    @foreach (Attachment f in ViewBag.Attachments)
+                    {
+                        <span class="badge badge-pill badge-default" style="cursor:pointer"><a href="@Url.Action("getAttatchment","Inbound",new { OrderNo=Model.OrderNo,FileName=f.FileName})" style="color:white" target="aa">@f.FileName</a></span>
+                    }
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+
+<div id="InboundDetailGrid" data-url="@Url.Content("../Inbound/InboundBodyDetail")"></div>

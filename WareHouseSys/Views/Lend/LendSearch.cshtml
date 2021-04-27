@@ -1,0 +1,67 @@
+﻿@{
+    ViewBag.Title = "借料查詢";
+}
+
+<style>
+    .tdstyle {
+        font-family: 標楷體;
+        font-size: large;
+        vertical-align: middle;
+        border-style: solid;
+        border-width: 0.5px;
+        font-weight: 800;
+        text-align: center;
+        width: 15%;
+        background-color: #D0CECF;
+    }
+
+    .ui-dialog {
+        z-index: 1000 !important;
+    }
+
+    body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    #LendGrid .k-grid-content, .k-grid tr td {
+        overflow: visible;
+    }
+
+    #LendGrid .k-grid-header {
+        padding-right: 0 !important;
+    }
+</style>
+<div class="row">
+    <section class="content-header">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> 借料作業</a></li>
+            <li class="active">借料查詢</li>
+        </ol>
+    </section>
+</div>
+
+<button id="LendAdd" class="btn btn-danger">新增借料單</button>
+
+<div id="LendGrid" data-url="@Url.Action("LendGrid", "Lend")" data-deleteurl="@Url.Content("../api/Lend/deleteLend")"></div>
+
+<div id="LendAddDialog" data-url="@Url.Action("LendAdd","Lend")"></div>
+
+<div id="LendDetailDialog" data-url="@Url.Action("LendDetail","Lend")"></div>
+
+<div id="ModifyLendDialog" data-url="@Url.Action("ModifyLend","Lend")"></div>
+
+<div id="BackLendDialog" data-url="@Url.Action("BackLend","Back")"></div>
+
+<div id="ExtendLendDialog" data-url="@Url.Action("ExtendLend","Extend")"></div>
+
+
+@section scripts{
+    <script src="~/PageJs/LendSearch.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+    <script src="~/PageJs/ModifyLend.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+    <script src="~/PageJs/LendDetail.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+    <script src="~/PageJs/LendAdd.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+    <script src="~/PageJs/LendDetail.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+    <script src="~/PageJs/FileUpload.js"></script>
+    <script src="~/PageJs/BackLend.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+    <script src="~/PageJs/ExtendLend.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+}

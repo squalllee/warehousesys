@@ -1,0 +1,71 @@
+﻿@using WareHouseSys.Models;
+@model List<PurLotClass>
+@{
+    ViewBag.Title = "採購轉收貨單";
+    Layout = "";
+}
+
+@if (Model.Count > 0)
+{
+    string OpenContract = ViewBag.OpenContract ? "Y" : "N";
+
+    <input id="OpenContract" type="hidden" value="@OpenContract" />
+    <div id="mask">
+        <div id="tt" style="width:100%;height:100%;">
+            <ul>
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    <li><a href="#tabs-@i.ToString()">批次 @Model[i].DeliveryLot</a></li>
+                }
+            </ul>
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <div id="tabs-@i.ToString()">
+                    <div class="container-fluid" style="margin-top:20px">
+
+                        <table class="table" style="border-style:solid;border-width:2px">
+                            <tbody>
+                                <tr>
+                                    <td>
+
+                                        <div class="panel-heading">
+                                            <button type="button" class="btn btn-primary pull-left" onclick="CreateReceive('@ViewBag.PurchaseNo','@Model[i].DeliveryLot','@OpenContract');">產生收貨單</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div name="TransToRecvTable" data-url="@Url.Content("../Purchase/getPurBodyByLot")?PurchaseNo=@Model[i].PurchaseNo&DeliveryLot=@Model[i].DeliveryLot"></div>
+                                        @*<table name="TransToRecvTable" data-url="@Url.Content("../api/Purchase/getPurBodyByLot/")@Model[i].PurchaseNo/@Model[i].DeliveryLot" class="hover display" style="width:100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>料號</th>
+                                                        <th>單價</th>
+                                                        <th>應交數量</th>
+                                                        <th>已交數量</th>
+                                                        <th>未交數量</th>
+                                                        <th>交貨批次</th>
+                                                        <th>交貨地點</th>
+                                                    </tr>
+                                                </thead>
+                                            </table>*@
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+
+
+        </div>
+    </div>
+}
+else
+{
+    <div><h3>採購單已完成收貨</h3></div>
+
+}
+
+
+

@@ -1,0 +1,13 @@
+﻿
+@{
+    ViewBag.Title = "轉退料單";
+    Layout = "";
+}
+
+<input type="hidden" id="PickingNo" value="@ViewBag.OrderNo" />
+<input type="hidden" id="WGroupId" value="@ViewBag.WGroupId" />
+<div id="PickingReturnGrid" data-url="@Url.Content("../Picking/PickingToReturnBodies")?OrderNO=@ViewBag.OrderNo" data-transferurl="@Url.Content("../api/Picking/TransferToReturn")"></div>
+<div class="pull-right" style="margin-top:10px">
+    <button id="TransferReturn" class="btn btn-danger">轉退料單</button>
+</div>
+

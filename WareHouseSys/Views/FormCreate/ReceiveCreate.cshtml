@@ -1,0 +1,71 @@
+﻿@section css
+{
+    <link href="~/jquery-easyui-1.7.2/themes/bootstrap/easyui.css" rel="stylesheet" />
+    <link href="~/jquery-easyui-1.7.2/themes/icon.css" rel="stylesheet" />
+}
+
+<div class="row">
+    <section class="content-header">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> 表單產生作業</a></li>
+            <li class="active">收貨單產生</li>
+        </ol>
+    </section>
+</div>
+
+<div class="container-fluid" style="margin-top:20px">
+    <div class="row" style="margin-top:10px">
+        <div class="col-md-12">
+            <table id="dg" class="easyui-datagrid" style="width:100%;height:500px"
+                   url="../api/Purchase/getPurchaseHeader"
+                   title="採購單查詢"
+                   sortName="PurchaseNo" sortOrder="asc" emptyMsg="查無資料"
+                   pagination="true" fitColumns="true" singleSelect="true" toolbar="#tb">
+                <thead>
+                    <tr>
+                        <th data-options="field:'PurchaseNo',width:200,sortable:true" formatter="OrderStyler">採購案號</th>
+                        <th field="PurchaseDate" width="200" sortable="true" formatter="formatDate1">採購日期</th>
+                        <th field="PurchaseName" width="200" align="right" sortable="true">案名</th>
+                        <th field="ContractPriceWithoutVAT" width="200" align="right" sortable="true">契約金額(未稅)</th>
+                        <th field="ContractPriceIncludeVAT" width="200" align="right" sortable="true">契約金額(含稅)</th>
+                        <th field="PurchaseMethod" width="200" align="right" sortable="true">採購方式</th>
+                        <th field="BudgetSource" width="200" align="right" sortable="true">預算來源</th>
+                        <th field="PurchaseUnit" width="250" align="right" sortable="true">採購單位</th>
+                        <th field="PurchaseMan" width="150" align="right" sortable="true">採購承辦人</th>
+                        <th field="VendorName" width="200" align="right" sortable="true">廠商名稱</th>
+                        <th field="Status" width="100" align="right">狀態</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="tb" style="padding:2px 5px;">
+    <form id="searchForm">
+        <div class="row" style="margin-top:10px">
+            <div class="col-md-3">
+                <input class="easyui-textbox" label="案號" name="txtPurchaseNo" id="txtPurchaseNo" labelPosition="left" style="width:100%">
+            </div>
+
+            <div class="col-md-6">
+                <input id="PurchaseDateStart" type="text" class="easyui-datebox" label="採購日期起" style="width:40%">~<input id="PurchaseDateEnd" type="text" class="easyui-datebox" label="採購日期迄" style="width:40%">
+                <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="PurchaseSearch();">查詢</a>
+            </div>
+        </div>
+    </form>
+</div>
+<div id="dlgDetail" class="easyui-dialog" title="採購明細" closed="true" data-options="iconCls:'icon-save'" style="width:1000px;height:500px;padding:10px">
+    <div class="easyui-accordion" style="width:100%;height:400px;">
+        <div title="採購明細" data-options="iconCls:'icon-ok'" style="overflow:auto;padding:10px;">
+
+        </div>
+    </div>
+</div>
+@section scripts
+{
+    <script src="~/jquery-easyui-1.7.2/jquery.easyui.min.js"></script>
+    <script src="~/jquery-easyui-1.7.2/locale/easyui-lang-zh_TW.js"></script>
+    <script src="~/PageJs/ReceiveCreate.js?ver=@DateTime.Now.ToString("yyyyMmddHHmmss")"></script>
+    <script src="~/PageJs/Common.js?ver=@DateTime.Now.ToString("yyyyMmddHHmmss")"></script>
+}

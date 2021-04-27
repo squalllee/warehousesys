@@ -1,0 +1,187 @@
+﻿@using WareHouseSys.ViewModels
+@model MaterialInfoViewModel
+
+@{
+    Layout = null;
+}
+
+<style>
+    .table > tbody > tr > td {
+        border-top: 1px solid #2b2b2b;
+    }
+</style>
+<table class="table" style="border-style:solid;border-width:2px">
+    <tbody>
+        <tr>
+            <td colspan="6" style="font-weight:800;font-size:x-large" align="center">物料基本資料</td>
+        </tr>
+        <tr>
+            <td class="tdstyle">
+                料號
+            </td>
+            <td>
+                <h4><span class="label label-default">@Model.MaterialNo</span></h4>
+            </td>
+            <td class="tdstyle">
+                品名
+            </td>
+            <td>
+                <h4><span class="label label-default">@Model.MaterialName</span></h4>
+            </td>
+            <td class="tdstyle">
+                單位
+            </td>
+            <td>
+                <h4><span class="label label-default">@Model.Unit</span></h4>
+            </td>
+        </tr>
+        <tr>
+            <td class="tdstyle">
+                規格
+            </td>
+            <td colspan="5">
+                <h4><span class="label label-default">@Model.Spec</span></h4>
+            </td>
+        </tr>
+        <tr>
+            <td class="tdstyle">
+                系統別
+            </td>
+            <td>
+                <h4><span class="label label-default">@Model.SystemName</span></h4>
+            </td>
+            <td class="tdstyle">
+                子系統
+            </td>
+            <td>
+                <h4><span class="label label-default">@Model.SystemName</span></h4>
+            </td>
+            <td class="tdstyle">
+                線別
+            </td>
+            <td>
+                <h4><span class="label label-default">綠線</span></h4>
+            </td>
+        </tr>
+        <tr>
+            <td class="tdstyle">
+                檢修類別
+            </td>
+            <td>
+                <h4><span class="label label-default">@Model.FixClassName</span></h4>
+            </td>
+            <td class="tdstyle">
+                影響類別
+            </td>
+            <td>
+                <h4><span class="label label-default">@Model.AffectClassName</span></h4>
+            </td>
+            <td class="tdstyle">
+                原廠代碼/開發
+            </td>
+            <td>
+                <h4><span class="label label-default">@Model.VendorName</span></h4>
+            </td>
+        </tr>
+        <tr>
+            <td class="tdstyle">
+                物料尺寸-長(cm)
+            </td>
+            <td>
+                <h4><span class="label label-default">@Model.Length</span></h4>
+            </td>
+            <td class="tdstyle">
+                物料尺寸-寬(cm)
+            </td>
+            <td>
+                <h4><span class="label label-default">@Model.Witdh</span></h4>
+            </td>
+            <td class="tdstyle">
+                物料尺寸-高(cm)
+            </td>
+            <td>
+                <h4><span class="label label-default">@Model.Height</span></h4>
+            </td>
+        </tr>
+        <tr>
+            <td class="tdstyle">
+                物料重量-公斤(kg)
+            </td>
+            <td>
+                <h4><span class="label label-default">@Model.Height</span></h4>
+            </td>
+            <td class="tdstyle">
+                設備零件數
+            </td>
+            <td>
+                <h4><span class="label label-default">@Model.EqQuantity</span></h4>
+            </td>
+            <td class="tdstyle">
+                安全量
+            </td>
+            <td>
+                <h4><span class="label label-default">@Model.SafetyStock</span></h4>
+            </td>
+        </tr>
+        <tr>
+            <td class="tdstyle">
+                預估年秏用量
+            </td>
+            <td>
+                <h4><span class="label label-default">@Model.EstAnnConsumption</span></h4>
+            </td>
+            <td class="tdstyle">
+                請購點
+            </td>
+            <td>
+                <h4><span class="label label-default">@Model.ROP.Trim()</span></h4>
+            </td>
+            <td class="tdstyle">
+                預估購備期(天)
+            </td>
+            <td>
+                <h4><span class="label label-default">@Model.EstPurPeriod.Trim()</span></h4>
+            </td>
+        </tr>
+        <tr>
+            <td class="tdstyle">
+                可修件
+            </td>
+            <td>
+                <h4><span class="label label-default">@(Model.IsFix ? "是" : "否")</span></h4>
+            </td>
+            <td class="tdstyle">
+                危害物
+            </td>
+            <td>
+                <h4><span class="label label-default">@(Model.IsDangerous ? "是" : "否")</span></h4>
+            </td>
+            <td class="tdstyle">
+                指定廠牌
+            </td>
+            <td>
+                <h4><span class="label label-default">@(Model.SpecifyBrand ? "是" : "否")</span></h4>
+            </td>
+        </tr>
+        <tr>
+            <td class="tdstyle">
+                時限品
+            </td>
+            <td>
+                <h4><span class="label label-default">@(Model.IsLimitTime ? "是" : "否")</span></h4>
+            </td>
+            <td class="tdstyle">
+                保存期限(月)
+            </td>
+            <td>
+                <h4><span class="label label-default">@Model.Expiration</span></h4>
+            </td>
+            <td class="tdstyle">
+                替代件料號
+            </td>
+            <td>
+                <h4><span class="label label-default">@Model.ReplaceNo</span></h4>
+            </td>
+        </tr>
+    </tbody>
+</table>

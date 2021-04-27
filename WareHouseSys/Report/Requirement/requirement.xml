@@ -1,0 +1,35 @@
+﻿<rHeader>
+  <ROWID>1</ROWID>
+  <ApplicationDate>2018-10-20</ApplicationDate>
+  <OrderNo>1071020-0001</OrderNo>
+  <Applicant>陳育祈</Applicant>
+  <ApplicantUnit>工務處/軌道土木廠</ApplicantUnit>
+  <MaterialInfo>
+    <MaterialNo>A0.AH.0001.CGRA</MaterialNo>
+    <MaterialName>空調箱-風扇軸承(3.7~7.5仟瓦)</MaterialName>
+    <Spec>3.7~7.5仟瓦</Spec>
+    <Unit>組</Unit>
+    <ReplaceNo>A0.AH.0002.CGRA</ReplaceNo>
+    <IsFix>0</IsFix>
+    <IsLimitTime>0</IsLimitTime>
+    <SafetyStock>8</SafetyStock>
+    <ReplaceQuantity>222</ReplaceQuantity>
+    <rBody>
+      <RequireReason>Q123</RequireReason>
+      <RequireUnit>工務處/軌道土木廠</RequireUnit>
+      <RequirementQty>1.800000000000000e+001</RequirementQty>
+      <EstPrice>100.0000</EstPrice>
+      <RequireDate>2018-10-20</RequireDate>
+      <PeriodStart1>2019-01-01</PeriodStart1>
+      <PeriodEnd1>2019-04-25</PeriodEnd1>
+      <PeriodQty1>9</PeriodQty1>
+      <PeriodStart2>2019-07-01</PeriodStart2>
+      <PeriodEnd2>2019-12-31</PeriodEnd2>
+      <PeriodQty2>9</PeriodQty2>
+      <IsDangerous>Q123</IsDangerous>
+      <Quantity>1.000000000000000e+001</Quantity>
+      <OnOrderInventory>222</OnOrderInventory>
+      
+    </rBody>
+  </MaterialInfo>
+</rHeader>

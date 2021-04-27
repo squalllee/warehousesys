@@ -1,0 +1,163 @@
+﻿
+@model List<WareHouseSys.DBModels.UNIT>
+@{
+    ViewBag.Title = "新增需求明細";
+    Layout = "";
+}
+
+<style>
+    .ui-autocomplete-loading {
+        /*background: white url("../images/cycle.gif") right center no-repeat;*/
+    }
+
+    .ui-autocomplete {
+        max-height: 300px;
+        overflow-y: auto;
+        /* prevent horizontal scrollbar */
+        overflow-x: hidden;
+    }
+
+    * html .ui-autocomplete {
+        height: 100px;
+    }
+</style>
+
+<form id="requireAddForm">
+    <table class="table" style="border-style:solid;border-width:2px">
+        <tbody>
+            <tr>
+                <td colspan="7" style="font-weight:800;font-size:x-large" align="center">物料需求單</td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    <font style="color:red">料號</font>
+                </td>
+                <td colspan="2">
+                    <input name="MaterialNo" style="width:85%;border-color: #d2d6de;border: 1px solid #ccc;" id="MaterialNo" required validationMessage="料號不可為空白">
+                </td>
+                <td class="tdstyle">
+                    品名
+                </td>
+                <td>
+                    <input name="MaterialName" style="width:95%;border-color: #d2d6de;border: 1px solid #ccc;" id="MaterialName" readonly>
+                </td>
+                <td class="tdstyle">
+                    計量單位
+                </td>
+                <td>
+                    <input name="Unit" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" id="Unit" readonly>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle">在途量</td>
+                <td colspan="2"><input name="OnOrderInventory" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" id="OnOrderInventory" readonly></td>
+
+                <td class="tdstyle">安全量</td>
+                <td><input name="SafetyStock" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" id="SafetyStock" readonly></td>
+                <td class="tdstyle">庫存量</td>
+                <td><input name="Inventory" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" id="Inventory" readonly></td>
+            </tr>
+            <tr>
+                <td class="tdstyle">替代件庫存</td>
+                <td colspan="2"><input name="ReplaceQuantity" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" id="ReplaceQuantity" readonly></td>
+                <td class="tdstyle">替代件料號</td>
+                <td><input name="ReplaceNo" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" id="ReplaceNo" readonly></td>
+                <td class="tdstyle">開發樣品</td>
+                <td><input name="Simple" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" id="Simple" readonly></td>
+
+            </tr>
+            <tr>
+                <td class="tdstyle"><font style="color:red">需求單位</font></td>
+                <td colspan="4">
+                    <select name="RequireUnit" class="combobox" id="RequireUnit" required validationMessage="需求單位不可為空白" style="width:70%">
+                        @foreach (WareHouseSys.DBModels.UNIT unit in Model)
+                        {
+                            int UnitLength = unit.UNITNO.TrimEnd('0').Count();
+
+                            if (unit.UNITNO.Trim().Substring(0, UnitLength) == ViewBag.UnitId.Substring(0, UnitLength))
+                            {
+                                <option value="@unit.UNITNO.Trim()" selected>@unit.UNITNAME.Trim() [@unit.UNITNO.Trim()]</option>
+                            }
+                            else
+                            {
+                                <option value="@unit.UNITNO.Trim()">@unit.UNITNAME.Trim() [@unit.UNITNO.Trim()]</option>
+                            }
+                            @*if (unit.UNITNO.Trim() == ViewBag.UnitId)
+                            {
+                                <option value="@unit.UNITNO.Trim()" selected>@unit.UNITNAME.Trim() [@unit.UNITNO.Trim()]</option>
+                            }
+                            else
+                            {
+                                <option value="@unit.UNITNO.Trim()">@unit.UNITNAME.Trim() [@unit.UNITNO.Trim()]</option>
+                            }*@
+
+                        }
+                    </select>
+                </td>
+                @*<td class="tdstyle"><font style="color:red">需求日期</font></td>
+        <td><input name="RequireDate" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" id="RequireDate" class="datetime" required validationMessage="需求日期不可為空白"></td>*@
+
+                <td class="tdstyle"><font style="color:red">需求數量</font></td>
+                <td><input name="RequirementQty" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" id="RequirementQty" type="number" required validationMessage="需求數量不可為空白"></td>
+            </tr>
+            <tr>
+                <td class="tdstyle">可修件</td>
+                <td colspan="2"><input name="IsFix" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" id="IsFix" readonly></td>
+                <td class="tdstyle">故障率</td>
+                <td><input name="FailureRate" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" id="FailureRate" readonly></td>
+                <td class="tdstyle">維修週期</td>
+                <td><input name="RepairPeriod" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" id="RepairPeriod" readonly></td>
+            </tr>
+            <tr>
+                <td class="tdstyle">設備零件數量</td>
+                <td colspan="2"><input name="EqQuantity" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" id="EqQuantity" readonly></td>
+                <td class="tdstyle">危害物(含危害物質)</td>
+                <td><input name="IsDangerous" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" id="IsDangerous" readonly></td>
+                <td class="tdstyle">保存期限</td>
+                <td><input name="Expiration" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" id="Expiration" readonly></td>
+
+            </tr>
+     
+            <tr>
+                <td class="tdstyle"><font style="color:red">預估單價(未稅)</font></td>
+                <td colspan="2"><input name="EstPrice" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" id="EstPrice" required validationMessage="預估單價不可為空白"></td>
+                <td class="tdstyle">開發樣品</td>
+                <td><input name="Simple" id="Simple" style="width:30%;border-color: #d2d6de;border: 1px solid #ccc;"  readonly></td>
+                <td class="tdstyle"><font style="color:red">檢修分類</font></td>
+                <td><input name="RepairClass" style="width:30%;border-color: #d2d6de;border: 1px solid #ccc;" id="RepairClass" required validationMessage="檢修分類不可為空白"></td>
+            </tr>
+            <tr>
+                <td class="tdstyle"><font style="color:red">用料期程及數量1</font></td>
+                <td class="tdstyle"><font style="color:red">起</font></td>
+                <td><input name="PeriodStart1" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" id="PeriodStart1" class="datetime" required validationMessage="用料期程1(起)不可為空白"></td>
+                <td class="tdstyle"><font style="color:red">迄</font></td>
+                <td><input name="PeriodEnd1" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" id="PeriodEnd1" class="datetime" required validationMessage="用料期程1(迄)不可為空白"></td>
+                <td class="tdstyle"><font style="color:red">數量</font></td>
+                <td><input name="PeriodQty1" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" id="PeriodQty1" type="number" required validationMessage="用料期程1(數量)不可為空白"></td>
+            </tr>
+            <tr>
+                <td class="tdstyle">用料期程及數量2</td>
+                <td class="tdstyle">起</td>
+                <td><input name="PeriodStart2" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" id="PeriodStart2" class="datetime"></td>
+                <td class="tdstyle">迄</td>
+                <td><input name="PeriodEnd2" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" id="PeriodEnd2" class="datetime"></td>
+                <td class="tdstyle">數量</td>
+                <td><input name="PeriodQty2" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" id="PeriodQty2" type="number"></td>
+            </tr>
+            <tr>
+                <td class="tdstyle">詳細規格</td>
+                <td colspan="6">
+                    <textarea cols="50" rows="4" id="Spec" name="Spec" readonly></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle"><font style="color:red">需求原因</font></td>
+                <td colspan="6"><textarea cols="50" rows="4" id="RequireReason" name="RequireReason" required validationMessage="需求原因不可為空白"></textarea></td>
+            </tr>
+           
+
+        </tbody>
+    </table>
+</form>
+
+

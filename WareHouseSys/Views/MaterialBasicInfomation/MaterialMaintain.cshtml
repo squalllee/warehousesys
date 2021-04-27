@@ -1,0 +1,94 @@
+﻿
+@{
+    ViewBag.Title = "料號建立";
+}
+
+<div class="row">
+    <section class="content-header">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> 物料基本資料維護</a></li>
+            <li class="active">料號建立</li>
+        </ol>
+    </section>
+</div>
+
+@(Html.Kendo().Grid<WareHouseSys.DBModels.MaterialInfo>()
+                        .Name("grid")
+                        .ToolBar(toolbar => toolbar.Create().Text("新增料號"))
+                        .Editable(editable => editable.Mode(GridEditMode.InLine).ConfirmDelete("test").DisplayDeleteConfirmation("是否確定要作廢?"))
+                        .Columns(columns =>
+                        {
+                            columns.Command(command => { command.Edit(); command.Destroy();}).Locked(true).Width(250);
+                            columns.Bound(c => c.MaterialNo).Title("料號").Width(150);
+                            columns.Bound(c => c.MaterialName).Title("品名").Width(150);
+                            columns.Bound(c => c.Spec).Title("規格").Width(150);
+                            columns.Bound(c => c.SystemId).Title("系統別").Width(150);
+                            columns.Bound(c => c.SubSystemId).Title("子系統別").EditorTemplateName("EditSpan").Width(150);
+                            columns.Bound(c => c.LineAbb).Title("LineAbb").Width(150);
+                            columns.Bound(c => c.FixClass).Title("FixClass").Width(150);
+                            columns.Bound(c => c.AffectClass).Title("AffectClass").Width(150);
+                            columns.Bound(e => e.VendorId).Title("VendorId").Width(150);
+                            columns.Bound(c => c.IsDevelopment).Title("IsDevelopment").Width(150);
+                            columns.Bound(c => c.Unit).Title("單位").Width(150);
+                            columns.Bound(c => c.Witdh).Title("寬").Width(150);
+                            columns.Bound(c => c.Height).Title("高").Width(150);
+                            columns.Bound(c => c.weight).Title("重").Width(150);
+                            columns.Bound(c => c.ReplaceNo).Title("替代件號").Width(150);
+                            columns.Bound(c => c.ROP).Title("ROP").Width(150);
+                            columns.Bound(c => c.EqQuantity).Title("EqQuantity").Width(150);
+                            columns.Bound(c => c.EstPurPeriod).Title("EstPurPeriod").Width(150);
+                            columns.Bound(c => c.EstAnnConsumption).Title("EstAnnConsumption").Width(150);
+                            columns.Bound(c => c.Simple).Title("樣品").ClientTemplate("#=(Simple === true?'是':'否')#").Width(150);
+                            columns.Bound(c => c.IsFix).Title("可修件").ClientTemplate("#=(IsFix === true?'是':'否')#").Width(150);
+                            columns.Bound(c => c.IsDangerous).Title("IsDangerous").ClientTemplate("#=(IsDangerous === true?'是':'否')#").Width(150);
+                            columns.Bound(c => c.IsLimitTime).Title("IsLimitTime").ClientTemplate("#=(IsLimitTime === true?'是':'否')#").Width(150);
+                            columns.Bound(c => c.Expiration).Title("使用期限").Width(150);
+                            columns.Bound(c => c.SafetyStock).Title("SafetyStock").Width(150);
+                            columns.Bound(c => c.FailureRate).Title("報修率").Width(150);
+                            columns.Bound(c => c.Handtool).Title("手工具").ClientTemplate("#=(Handtool === true?'是':'否')#").Width(150);
+                        })
+                    .HtmlAttributes(new { style = "height: 750px;" })
+                    .Scrollable()
+                    .Sortable()
+                    .Filterable()
+                    .Pageable(pageable => pageable
+                    .Refresh(true)
+                    .PageSizes(true)
+                    .ButtonCount(5))
+                    .Filterable(filterable => filterable
+                    .Extra(false)
+                    .Operators(operators => operators
+                        .ForString(str => str.Clear()
+                            .IsEqualTo("等於")
+                            .Contains("包含")
+                        )
+                        .ForDate(str => str.Clear()
+                        .IsEqualTo("等於")
+                        .IsGreaterThanOrEqualTo("大於等於")
+                        .IsLessThanOrEqualTo("小於等於")))
+
+                    )
+                    .Events(events => events
+                    .DataBound("onGridDataBound")
+                    )
+                    .DataSource(dataSource => dataSource
+                        .Ajax()
+                        .Model(model => model.Id(p => p.MaterialNo))
+                        .Read(read => read.Action("getMaterialInfo", "MaterialBasicInfomation"))
+                        .Create(update => update.Action("addMaterialInfo", "MaterialBasicInfomation")) 
+                        .Update(update => update.Action("updateMaterialInfo", "MaterialBasicInfomation"))
+                        .Destroy(update => update.Action("deleteMaterialInfo", "MaterialBasicInfomation"))
+                        .Events(events => events.Error("error_handler"))
+                        .PageSize(20)
+
+                    )
+
+)
+
+
+@section scripts{
+
+    <script src="~/PageJs/MaterialMaintain.js?ver=@DateTime.Now.ToString("yyyyMMddHHmmss")"></script>
+
+}
+

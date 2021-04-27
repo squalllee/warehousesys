@@ -1,0 +1,89 @@
+﻿
+@{
+    ViewBag.Title = "需求單作業";
+}
+@section css
+{
+    <link href="~/Content/fastselect.min.css" rel="stylesheet" />
+}
+<style>
+    .tdstyle {
+        font-family: 標楷體;
+        font-size: large;
+        vertical-align: middle;
+        border-style: solid;
+        border-width: 0.5px;
+        font-weight: 800;
+        text-align: center;
+        width: 15%;
+        background-color: #D0CECF;
+    }
+
+    .ui-dialog {
+        z-index: 1000 !important;
+    }
+
+    body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+</style>
+<div class="row">
+    <section class="content-header">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> 進貨入庫作業</a></li>
+            <li class="active">需求單作業</li>
+        </ol>
+    </section>
+</div>
+
+<form name="RequirementForm">
+    <div class="table-responsive">
+        <table class="table" style="border-style:solid;border-width:2px">
+            <tbody>
+                <tr>
+                    <td class="tdstyle">
+                        需求單號
+                    </td>
+                    <td> <input name="RequireNo" style="width:70%;border-color: #d2d6de;border: 1px solid #ccc;" id="RequireNo"></td>
+                    <td class="tdstyle">
+                        申請日期起
+                    </td>
+                    <td>
+                        <input type="text" name="RequireDateStart" id="RequireDateStart" class="dateTime">~<input type="text" name="RequireDateEnd" id="RequireDateEnd" class="dateTime">
+                        <button id="btnSearch" class="btn btn-default" type="button" style="margin-left:10px"><i class="fa fa-search fa-fw"></i> 查詢</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</form>
+
+<table id="RequireTable" data-url="@Url.Content("../api/Requirement/getRequirementHeader")" class="hover display">
+    <thead>
+        <tr>
+            <th>需求單號</th>
+            <th>申請日期</th>
+            <th>申請人</th>
+            <th>狀態</th>
+            <th>動作</th>
+        </tr>
+    </thead>
+</table>
+
+<div id="ReqDetailDialog" data-url="@Url.Action("RequirementDetail","Requirement")"></div>
+<div id="TransToPurDialog" data-url="@Url.Action("PurchaseAdd","Purchase")" data-saveurl="@Url.Content("../api/Requirement/TransToPur")"></div>
+<div id="PurLocalUpdateDialog" data-url="@Url.Action("PurchaseLocalUpdate","Purchase")"></div>
+<div id="PurDetailAddDialog" data-url="@Url.Action("PurchaseDetailLocalAdd","Purchase")"></div>
+<div id="ReqUpdateDialog" data-url="@Url.Action("RequirementUpdate","Requirement")"></div>
+<div id="ReqDetailUpdateDialog" data-url="@Url.Action("RequirementDetailUpdate","Requirement")"></div>
+<div id="ReqDetailAddDialog" data-url="@Url.Action("RequirementAddDetail","Requirement")"></div>
+<div id="ReqCloseDialog" data-url="@Url.Action("RequirementClose","Requirement")" data-closeurl="@Url.Content("../api/Requirement/uploadRequireAtt")"></div>
+
+
+@section scripts{
+
+    <script src="~/PageJs/RequirementSearch.js?ver=@DateTime.Now.ToString("yyyyMMddHHmmss")"></script>
+    <script src="~/PageJs/FileUpload.js?ver=@DateTime.Now.ToString("yyyyMMddHHmmss")"></script>
+    <script src="~/PageJs/PurchaseAddWithContract.js?ver=@DateTime.Now.ToString("yyyyMMddHHmmss")"></script>
+    <script src="~/Scripts/fastselect.standalone.min.js"></script>
+}

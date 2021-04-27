@@ -1,0 +1,191 @@
+﻿<error errorId="c34f9345-5de7-4eda-bf11-1fc127386ac8" application="/LM/W3SVC/1/ROOT/WareHouseSys" host="IMOPC0016" type="System.IO.DirectoryNotFoundException" message="找不到路徑 'D:\Source\WareHouseSys\WareHouseSys\Attatchment\SDS\D0.OT.0021.SJ.pdf' 的一部分。" source="mscorlib" detail="System.IO.DirectoryNotFoundException: 找不到路徑 'D:\Source\WareHouseSys\WareHouseSys\Attatchment\SDS\D0.OT.0021.SJ.pdf' 的一部分。&#xD;&#xA;   於 System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)&#xD;&#xA;   於 System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FileShare share, Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)&#xD;&#xA;   於 System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, String msgPath, Boolean bFromProxy)&#xD;&#xA;   於 System.IO.FileStream..ctor(String path, FileMode mode)&#xD;&#xA;   於 System.Web.HttpPostedFile.SaveAs(String filename)&#xD;&#xA;   於 WareHouseSys.Controllers.ChemicalController.SDSUpload(HttpPostedFileBase SDSfile, String MaterialNo) 於 D:\Source\WareHouseSys\WareHouseSys\Controllers\ChemicalController.cs: 行 26&#xD;&#xA;   於 lambda_method(Closure , ControllerBase , Object[] )&#xD;&#xA;   於 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)&#xD;&#xA;   於 System.Web.Mvc.Async.AsyncControllerActionInvoker.&lt;&gt;c.&lt;BeginInvokeSynchronousActionMethod&gt;b__9_0(IAsyncResult asyncResult, ActionInvocation innerInvokeState)&#xD;&#xA;   於 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)&#xD;&#xA;   於 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)&#xD;&#xA;   於 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.&lt;&gt;c__DisplayClass11_0.&lt;InvokeActionMethodFilterAsynchronouslyRecursive&gt;b__0()&#xD;&#xA;   於 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.&lt;&gt;c__DisplayClass11_2.&lt;InvokeActionMethodFilterAsynchronouslyRecursive&gt;b__2()&#xD;&#xA;   於 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)&#xD;&#xA;   於 System.Web.Mvc.Async.AsyncControllerActionInvoker.&lt;&gt;c__DisplayClass3_6.&lt;BeginInvokeAction&gt;b__4()&#xD;&#xA;   於 System.Web.Mvc.Async.AsyncControllerActionInvoker.&lt;&gt;c__DisplayClass3_1.&lt;BeginInvokeAction&gt;b__1(IAsyncResult asyncResult)&#xD;&#xA;   於 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeAction(IAsyncResult asyncResult)&#xD;&#xA;   於 System.Web.Mvc.Controller.&lt;&gt;c.&lt;BeginExecuteCore&gt;b__152_1(IAsyncResult asyncResult, ExecuteCoreState innerState)&#xD;&#xA;   於 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncVoid`1.CallEndDelegate(IAsyncResult asyncResult)&#xD;&#xA;   於 System.Web.Mvc.Controller.EndExecuteCore(IAsyncResult asyncResult)&#xD;&#xA;   於 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncVoid`1.CallEndDelegate(IAsyncResult asyncResult)&#xD;&#xA;   於 System.Web.Mvc.Controller.EndExecute(IAsyncResult asyncResult)&#xD;&#xA;   於 System.Web.Mvc.MvcHandler.&lt;&gt;c.&lt;BeginProcessRequest&gt;b__20_1(IAsyncResult asyncResult, ProcessRequestState innerState)&#xD;&#xA;   於 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncVoid`1.CallEndDelegate(IAsyncResult asyncResult)&#xD;&#xA;   於 System.Web.Mvc.MvcHandler.EndProcessRequest(IAsyncResult asyncResult)&#xD;&#xA;   於 System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()&#xD;&#xA;   於 System.Web.HttpApplication.ExecuteStepImpl(IExecutionStep step)&#xD;&#xA;   於 System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean&amp; completedSynchronously)" user="110140" time="2020-09-23T01:42:24.7130109Z">
+  <serverVariables>
+    <item name="ALL_HTTP">
+      <value string="HTTP_CONNECTION:keep-alive&#xD;&#xA;HTTP_CONTENT_LENGTH:261325&#xD;&#xA;HTTP_CONTENT_TYPE:multipart/form-data; boundary=----WebKitFormBoundaryBmW1gbe5M7FIvY48&#xD;&#xA;HTTP_ACCEPT:*/*; q=0.5, application/json&#xD;&#xA;HTTP_ACCEPT_ENCODING:gzip, deflate, br&#xD;&#xA;HTTP_ACCEPT_LANGUAGE:zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7&#xD;&#xA;HTTP_COOKIE:__RequestVerificationToken_L1dhcmVIb3VzZVN5cw2=JXGEutQKVUoEE8fP5nSxmNHxG6CsmEDAdUUYw7GnYEWpaaoBhDmZCJt_y9D1pI76QdrFw_09eETuXAOYutTdegAK9L91fkvDzPuefJJ6VRs1; .ASPXAUTH=C42B1837C54BFB22E64150F284592C1222ADE837E687785CFE15BF8F53B1E59799A7307F2F33311B076A320CECA95369B70C68A75F481B26F67972F1AE697BDCCBD7A8615656348D8B90764776BFECCB4F030E3AC37ACA026C5F8E8126F7128F08CDA707250ED4608BFDB708CECC4E4C&#xD;&#xA;HTTP_HOST:localhost&#xD;&#xA;HTTP_REFERER:http://localhost/WareHouseSys/Chemical/ChemicalMaintain&#xD;&#xA;HTTP_USER_AGENT:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36&#xD;&#xA;HTTP_ORIGIN:http://localhost&#xD;&#xA;HTTP_SEC_FETCH_SITE:same-origin&#xD;&#xA;HTTP_SEC_FETCH_MODE:cors&#xD;&#xA;HTTP_SEC_FETCH_DEST:empty&#xD;&#xA;" />
+    </item>
+    <item name="ALL_RAW">
+      <value string="Connection: keep-alive&#xD;&#xA;Content-Length: 261325&#xD;&#xA;Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryBmW1gbe5M7FIvY48&#xD;&#xA;Accept: */*; q=0.5, application/json&#xD;&#xA;Accept-Encoding: gzip, deflate, br&#xD;&#xA;Accept-Language: zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7&#xD;&#xA;Cookie: __RequestVerificationToken_L1dhcmVIb3VzZVN5cw2=JXGEutQKVUoEE8fP5nSxmNHxG6CsmEDAdUUYw7GnYEWpaaoBhDmZCJt_y9D1pI76QdrFw_09eETuXAOYutTdegAK9L91fkvDzPuefJJ6VRs1; .ASPXAUTH=C42B1837C54BFB22E64150F284592C1222ADE837E687785CFE15BF8F53B1E59799A7307F2F33311B076A320CECA95369B70C68A75F481B26F67972F1AE697BDCCBD7A8615656348D8B90764776BFECCB4F030E3AC37ACA026C5F8E8126F7128F08CDA707250ED4608BFDB708CECC4E4C&#xD;&#xA;Host: localhost&#xD;&#xA;Referer: http://localhost/WareHouseSys/Chemical/ChemicalMaintain&#xD;&#xA;User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36&#xD;&#xA;Origin: http://localhost&#xD;&#xA;Sec-Fetch-Site: same-origin&#xD;&#xA;Sec-Fetch-Mode: cors&#xD;&#xA;Sec-Fetch-Dest: empty&#xD;&#xA;" />
+    </item>
+    <item name="APPL_MD_PATH">
+      <value string="/LM/W3SVC/1/ROOT/WareHouseSys" />
+    </item>
+    <item name="APPL_PHYSICAL_PATH">
+      <value string="D:\Source\WareHouseSys\WareHouseSys\" />
+    </item>
+    <item name="AUTH_TYPE">
+      <value string="Forms" />
+    </item>
+    <item name="AUTH_USER">
+      <value string="110140" />
+    </item>
+    <item name="AUTH_PASSWORD">
+      <value string="*****" />
+    </item>
+    <item name="LOGON_USER">
+      <value string="110140" />
+    </item>
+    <item name="REMOTE_USER">
+      <value string="110140" />
+    </item>
+    <item name="CERT_COOKIE">
+      <value string="" />
+    </item>
+    <item name="CERT_FLAGS">
+      <value string="" />
+    </item>
+    <item name="CERT_ISSUER">
+      <value string="" />
+    </item>
+    <item name="CERT_KEYSIZE">
+      <value string="" />
+    </item>
+    <item name="CERT_SECRETKEYSIZE">
+      <value string="" />
+    </item>
+    <item name="CERT_SERIALNUMBER">
+      <value string="" />
+    </item>
+    <item name="CERT_SERVER_ISSUER">
+      <value string="" />
+    </item>
+    <item name="CERT_SERVER_SUBJECT">
+      <value string="" />
+    </item>
+    <item name="CERT_SUBJECT">
+      <value string="" />
+    </item>
+    <item name="CONTENT_LENGTH">
+      <value string="261325" />
+    </item>
+    <item name="CONTENT_TYPE">
+      <value string="multipart/form-data; boundary=----WebKitFormBoundaryBmW1gbe5M7FIvY48" />
+    </item>
+    <item name="GATEWAY_INTERFACE">
+      <value string="CGI/1.1" />
+    </item>
+    <item name="HTTPS">
+      <value string="off" />
+    </item>
+    <item name="HTTPS_KEYSIZE">
+      <value string="" />
+    </item>
+    <item name="HTTPS_SECRETKEYSIZE">
+      <value string="" />
+    </item>
+    <item name="HTTPS_SERVER_ISSUER">
+      <value string="" />
+    </item>
+    <item name="HTTPS_SERVER_SUBJECT">
+      <value string="" />
+    </item>
+    <item name="INSTANCE_ID">
+      <value string="1" />
+    </item>
+    <item name="INSTANCE_META_PATH">
+      <value string="/LM/W3SVC/1" />
+    </item>
+    <item name="LOCAL_ADDR">
+      <value string="::1" />
+    </item>
+    <item name="PATH_INFO">
+      <value string="/WareHouseSys/Chemical/SDSUpload" />
+    </item>
+    <item name="PATH_TRANSLATED">
+      <value string="D:\Source\WareHouseSys\WareHouseSys\Chemical\SDSUpload" />
+    </item>
+    <item name="QUERY_STRING">
+      <value string="MaterialNo=D0.OT.0021.SJ" />
+    </item>
+    <item name="REMOTE_ADDR">
+      <value string="::1" />
+    </item>
+    <item name="REMOTE_HOST">
+      <value string="::1" />
+    </item>
+    <item name="REMOTE_PORT">
+      <value string="63107" />
+    </item>
+    <item name="REQUEST_METHOD">
+      <value string="POST" />
+    </item>
+    <item name="SCRIPT_NAME">
+      <value string="/WareHouseSys/Chemical/SDSUpload" />
+    </item>
+    <item name="SERVER_NAME">
+      <value string="localhost" />
+    </item>
+    <item name="SERVER_PORT">
+      <value string="80" />
+    </item>
+    <item name="SERVER_PORT_SECURE">
+      <value string="0" />
+    </item>
+    <item name="SERVER_PROTOCOL">
+      <value string="HTTP/1.1" />
+    </item>
+    <item name="SERVER_SOFTWARE">
+      <value string="Microsoft-IIS/10.0" />
+    </item>
+    <item name="URL">
+      <value string="/WareHouseSys/Chemical/SDSUpload" />
+    </item>
+    <item name="HTTP_CONNECTION">
+      <value string="keep-alive" />
+    </item>
+    <item name="HTTP_CONTENT_LENGTH">
+      <value string="261325" />
+    </item>
+    <item name="HTTP_CONTENT_TYPE">
+      <value string="multipart/form-data; boundary=----WebKitFormBoundaryBmW1gbe5M7FIvY48" />
+    </item>
+    <item name="HTTP_ACCEPT">
+      <value string="*/*; q=0.5, application/json" />
+    </item>
+    <item name="HTTP_ACCEPT_ENCODING">
+      <value string="gzip, deflate, br" />
+    </item>
+    <item name="HTTP_ACCEPT_LANGUAGE">
+      <value string="zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7" />
+    </item>
+    <item name="HTTP_COOKIE">
+      <value string="__RequestVerificationToken_L1dhcmVIb3VzZVN5cw2=JXGEutQKVUoEE8fP5nSxmNHxG6CsmEDAdUUYw7GnYEWpaaoBhDmZCJt_y9D1pI76QdrFw_09eETuXAOYutTdegAK9L91fkvDzPuefJJ6VRs1; .ASPXAUTH=C42B1837C54BFB22E64150F284592C1222ADE837E687785CFE15BF8F53B1E59799A7307F2F33311B076A320CECA95369B70C68A75F481B26F67972F1AE697BDCCBD7A8615656348D8B90764776BFECCB4F030E3AC37ACA026C5F8E8126F7128F08CDA707250ED4608BFDB708CECC4E4C" />
+    </item>
+    <item name="HTTP_HOST">
+      <value string="localhost" />
+    </item>
+    <item name="HTTP_REFERER">
+      <value string="http://localhost/WareHouseSys/Chemical/ChemicalMaintain" />
+    </item>
+    <item name="HTTP_USER_AGENT">
+      <value string="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36" />
+    </item>
+    <item name="HTTP_ORIGIN">
+      <value string="http://localhost" />
+    </item>
+    <item name="HTTP_SEC_FETCH_SITE">
+      <value string="same-origin" />
+    </item>
+    <item name="HTTP_SEC_FETCH_MODE">
+      <value string="cors" />
+    </item>
+    <item name="HTTP_SEC_FETCH_DEST">
+      <value string="empty" />
+    </item>
+    <item name="HTTP_APPLICATIONINSIGHTS_REQUESTTRACKINGTELEMETRYMODULE_ROOTREQUEST_ID">
+      <value string="ecb876c5-f56c-44b6-abb9-3e3bd5468ab4" />
+    </item>
+  </serverVariables>
+  <queryString>
+    <item name="MaterialNo">
+      <value string="D0.OT.0021.SJ" />
+    </item>
+  </queryString>
+  <cookies>
+    <item name="__RequestVerificationToken_L1dhcmVIb3VzZVN5cw2">
+      <value string="JXGEutQKVUoEE8fP5nSxmNHxG6CsmEDAdUUYw7GnYEWpaaoBhDmZCJt_y9D1pI76QdrFw_09eETuXAOYutTdegAK9L91fkvDzPuefJJ6VRs1" />
+    </item>
+    <item name=".ASPXAUTH">
+      <value string="C42B1837C54BFB22E64150F284592C1222ADE837E687785CFE15BF8F53B1E59799A7307F2F33311B076A320CECA95369B70C68A75F481B26F67972F1AE697BDCCBD7A8615656348D8B90764776BFECCB4F030E3AC37ACA026C5F8E8126F7128F08CDA707250ED4608BFDB708CECC4E4C" />
+    </item>
+  </cookies>
+</error>

@@ -1,0 +1,43 @@
+﻿@{
+    ViewBag.Title = "展延查詢";
+}
+
+<style>
+    .tdstyle {
+        font-family: 標楷體;
+        font-size: large;
+        vertical-align: middle;
+        border-style: solid;
+        border-width: 0.5px;
+        font-weight: 800;
+        text-align: center;
+        width: 15%;
+        background-color: #D0CECF;
+    }
+
+    #ExtendSearchGrid .k-grid-content, .k-grid tr td {
+        overflow: visible;
+    }
+
+    #ExtendSearchGrid .k-grid-header {
+        padding-right: 0 !important;
+    }
+</style>
+<div class="row">
+    <section class="content-header">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> 展延作業</a></li>
+            <li class="active">展延查詢</li>
+        </ol>
+    </section>
+</div>
+
+<div id="ExtendSearchGrid" data-url="@Url.Action("getExtendHaderViewModel", "Extend")" data-deleteurl="@Url.Content("../api/Extend/deleteExtend")"></div>
+
+<div id="ExtendDetailDialog" data-url="@Url.Action("ExtendDetail","Extend")"></div>
+
+@section scripts{
+    <script src="~/PageJs/ExtendSearch.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+    <script src="~/PageJs/ExtendDetail.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+    <script src="~/PageJs/ExtendUpdate.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+}

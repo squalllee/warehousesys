@@ -1,0 +1,149 @@
+﻿@using WareHouseSys.ViewModels
+<style>
+    .table > tbody > tr > td {
+        border-top: 1px solid #2b2b2b;
+    }
+
+    .tdstyle {
+        font-family: 標楷體;
+        font-size: large;
+        vertical-align: middle;
+        border-style: solid;
+        border-width: 0.5px;
+        font-weight: 800;
+        text-align: center;
+        width: 15%;
+        background-color: #D0CECF;
+    }
+</style>
+<div class="row">
+    <section class="content-header">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> 查詢作業</a></li>
+            <li class="active">展延記錄查詢</li>
+        </ol>
+    </section>
+</div>
+
+<input type="hidden" value="@Url.Action("getAttatchment","Extend")" id="baseUrl" />
+<script>
+
+function grid_filterMenuInit(e) {
+    if (e.field == "ExtendDate") {
+        var logicDropDown = e.container.find("select:eq(1)").data("kendoDropDownList");
+        var or = logicDropDown.dataSource.at(1);
+        logicDropDown.dataSource.remove(or);
+    }
+    else if (e.field == "AddDateTime") {
+        var logicDropDown = e.container.find("select:eq(1)").data("kendoDropDownList");
+        var or = logicDropDown.dataSource.at(1);
+        logicDropDown.dataSource.remove(or);
+    }
+}
+
+</script>
+
+@(Html.Kendo().Grid<ExtendSearchViewModel>()
+            .Name("grid")
+            .Columns(columns =>
+            {
+                columns.Bound(c => c.OrderNo).Width(180).Title("展延單號");
+                columns.Bound(c => c.LendNo).Width(180).Title("借料單號");
+                columns.Bound(c => c.AddDateTime).Width(180).Title("申請日期").ClientTemplate("#= kendo.toString(AddDateTime, 'yyyy/MM/dd')==null?'':kendo.toString(AddDateTime, 'yyyy/MM/dd') #").Filterable(filter => filter.Extra(true));
+                columns.Bound(c => c.ExtendDate).Width(180).Title("展延期限").ClientTemplate("#= kendo.toString(ExtendDate, 'yyyy/MM/dd')==null?'':kendo.toString(ExtendDate, 'yyyy/MM/dd') #").Filterable(filter => filter.Extra(true));
+                columns.Bound(c => c.UNITNAME).Width(300).Title("單位");
+                columns.Bound(c => c.ExtendMan).Width(150).Title("展延人員");
+                columns.Bound(c => c.ApprovedMan).Width(150).Title("核可人員");
+                columns.Bound(c => c.MaterialNo).Width(180).Title("料號");
+                columns.Bound(c => c.MaterialName).Width(150).Title("品名");
+                columns.Bound(c => c.Spec).Width(300).Title("規格");
+                columns.Bound(c => c.Lot).Width(180).Title("批號");
+                columns.Bound(c => c.Days).Width(150).Title("展延天數");
+                columns.Bound(c => c.Quantity).Width(150).Title("展延數量");
+                columns.Bound(c => c.AttUrl).Width(80).Title("附件").Filterable(false).Sortable(false).ClientTemplate("<div name='attatchment' class='btn-group dropleft'></div>");
+                columns.Bound(c => c.Status).Width(80).Title("狀態");
+                columns.Bound(c => c.ExtendReason).Width(300).Title("備註");
+            })
+            .HtmlAttributes(new { style = "height: 750px;" })
+            .Scrollable()
+            .Resizable(resize => resize.Columns(true))
+            .Sortable()
+              .ToolBar(tools =>
+              {
+                  tools.Excel();
+              })
+                    .Excel(excel => excel
+                    .FileName("WorkInfo.xlsx")
+                    .Filterable(true)
+                    .AllPages(true)
+                )
+
+             .Filterable(filterable => filterable
+                 .Extra(false)
+                 .Messages(m => m
+                    .Clear("清除")
+                    .Filter("過濾")
+                    .Info("輸入要搜尋的值"))
+                 .Operators(operators => operators
+
+                     .ForDate(options1 => options1
+
+                         .Clear()
+                         .IsGreaterThanOrEqualTo("大於等於")
+                         .IsLessThanOrEqualTo("小於等於")
+                     )
+                     .ForString(options2 => options2
+
+                         .Clear()
+                         .IsEqualTo("等於")
+                         .Contains("包含")
+                     )
+                    .ForNumber(str => str
+                               .Clear()
+                               .IsEqualTo("相等")
+                               .IsGreaterThan("大於")
+                               .IsLessThan("小於")
+                               .IsGreaterThanOrEqualTo("大於等於")
+                               .IsLessThanOrEqualTo("小於等於")
+                    )
+                 )
+             )
+
+            .Pageable(pageable => pageable
+                          .Messages(m => m
+                                 .Last("最末頁")
+                                 .First("第一頁")
+                                 .Next("下一頁")
+                                 .Previous("上一頁")
+                                 .MorePages("更多頁")
+                                 .ItemsPerPage("每頁筆數")
+                                 .Display("第 {0} - {1} 筆 共 {2} 筆記錄")
+                                 .Refresh("重新整理")
+                                 .Empty("沒有符合記錄")
+                                 .AllPages("全部")
+                           )
+            .Refresh(true)
+            .PageSizes(true)
+            .ButtonCount(5)
+            .PageSizes(new List<object>
+                { 20, 30, 40, 50, "All"}))
+            .DataSource(dataSource => dataSource
+            .Ajax()
+            .Read(read => read.Action("ExtendRecordSearchGrid", "Extend"))
+            .PageSize(20)
+
+            )
+            .Events(events => events
+                .DataBound("onGridDataBound")
+            )
+            .Events(events => events
+                .FilterMenuInit("grid_filterMenuInit")
+            )
+)
+
+@section scripts{
+    <script src="~/PageJs/ExtendRecordSearch.js?ver=@DateTime.Now.ToString("yyyyMMddmmss")"></script>
+
+
+}
+

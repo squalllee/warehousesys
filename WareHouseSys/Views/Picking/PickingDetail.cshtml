@@ -1,0 +1,142 @@
+﻿@using WareHouseSys.ViewModels;
+@using WareHouseSys.Models;
+@model MaterialPickHeaderSaveModel
+@{
+    ViewBag.Title = "發料明細";
+    Layout = "";
+}
+<style>
+    .table > tbody > tr > td {
+        border-top: 1px solid #2b2b2b;
+    }
+
+    .fileinput-button {
+        position: relative;
+        overflow: hidden;
+    }
+
+        .fileinput-button input {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 0;
+            opacity: 0;
+            -ms-filter: 'alpha(opacity=0)';
+            font-size: 200px;
+            direction: ltr;
+            cursor: pointer;
+        }
+
+    .thumb {
+        height: 80px;
+        width: 100px;
+        border: 1px solid #000;
+    }
+
+    ul.thumb-Images li {
+        width: 120px;
+        float: left;
+        display: inline-block;
+        vertical-align: top;
+        height: 120px;
+    }
+
+    .img-wrap {
+        position: relative;
+        display: inline-block;
+        font-size: 0;
+    }
+
+        .img-wrap .close {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            z-index: 100;
+            background-color: #D0E5F5;
+            padding: 5px 2px 2px;
+            color: #000;
+            font-weight: bolder;
+            cursor: pointer;
+            opacity: .5;
+            font-size: 23px;
+            line-height: 10px;
+            border-radius: 50%;
+        }
+
+        .img-wrap:hover .close {
+            opacity: 1;
+            background-color: #ff0000;
+        }
+
+    .FileNameCaptionStyle {
+        font-size: 12px;
+    }
+</style>
+<form id="PickingDetailForm">
+    <table class="table" style="border-style:solid;border-width:2px">
+        <tbody>
+            <tr>
+                <td colspan="6" style="font-weight:800;font-size:x-large" align="center">領料單資訊</td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    領料單號
+                </td>
+                <td>
+                    <h4><span class="label label-default">@Model.OrderNo</span></h4>
+                <td class="tdstyle">
+                    <font style="color:red">領料日期</font>
+                </td>
+                <td>
+                    <h4><span class="label label-default">@(Model.OutBoundDate == null ? "" : DateTime.Parse(Model.OutBoundDate.ToString()).ToString("yyyy/MM/dd"))</span></h4>
+                </td>
+
+                <td class="tdstyle">
+                    發料人員
+                </td>
+                <td>
+                    <h4><span class="label label-default">@Model.OutBoundMan</span></h4>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    領料原因
+                </td>
+                <td colspan="3">
+                    <h4><span class="label label-default">@Model.PickingReason</span></h4>
+                </td>
+                <td class="tdstyle">
+                    緊急領料
+                </td>
+                <td >
+                    <h4><span class="label label-default">@(Model.EmergencyPicking ? "是" : "否")</span></h4>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6">
+                    <div style="width:1165px">
+                        <div id="PickingDetailGrid" data-url="@Url.Content("../Picking/MaterialPickingBodyDetailByOrder")?OrderNO=@Model.OrderNo" data-updateurl="@Url.Content("../api/Picking/UpdateMaterialPickingBody")"></div>
+                    </div>
+
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstyle">
+                    附件
+                </td>
+                <td colspan="5">
+                    @foreach (Attachment f in Model.attachments)
+                    {
+                        <span class="badge badge-pill badge-default" style="cursor:pointer"><a href="@Url.Action("getAttatchment","Picking",new {OrderNo= Model.OrderNo,FileName=f.FileName})" style="color:white" target="aa">@f.FileName</a></span>
+                    }
+                </td>
+            </tr>
+           
+        </tbody>
+    </table>
+
+
+</form>
+
+
+
